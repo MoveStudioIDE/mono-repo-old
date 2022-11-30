@@ -1,0 +1,16 @@
+{
+  "name": "studio-backend",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "license": "MIT",
+  "dependencies": {
+    "@mysten/sui.js": "^0.17.1",
+    "@types/node": "^18.11.9",
+    "dotenv": "^16.0.3",
+    "fs": "^0.0.1-security",
+    "typescript": "^4.9.3"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.1"
+  }
+}
