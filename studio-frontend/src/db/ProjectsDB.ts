@@ -95,6 +95,16 @@ export class IndexedDb {
     return requestUpdate;
   }
 
+  public async addNewDependency(tableName: string, project: string, dependencyName: string, dependencyAddress: string) {
+    const tx = this.db.transaction(tableName, 'readwrite');
+    const store = tx.objectStore(tableName);
+    const result = await store.get(project);
+    const dependencies = result.dependencies;
+    dependencies.push({name: dependencyName, address: dependencyAddress});
+    const requestUpdate = store.put(result);
+    return requestUpdate;
+  }
+
 
   public async putBulkValue(tableName: string, values: object[]) {
     const tx = this.db.transaction(tableName, 'readwrite');

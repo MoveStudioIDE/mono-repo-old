@@ -2,7 +2,7 @@
 import React, {useContext} from 'react'
 import ProjectContext from './context/ProjectContext';
 import './Sidebar.css'
-import { Module } from './types/project-types';
+import { Dependency, Module } from './types/project-types';
 
 function Sidebar (
   props: { 
@@ -10,7 +10,8 @@ function Sidebar (
     changeProject: (project: string) => void,
     deleteProject: (project: string) => void,
     changeModule: (module: string) => void,
-    deleteModule: (module: string) => void
+    deleteModule: (module: string) => void,
+    addDependency: (dependency: string, address: string) => void
   }
 ){
 
@@ -26,6 +27,19 @@ function Sidebar (
 
   const modules = currentProject?.modules.map((module: Module) => {
     return <option value={module.name}>{module.name}</option>
+  });
+
+  const dependencies = currentProject?.dependencies.map((dependency: Dependency) => {
+    return (
+      <tr>
+        <td>
+          <p>{dependency.name}</p>
+        </td>
+        <td>
+          <p>{dependency.address}</p>
+        </td>
+      </tr>
+    )
   });
 
   const currentProjectModules = () => {
@@ -83,6 +97,19 @@ function Sidebar (
     }
   }
 
+  const addDepencies = () => {
+    const dependency = document.getElementById('dependency') as HTMLInputElement;
+    const address = document.getElementById('address') as HTMLInputElement;
+
+    if (dependency.value && address.value) {
+      props.addDependency(dependency.value, address.value);
+      dependency.value = '';
+      address.value = '';
+    }
+  }
+
+  
+
   // console.log('projectList', projectList);
 
   return (
@@ -107,8 +134,7 @@ function Sidebar (
             <p>Address</p>
           </th>
         </tr>
-          {/* {dependencies} */}
-
+          {dependencies}
         <tr>
           <td>
             <input type="text" id="dependency" placeholder="package" />
@@ -116,6 +142,11 @@ function Sidebar (
           <td>
             <input type="text" id="address" placeholder="0x..." />
           </td>
+        </tr>
+        <tr>
+          <th colSpan={2}>
+            <button onClick={addDepencies}>Add Dependency</button>
+          </th>
         </tr>
       </table>
       {/* <button onClick={addDepencies}>Add Dependency</button> */}

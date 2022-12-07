@@ -124,13 +124,18 @@ function App() {
       setCode('')
       console.log('default');
     } else if (newProject === 'addProject') {
+      setCurrentProject(null);
+      setCurrentModule(null);
+      setCode('')
       console.log('addProject');
       const addToIndexdb = async (newProjectName: string) => {
         indexedDb = new IndexedDb('test');
         await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
         await indexedDb.putValue('projects', {
           package: newProjectName,
-          dependencies: [],
+          dependencies: [
+            {name: 'Sui', address: '0x02'}
+          ],
           modules: []
         });
       }
@@ -141,9 +146,7 @@ function App() {
       addToIndexdb(newProjectName).then(() => {
         getProjects();
       });
-      setCurrentProject(null);
-      setCurrentModule(null);
-      setCode('')
+      
       // getProjectData(newProjectName || 'project1');
     } else {
       setCurrentModule(null);
@@ -277,6 +280,23 @@ function App() {
     setCode(newCode);
   }
 
+  const handleDependencyAdd = (dependencyName: string, dependencyAddress: string) => {
+    const addDependencyToIndexdb = async (dependencyName: string, dependencyAddress: string) => {
+      indexedDb = new IndexedDb('test');
+      await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      if (!currentProject) {
+        return;
+      }
+      await indexedDb.addNewDependency('projects', currentProject.package, dependencyName, dependencyAddress);
+    }
+    if (!currentProject) {
+      return;
+    }
+    addDependencyToIndexdb(dependencyName, dependencyAddress).then(() => {
+      getProjectData(currentProject.package);
+    });
+  }
+
   // useEffect(() => {
   //   if (!wallet.connected) return;
   //   console.log('connected wallet name: ', wallet.name)
@@ -315,6 +335,7 @@ function App() {
               deleteProject={handleProjectDelete}
               changeModule={handleModuleChange}
               deleteModule={handleModuleDelete}
+              addDependency={handleDependencyAdd}
             />
           }
           canvas={
