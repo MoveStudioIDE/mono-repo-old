@@ -55,6 +55,31 @@ export class IndexedDb {
     return result;
   }
 
+  public async addNewModule(tableName: string, project: string, moduleName: string) {
+    const tx = this.db.transaction(tableName, 'readwrite');
+    const store = tx.objectStore(tableName);
+    const result = await store.get(project);
+    const modules = result.modules;
+    modules.push({name: moduleName, code: ''});
+    const requestUpdate = store.put(result);
+    return requestUpdate;
+  }
+
+  public async deleteModule(tableName: string, project: string, moduleName: string) {
+    const tx = this.db.transaction(tableName, 'readwrite');
+    const store = tx.objectStore(tableName);
+    const result = await store.get(project);
+    const modules = result.modules;
+    for (let i = 0; i < modules.length; i++) {
+      if (modules[i].name === moduleName) {
+        modules.splice(i, 1);
+        break;
+      }
+    }
+    const requestUpdate = store.put(result);
+    return requestUpdate;
+  }
+
   public async putBulkValue(tableName: string, values: object[]) {
     const tx = this.db.transaction(tableName, 'readwrite');
     const store = tx.objectStore(tableName);

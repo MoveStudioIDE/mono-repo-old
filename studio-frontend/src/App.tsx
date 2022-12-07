@@ -16,6 +16,7 @@ function App() {
   const [code, setCode] = useState('');
   const [projectList, setProjectList] = useState<string[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
+  const [currentModuleCode, setCurrentModuleCode] = useState('');
   // const [dependencies, setDependencies] = useState([] as {dependency: string, address: string}[]);
   // const wallet = useWallet();
   // let projects = localStorage.getItem('projects');
@@ -118,7 +119,7 @@ function App() {
 
   const handleProjectChange = (newProject: string) => {
     if (newProject === 'default') {
-      // setCurrentProject(null);
+      setCurrentProject(null);
       console.log('default');
     } else if (newProject === 'addProject') {
       console.log('addProject');
@@ -154,6 +155,53 @@ function App() {
     }
     removeFromIndexdb(projectName).then(() => {
       getProjects();
+    });
+  }
+
+  const handleModuleChange = (module: string) => {
+    if (module === 'default') {
+      setCurrentModuleCode('');
+      console.log('default');
+    } else if (module === 'addModule') {
+      console.log('addModule');
+      const addModuleToIndexdb = async (newModuleName: string) => {
+        indexedDb = new IndexedDb('test');
+        await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+        if (!currentProject) {
+          return;
+        }
+        await indexedDb.addNewModule('projects', currentProject.package, newModuleName);
+      }
+      if (!currentProject) {
+        return;
+      }
+      const newModuleName = prompt('Enter module name');
+      if (!newModuleName) {
+        return;
+      }
+      addModuleToIndexdb(newModuleName).then(() => {
+        getProjectData(currentProject.package);
+      });
+    } else {
+      console.log('newModule', module);
+      setCurrentModuleCode(module);
+    }
+  }
+
+  const handleModuleDelete = (moduleName: string) => {
+    const removeModuleFromIndexdb = async (moduleName: string) => {
+      indexedDb = new IndexedDb('test');
+      await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      if (!currentProject) {
+        return;
+      }
+      await indexedDb.deleteModule('projects', currentProject.package, moduleName);
+    }
+    if (!currentProject) {
+      return;
+    }
+    removeModuleFromIndexdb(moduleName).then(() => {
+      getProjectData(currentProject.package);
     });
   }
 
@@ -219,8 +267,8 @@ function App() {
   return (
     <div>
       <ProjectContext.Provider value={projectsContext}>
-        <button onClick={addProject} id="addProject">Add project</button>
-        <button onClick={removeProject} id="removeProject">Remove project</button>
+        {/* <button onClick={addProject} id="addProject">Add project</button>
+        <button onClick={removeProject} id="removeProject">Remove project</button> */}
         <PageLayout
           header={<Header />}
           sidebar={
@@ -228,6 +276,8 @@ function App() {
               compileCode={compileCode} 
               changeProject={handleProjectChange}
               deleteProject={handleProjectDelete}
+              changeModule={handleModuleChange}
+              deleteModule={handleModuleDelete}
             />
           }
           canvas={<Canvas setCode={setCode} />}

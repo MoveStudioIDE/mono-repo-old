@@ -1,4 +1,4 @@
-import { Mode } from 'fs';
+
 import React, {useContext} from 'react'
 import ProjectContext from './context/ProjectContext';
 import './Sidebar.css'
@@ -7,8 +7,10 @@ import { Module } from './types/project-types';
 function Sidebar (
   props: { 
     compileCode: () => void, 
-    changeProject: (project: string) => void
-    deleteProject: (project: string) => void
+    changeProject: (project: string) => void,
+    deleteProject: (project: string) => void,
+    changeModule: (module: string) => void,
+    deleteModule: (module: string) => void
   }
 ){
 
@@ -18,8 +20,12 @@ function Sidebar (
   //   // Add dependencies to code
   // }
 
-  const options = projectList.map((project: string) => {
+  const projects = projectList.map((project: string) => {
     return <option value={project}>{project}</option>
+  });
+
+  const modules = currentProject?.modules.map((module: Module) => {
+    return <option value={module.name}>{module.name}</option>
   });
 
   const currentProjectModules = () => {
@@ -54,6 +60,25 @@ function Sidebar (
     }
   }
 
+  const handleModuleDelete = () => {
+    console.log('handleModuleDelete', currentProject);
+    const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
+
+    if (moduleSelect.value !== 'default' && moduleSelect.value !== 'addModule' && currentProject) {
+      props.deleteModule(moduleSelect.value);
+      moduleSelect.value = 'default';
+    }
+  }
+
+  const handleModuleChange = (event: any) => {
+    console.log('handleModuleChange', event.target.value);
+    props.changeModule(event.target.value);
+
+    if (event.target.value === 'addModule') {
+      event.target.value = 'default';
+    }
+  }
+
   // console.log('projectList', projectList);
 
   return (
@@ -65,8 +90,8 @@ function Sidebar (
         onChange={handleProjectChange}
       >
         <option value="default">--Select a project--</option>
-        <option value="addProject">++Add Project</option>
-        {options}
+        <option value="addProject">++Add Project++</option>
+        {projects}
       </select>
       <button onClick={handleProjectDelete}>Delete Project</button>
       <table>
@@ -90,7 +115,17 @@ function Sidebar (
         </tr>
       </table>
       {/* <button onClick={addDepencies}>Add Dependency</button> */}
+      <select 
+        name="modules"
+        id="moduleSelector"
+        onChange={handleModuleChange}
+      >
+        <option value="default">--Select a module--</option>
+        <option value="addModule">++Add Module++</option>
+        {modules}
+      </select>
       <input type="button" value="Compile" onClick={props.compileCode} />
+      <button onClick={handleModuleDelete}>Delete Module</button>
     </div>
   )
 }
