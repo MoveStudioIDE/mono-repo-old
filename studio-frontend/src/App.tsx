@@ -16,7 +16,7 @@ function App() {
   const [code, setCode] = useState('');
   const [projectList, setProjectList] = useState<string[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
-  const [currentModuleCode, setCurrentModuleCode] = useState('');
+  const [currentModule, setCurrentModule] = useState<string | null>(null);
   // const [dependencies, setDependencies] = useState([] as {dependency: string, address: string}[]);
   // const wallet = useWallet();
   // let projects = localStorage.getItem('projects');
@@ -65,7 +65,7 @@ function App() {
 
   let projectsContext = {
     projectList: projectList,
-    currentProject: currentProject
+    currentProject: currentProject,
   }
 
   const getProjects = async () => {
@@ -120,6 +120,8 @@ function App() {
   const handleProjectChange = (newProject: string) => {
     if (newProject === 'default') {
       setCurrentProject(null);
+      setCurrentModule(null);
+      setCode('')
       console.log('default');
     } else if (newProject === 'addProject') {
       console.log('addProject');
@@ -139,8 +141,13 @@ function App() {
       addToIndexdb(newProjectName).then(() => {
         getProjects();
       });
+      setCurrentProject(null);
+      setCurrentModule(null);
+      setCode('')
       // getProjectData(newProjectName || 'project1');
     } else {
+      setCurrentModule(null);
+      setCode('')
       console.log('newProject', newProject);
       getProjectData(newProject);
       console.log('currentProject', currentProject);
@@ -160,7 +167,8 @@ function App() {
 
   const handleModuleChange = (module: string) => {
     if (module === 'default') {
-      setCurrentModuleCode('');
+      setCurrentModule(null);
+      setCode('')
       console.log('default');
     } else if (module === 'addModule') {
       console.log('addModule');
@@ -182,9 +190,18 @@ function App() {
       addModuleToIndexdb(newModuleName).then(() => {
         getProjectData(currentProject.package);
       });
+      setCurrentModule(null);
+      setCode('');
+      // setCurrentModule(newModuleName);
+      // setCode('');
     } else {
       console.log('newModule', module);
-      setCurrentModuleCode(module);
+      if (!currentProject) {
+        return;
+      }
+      setCurrentModule(module);
+      setCode(currentProject.modules.find((m) => m.name === module)?.code || '');
+      // setCurrentModuleCode(currentProject.modules.find((m) => m.name === module)?.code || '');
     }
   }
 
@@ -203,6 +220,8 @@ function App() {
     removeModuleFromIndexdb(moduleName).then(() => {
       getProjectData(currentProject.package);
     });
+    setCurrentModule(null);
+    setCode('')
   }
 
   const addProject = () => {
@@ -238,6 +257,24 @@ function App() {
   const compileCode = async () => {
     console.log(code);
     // Call compile function in backend
+  }
+
+  const handleNewCode = (newCode: string) => {
+    const updateModuleInIndexdb = async (newCode: string) => {
+      indexedDb = new IndexedDb('test');
+      await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      if (!currentProject || !currentModule) {
+        return;
+      }
+      await indexedDb.updateModule('projects', currentProject.package, currentModule, newCode);
+    }
+    if (!currentProject || !currentModule) {
+      return;
+    }
+    updateModuleInIndexdb(newCode).then(() => {
+      getProjectData(currentProject.package);
+    });
+    setCode(newCode);
   }
 
   // useEffect(() => {
@@ -280,7 +317,12 @@ function App() {
               deleteModule={handleModuleDelete}
             />
           }
-          canvas={<Canvas setCode={setCode} />}
+          canvas={
+            <Canvas 
+              setCode={handleNewCode} 
+              code={code}
+            />
+          }
         />
       </ProjectContext.Provider>
     </div>

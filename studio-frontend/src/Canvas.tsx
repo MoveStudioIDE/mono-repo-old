@@ -1,11 +1,25 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Canvas.css';
 
-function Canvas(props: { setCode: (code: string) => void }) {
+function Canvas(
+  props: { 
+    code: string, 
+    setCode: (code: string) => void 
+  }
+) {
+
+  console.log('Canvas', props.code)
 
   const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    props.setCode(event.target.value);  
+    props.setCode(event.target.value);
+
   }
+
+  useEffect(() => {
+    console.log('Canvas useEffect', props.code)
+    const editor = document.getElementById('program') as HTMLTextAreaElement;
+    editor.value = props.code;
+  }, [props.code])
 
   return (
     <textarea 
@@ -13,7 +27,6 @@ function Canvas(props: { setCode: (code: string) => void }) {
       className="editor"
       onChange={handleTextChange}
     >
-      Code here
     </textarea>
   );
 }

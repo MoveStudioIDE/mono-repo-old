@@ -80,6 +80,22 @@ export class IndexedDb {
     return requestUpdate;
   }
 
+  public async updateModule(tableName: string, project: string, moduleName: string, code: string) {
+    const tx = this.db.transaction(tableName, 'readwrite');
+    const store = tx.objectStore(tableName);
+    const result = await store.get(project);
+    const modules = result.modules;
+    for (let i = 0; i < modules.length; i++) {
+      if (modules[i].name === moduleName) {
+        modules[i].code = code;
+        break;
+      }
+    }
+    const requestUpdate = store.put(result);
+    return requestUpdate;
+  }
+
+
   public async putBulkValue(tableName: string, values: object[]) {
     const tx = this.db.transaction(tableName, 'readwrite');
     const store = tx.objectStore(tableName);

@@ -45,9 +45,13 @@ function Sidebar (
     console.log('handleProjectChange', event.target.value);
     props.changeProject(event.target.value);
 
+    const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
+    moduleSelect.value = 'default';
+
     // Empty the select element if addProject is selected
     if (event.target.value === 'addProject') {
       event.target.value = 'default';
+      // event.target.value =
     }
   }
 
@@ -124,8 +128,8 @@ function Sidebar (
         <option value="addModule">++Add Module++</option>
         {modules}
       </select>
-      <input type="button" value="Compile" onClick={props.compileCode} />
       <button onClick={handleModuleDelete}>Delete Module</button>
+      <input type="button" value="Compile" onClick={props.compileCode} />
     </div>
   )
 }
