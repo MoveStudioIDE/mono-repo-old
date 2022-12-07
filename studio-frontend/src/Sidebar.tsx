@@ -25,6 +25,9 @@ function Sidebar (props: { compileCode: () => void }) {
             <div className="module-code">{module.code}</div>
           </div>
         )
+      });
+    }
+  }
 
   const handleProjectChange = (event: any) => {
     console.log('handleProjectChange', event.target.value);
