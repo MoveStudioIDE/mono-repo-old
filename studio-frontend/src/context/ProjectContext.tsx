@@ -4,7 +4,7 @@ import { Project } from '../types/project-types';
 interface ProjectContextInterface {
   projectList: string[],
   currentProject: Project | null,
-  setCurrentProject: React.Dispatch<React.SetStateAction<Project | null>>
+  // setCurrentProject: React.Dispatch<React.SetStateAction<Project | null>>
 }
 
 

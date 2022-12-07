@@ -11,10 +11,6 @@ import { getProjectData, getProjects, openProjectDB } from './db/ProjectDB';
 import { Project } from './types/project-types';
 import { IndexedDb } from './db/ProjectsDB';
 
-
-
-
-
 function App() {
 
   const [code, setCode] = useState('');
@@ -68,8 +64,7 @@ function App() {
 
   let projectsContext = {
     projectList: projectList,
-    currentProject: currentProject,
-    setCurrentProject: setCurrentProject
+    currentProject: currentProject
   }
 
   const getProjects = async () => {
@@ -81,6 +76,15 @@ function App() {
     setProjectList(allProjects);
   }
 
+  const getProjectData = async (project: string) => {
+    indexedDb = new IndexedDb('test');
+    await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+    const projectData = await indexedDb.getValue('projects', project);
+    setCurrentProject(projectData);
+    // console.log('projectData', projectData);
+    // return projectData;
+  }
+
   useEffect(() => {
     const startIndexDb = async () => {
       indexedDb = new IndexedDb('test');
@@ -90,6 +94,68 @@ function App() {
       getProjects();
     });
   }, []);
+
+  useEffect(() => {
+    const addToIndexdb = async (newProject: Project) => {
+      // indexedDb = new IndexedDb('test');
+      // await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      // await indexedDb.putValue('projects', {
+      //   package: 'test2',
+      //   dependencies: [
+      //     {name: 'Sui', address: '0x02'}
+      //   ],
+      //   modules: [
+      //     {name: 'test1', code: 'module Test1 { ... }'}
+      //   ]
+      // });
+    }
+    // addToIndexdb().then(() => {
+    //   getProjects();
+    // });
+    console.log('currentProject', currentProject);
+    
+  }, [projectsContext.currentProject]);
+
+  const handleProjectChange = (newProject: string) => {
+    if (newProject === 'default') {
+      // setCurrentProject(null);
+      console.log('default');
+    } else if (newProject === 'addProject') {
+      console.log('addProject');
+      const addToIndexdb = async (newProjectName: string) => {
+        indexedDb = new IndexedDb('test');
+        await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+        await indexedDb.putValue('projects', {
+          package: newProjectName,
+          dependencies: [],
+          modules: []
+        });
+      }
+      const newProjectName = prompt('Enter project name');
+      if (!newProjectName) {
+        return;
+      }
+      addToIndexdb(newProjectName).then(() => {
+        getProjects();
+      });
+      // getProjectData(newProjectName || 'project1');
+    } else {
+      console.log('newProject', newProject);
+      getProjectData(newProject);
+      console.log('currentProject', currentProject);
+    }
+  }
+
+  const handleProjectDelete = (projectName: string) => {
+    const removeFromIndexdb = async (projectName: string) => {
+      indexedDb = new IndexedDb('test');
+      await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      await indexedDb.deleteValue('projects', projectName);
+    }
+    removeFromIndexdb(projectName).then(() => {
+      getProjects();
+    });
+  }
 
   const addProject = () => {
     const addToIndexdb = async () => {
@@ -157,7 +223,13 @@ function App() {
         <button onClick={removeProject} id="removeProject">Remove project</button>
         <PageLayout
           header={<Header />}
-          sidebar={<Sidebar compileCode={compileCode} />}
+          sidebar={
+            <Sidebar 
+              compileCode={compileCode} 
+              changeProject={handleProjectChange}
+              deleteProject={handleProjectDelete}
+            />
+          }
           canvas={<Canvas setCode={setCode} />}
         />
       </ProjectContext.Provider>

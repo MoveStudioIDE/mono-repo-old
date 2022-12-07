@@ -4,9 +4,15 @@ import ProjectContext from './context/ProjectContext';
 import './Sidebar.css'
 import { Module } from './types/project-types';
 
-function Sidebar (props: { compileCode: () => void }) {
+function Sidebar (
+  props: { 
+    compileCode: () => void, 
+    changeProject: (project: string) => void
+    deleteProject: (project: string) => void
+  }
+){
 
-  const {projectList, currentProject, setCurrentProject} = useContext(ProjectContext);
+  const {projectList, currentProject} = useContext(ProjectContext);
 
   // function addDepencies() {
   //   // Add dependencies to code
@@ -31,7 +37,21 @@ function Sidebar (props: { compileCode: () => void }) {
 
   const handleProjectChange = (event: any) => {
     console.log('handleProjectChange', event.target.value);
-    setCurrentProject(event.target.value);
+    props.changeProject(event.target.value);
+
+    // Empty the select element if addProject is selected
+    if (event.target.value === 'addProject') {
+      event.target.value = 'default';
+    }
+  }
+
+  const handleProjectDelete = () => {
+    console.log('handleProjectDelete', currentProject);
+    if (currentProject) {
+      props.deleteProject(currentProject.package);
+      const projectSelect = document.getElementById('projectSelector') as HTMLSelectElement;
+      projectSelect.value = 'default';
+    }
   }
 
   // console.log('projectList', projectList);
@@ -45,9 +65,10 @@ function Sidebar (props: { compileCode: () => void }) {
         onChange={handleProjectChange}
       >
         <option value="default">--Select a project--</option>
+        <option value="addProject">++Add Project</option>
         {options}
       </select>
-      {/* <button onClick={setProjects || undefined}>setProjects</button> */}
+      <button onClick={handleProjectDelete}>Delete Project</button>
       <table>
         <tr>
           <th>
