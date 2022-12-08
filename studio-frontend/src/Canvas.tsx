@@ -12,7 +12,7 @@ function Canvas(
 
   const handleTextChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     props.setCode(event.target.value);
-
+    
   }
 
   useEffect(() => {

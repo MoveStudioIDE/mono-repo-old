@@ -10,6 +10,8 @@ import ProjectContext from './context/ProjectContext';
 import { getProjectData, getProjects, openProjectDB } from './db/ProjectDB';
 import { Project } from './types/project-types';
 import { IndexedDb } from './db/ProjectsDB';
+import { textChangeRangeIsUnchanged } from 'typescript';
+import axios from 'axios';
 
 function App() {
 
@@ -17,6 +19,8 @@ function App() {
   const [projectList, setProjectList] = useState<string[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [currentModule, setCurrentModule] = useState<string | null>(null);
+  const [compiledModules, setCompiledModules] = useState<string[]>([]);
+  const [compileError, setCompileError] = useState<string | null>(null);
   // const [dependencies, setDependencies] = useState([] as {dependency: string, address: string}[]);
   // const wallet = useWallet();
   // let projects = localStorage.getItem('projects');
@@ -134,6 +138,7 @@ function App() {
         await indexedDb.putValue('projects', {
           package: newProjectName,
           dependencies: [
+            {name: newProjectName, address: '0x0'},
             {name: 'Sui', address: '0x02'}
           ],
           modules: []
@@ -257,9 +262,36 @@ function App() {
     });
   }
 
-  const compileCode = async () => {
-    console.log(code);
-    // Call compile function in backend
+  const compileCode = () => {
+    // const callCompile = async () => {
+    //   if (!currentProject) {
+    //     return;
+    //   }
+    //   const compileResults = await compile(currentProject);
+    //   console.log('compileResults', compileResults);
+    //   if (typeof compileResults === 'string') {
+    //     setCompiledModules([]);
+    //     setCompileError(compileResults);
+    //     return;
+    //   }
+    //   setCompiledModules(compileResults);
+    //   setCompileError('');
+    // }
+    // callCompile();
+    if (!currentProject) {
+      return;
+    }
+    axios.post('http://localhost:5001/compile', currentProject).then((res) => {
+      const compileResults = res.data as string | string[];
+      console.log('res', compileResults);
+      // if (typeof compileResults === 'string') {
+      //   setCompiledModules([]);
+      //   setCompileError(compileResults);
+      //   return;
+      // }
+      // setCompiledModules(compileResults);
+      // setCompileError('');
+    });
   }
 
   const handleNewCode = (newCode: string) => {
@@ -276,6 +308,8 @@ function App() {
     }
     updateModuleInIndexdb(newCode).then(() => {
       getProjectData(currentProject.package);
+    }).then(() => {
+      compileCode();
     });
     setCode(newCode);
   }

@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { execSync } from 'child_process';
 import fs from 'fs';
 
-async function main () {
+export async function compileAndPublish (moduleCode: string) {
   dotenv.config();
   if (process.env.RECOVERY_PHRASE === undefined) {
     throw new Error('RECOVERY_PHRASE is not defined');
@@ -20,7 +20,7 @@ async function main () {
   const packageName = 'test';
   const moduleName = 'test';
   const packagePath = `./packages/${packageName}`;
-  const moduleCode = fs.readFileSync('./example.move', 'utf8');
+  // const moduleCode = fs.readFileSync('./example.move', 'utf8');
 
   // Create the new package
   execSync(
@@ -51,5 +51,3 @@ async function main () {
 
   return ;
 }
-
-main()
