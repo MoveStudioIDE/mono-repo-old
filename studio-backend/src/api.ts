@@ -1,7 +1,7 @@
 import cors from 'cors';
 import express from 'express';
 import { appendFileSync } from 'fs';
-import { compile } from './compile';
+import { compile, publish } from './compile';
 import { getProjectsOfAddress } from './gets';
 import { Project } from './schema/user-schema';
 
@@ -35,6 +35,18 @@ app.post('/compile', async (req, res) => {
 
   // Call compile function
   const compileResult = await compile(project);
+
+  res.send(compileResult);
+
+});
+
+app.post('/publish', async (req, res) => {
+  const compiledModules = req.body.compiledModules;
+
+  console.log(compiledModules);
+
+  // Call compile function
+  const compileResult = await publish(compiledModules);
 
   res.send(compileResult);
 

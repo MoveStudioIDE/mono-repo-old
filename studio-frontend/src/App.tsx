@@ -1,11 +1,11 @@
 import React, { useEffect, useState, createContext } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import PageLayout from './PageLayout';
+import PageLayout from './pages/utils/PageLayout';
 import Canvas from './Canvas';
 import Sidebar from './Sidebar';
 import Header from './Header';
-import { useWallet } from '@suiet/wallet-kit';
+// import { useSuiProvider, useWallet, WalletProvider } from '@suiet/wallet-kit';
 import ProjectContext from './context/ProjectContext';
 import { getProjectData, getProjects, openProjectDB } from './db/ProjectDB';
 import { Project } from './types/project-types';
@@ -13,14 +13,43 @@ import { IndexedDb } from './db/ProjectsDB';
 import { textChangeRangeIsUnchanged } from 'typescript';
 import axios from 'axios';
 
+
+const GAS_BUDGET = 40000;
+
+import { ConnectButton, useWallet } from "@mysten/wallet-kit";
+
 function App() {
+  
+  // const wallet = useWallet();
+
+  const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
+
+  const handleClick = async () => {
+    await signAndExecuteTransaction({
+      kind: "moveCall",
+      data: {
+        packageObjectId: "0x2",
+        module: "devnet_nft",
+        function: "mint",
+        typeArguments: [],
+        arguments: [
+          "name",
+          "capy",
+          "https://cdn.britannica.com/94/194294-138-B2CF7780/overview-capybara.jpg?w=800&h=450&c=crop",
+        ],
+        gasBudget: 10000,
+      },
+    });
+  };
+
 
   const [code, setCode] = useState('');
   const [projectList, setProjectList] = useState<string[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [currentModule, setCurrentModule] = useState<string | null>(null);
   const [compiledModules, setCompiledModules] = useState<string[]>([]);
-  const [compileError, setCompileError] = useState<string | null>(null);
+  const [compileError, setCompileError] = useState<string>('');
+  const [publishedPackages, setPublishedPackages] = useState<string[]>([]);
   // const [dependencies, setDependencies] = useState([] as {dependency: string, address: string}[]);
   // const wallet = useWallet();
   // let projects = localStorage.getItem('projects');
@@ -284,15 +313,72 @@ function App() {
     axios.post('http://localhost:5001/compile', currentProject).then((res) => {
       const compileResults = res.data as string | string[];
       console.log('res', compileResults);
-      // if (typeof compileResults === 'string') {
-      //   setCompiledModules([]);
-      //   setCompileError(compileResults);
-      //   return;
-      // }
-      // setCompiledModules(compileResults);
-      // setCompileError('');
+      if (typeof compileResults === 'string') {
+        setCompiledModules([]);
+        setCompileError(compileResults);
+        return;
+      }
+      setCompiledModules(compileResults);
+      setCompileError('');
     });
   }
+
+  const handlePublish = () => {
+    if (!currentProject || compiledModules.length == 0) {
+      return;
+    }
+
+    const publishData = {
+      compiledModules: compiledModules,
+      gasBudget: GAS_BUDGET
+    }
+
+    console.log('publishData', publishData)
+
+    const callPublish = async () => {
+      // const publishTxn = await wallet.signAndExecuteTransaction({
+      //   transaction: {
+      //     kind: 'publish', 
+      //     data: publishData
+      //   }
+      // });
+
+      // console.log('publishTxn', publishTxn);
+
+      const moveCallData = {
+        packageObjectId: '0x2',
+        module: 'devnet_nft',
+        function: 'mint',
+        typeArguments: [],
+        arguments: [
+          'name',
+          'capy',
+          'https://cdn.britannica.com/94/194294-138-B2CF7780/overview-capybara.jpg?w=800&h=450&c=crop',
+        ],
+        gasBudget: 10000,
+      };
+
+      const publishTxn = await signAndExecuteTransaction({
+        kind: 'publish',
+        data: {
+          compiledModules: compiledModules,
+          gasBudget: GAS_BUDGET,
+        }
+      });
+
+      console.log('resData', publishTxn);
+
+      const publishTxnDigest = publishTxn.certificate.transactionDigest;
+
+      const publishTxnCreated = publishTxn.effects.created;
+
+      console.log('publishTxnCreated', publishTxnCreated);
+      console.log('publishTxnDigest', publishTxnDigest);
+
+    }
+    callPublish();
+  }
+
 
   const handleNewCode = (newCode: string) => {
     const updateModuleInIndexdb = async (newCode: string) => {
@@ -309,7 +395,7 @@ function App() {
     updateModuleInIndexdb(newCode).then(() => {
       getProjectData(currentProject.package);
     }).then(() => {
-      compileCode();
+      // compileCode();
     });
     setCode(newCode);
   }
@@ -354,17 +440,26 @@ function App() {
   //   });
   // }
 
+  // console.log('compiledModules', compiledModules);
+
 
   return (
     <div>
       <ProjectContext.Provider value={projectsContext}>
+      <ConnectButton />
+      <button onClick={handleClick}>handleClick</button>
+      <button onClick={handlePublish}>handleExecuteMoveCall</button>
         {/* <button onClick={addProject} id="addProject">Add project</button>
         <button onClick={removeProject} id="removeProject">Remove project</button> */}
         <PageLayout
           header={<Header />}
-          sidebar={
+          innerSidebar={<p></p>}
+          outerSidebar={
             <Sidebar 
               compileCode={compileCode} 
+              publishPackage={handlePublish}
+              compiledModules={compiledModules}
+              compileError={compileError}
               changeProject={handleProjectChange}
               deleteProject={handleProjectDelete}
               changeModule={handleModuleChange}

@@ -1,38 +1,29 @@
+import { Dependency, Module, Project } from "../types/project-types";
 
-import React, {useContext} from 'react'
-import ProjectContext from './context/ProjectContext';
-import './Sidebar.css'
-import { Dependency, Module } from './types/project-types';
 
-function Sidebar (
-  props: { 
-    compileCode: () => void, 
-    publishPackage: () => void,
+function BuildInnerSidebar(
+  props: {
+    projectList: string[],
+    currentProject: Project | null,
     changeProject: (project: string) => void,
     deleteProject: (project: string) => void,
     changeModule: (module: string) => void,
     deleteModule: (module: string) => void,
     addDependency: (dependency: string, address: string) => void,
-    compiledModules: string[],
-    compileError: string
   }
-){
+) {
 
-  const {projectList, currentProject} = useContext(ProjectContext);
+  //---Helper---//
 
-  // function addDepencies() {
-  //   // Add dependencies to code
-  // }
-
-  const projects = projectList.map((project: string) => {
+  const projects = props.projectList.map((project: string) => {
     return <option value={project}>{project}</option>
   });
 
-  const modules = currentProject?.modules.map((module: Module) => {
+  const modules = props.currentProject?.modules.map((module: Module) => {
     return <option value={module.name}>{module.name}</option>
   });
 
-  const dependencies = currentProject?.dependencies.map((dependency: Dependency) => {
+  const dependencies = props.currentProject?.dependencies.map((dependency: Dependency) => {
     return (
       <tr>
         <td>
@@ -45,20 +36,7 @@ function Sidebar (
     )
   });
 
-  // console.log('compiledModules', props.compiledModules)
-
-  const currentProjectModules = () => {
-    if (currentProject) {
-      return currentProject.modules.map((module: Module) => {
-        return (
-          <div className="module">
-            <div className="module-name">{module.name}</div>
-            <div className="module-code">{module.code}</div>
-          </div>
-        )
-      });
-    }
-  }
+  //---Handlers---//
 
   const handleProjectChange = (event: any) => {
     console.log('handleProjectChange', event.target.value);
@@ -75,21 +53,11 @@ function Sidebar (
   }
 
   const handleProjectDelete = () => {
-    console.log('handleProjectDelete', currentProject);
-    if (currentProject) {
-      props.deleteProject(currentProject.package);
+    console.log('handleProjectDelete', props.currentProject);
+    if (props.currentProject) {
+      props.deleteProject(props.currentProject.package);
       const projectSelect = document.getElementById('projectSelector') as HTMLSelectElement;
       projectSelect.value = 'default';
-    }
-  }
-
-  const handleModuleDelete = () => {
-    console.log('handleModuleDelete', currentProject);
-    const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
-
-    if (moduleSelect.value !== 'default' && moduleSelect.value !== 'addModule' && currentProject) {
-      props.deleteModule(moduleSelect.value);
-      moduleSelect.value = 'default';
     }
   }
 
@@ -99,6 +67,16 @@ function Sidebar (
 
     if (event.target.value === 'addModule') {
       event.target.value = 'default';
+    }
+  }
+
+  const handleModuleDelete = () => {
+    console.log('handleModuleDelete', props.currentProject);
+    const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
+
+    if (moduleSelect.value !== 'default' && moduleSelect.value !== 'addModule' && props.currentProject) {
+      props.deleteModule(moduleSelect.value);
+      moduleSelect.value = 'default';
     }
   }
 
@@ -113,13 +91,11 @@ function Sidebar (
     }
   }
 
-  
-
-  // console.log('projectList', projectList);
+  //---Render---//
 
   return (
-    <div className="sidebar">
-      <h1>Sidebar</h1>
+    <div>
+      <h1>Build Inner Sidebar</h1>
       <select 
         name="project" 
         id="projectSelector"
@@ -154,7 +130,6 @@ function Sidebar (
           </th>
         </tr>
       </table>
-      {/* <button onClick={addDepencies}>Add Dependency</button> */}
       <select 
         name="modules"
         id="moduleSelector"
@@ -165,14 +140,8 @@ function Sidebar (
         {modules}
       </select>
       <button onClick={handleModuleDelete}>Delete Module</button>
-      <input type="button" value="Compile" onClick={props.compileCode} />
-      {props.compileError && <p>{props.compileError}</p>}
-      {props.compiledModules && props.compiledModules.length > 0 && <ul>{props.compiledModules.map((module: string) => {
-        return <p>{module}</p>
-      })}</ul>}
-      {props.compiledModules && props.compiledModules.length > 0 && <button onClick={props.publishPackage}>Publish Package</button>}
     </div>
-  )
+  );
 }
 
-export default Sidebar
+export default BuildInnerSidebar;

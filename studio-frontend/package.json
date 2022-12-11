@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "@mysten/sui.js": "^0.18.0",
+    "@mysten/wallet-adapter-react": "^11.0.0",
+    "@mysten/wallet-kit": "^0.1.2",
+    "@suiet/wallet-adapter": "^0.0.18",
     "@suiet/wallet-kit": "^0.1.10",
     "@types/node": "^16.7.13",
     "@types/react": "^18.0.26",
@@ -38,5 +41,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "react-router-dom": "^6.4.5"
   }
 }

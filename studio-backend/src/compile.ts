@@ -1,6 +1,8 @@
+import { JsonRpcProvider, Ed25519Keypair, RawSigner } from '@mysten/sui.js';
 import { execSync } from 'child_process';
 import * as fs from 'fs';
 import { Project } from './schema/user-schema';
+import dotenv from 'dotenv';
 
 const TEMP_DIR = `${__dirname}/../temp-packages`;
 
@@ -89,10 +91,48 @@ export async function compile(project: Project): Promise<string | string[]> {
 
     return errorMessage as string;
   }
+}
 
+export async function publish (compiledModules: string[]) {
+  dotenv.config();
+  if (process.env.RECOVERY_PHRASE === undefined) {
+    throw new Error('RECOVERY_PHRASE is not defined');
+  }
+  // connect to local RPC server
+  const provider = new JsonRpcProvider();
+  const keyPair = Ed25519Keypair.deriveKeypair(process.env.RECOVERY_PHRASE)
+  const signer = new RawSigner(keyPair, provider);
+  // await provider.requestSuiFromFaucet(
+  //   await signer.getAddress()
+  // );
+  console.log(`Signer address: ${await signer.getAddress()}`);
+
+  // publish the compiled modules
+
+  try {
+    // const publishTxn = await signer.publish({
+    //   compiledModules: compiledModules,
+    //   gasBudget: 10000,
+    // });
+    // console.log(publishTxn)
+
+    const publishTxn = await signer.signAndExecuteTransaction({
+      kind: 'publish',
+      data: {
+        compiledModules: compiledModules,
+        gasBudget: 10000
+      },
+    });
+
+    console.log(publishTxn);
+
+    return publishTxn;  
+  } catch (error: any) {
+    console.log(error);
+  }
+  
 
 }
 
 
-// compile(exampleProject)
 
