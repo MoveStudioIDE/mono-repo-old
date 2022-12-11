@@ -153,7 +153,7 @@ function BuildInnerSidebar(
           {modules}
         </select>
         {props.currentModule && <button onClick={handleModuleDelete}>Delete Module</button>}
-        {props.currentModule && <button onClick={props.compileCode}>Compile</button>}
+        {props.currentProject && <button onClick={props.compileCode}>Compile</button>}
         {props.compileError && <p>{props.compileError}</p>}
         {props.compiledModules && props.compiledModules.length > 0 && <ul>{props.compiledModules.map((module: string) => {
         return <p>{module}</p>

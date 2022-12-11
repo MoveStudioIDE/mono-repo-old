@@ -9,9 +9,9 @@ import DeployCanvas from "../components/DeployCanvas";
 
 const GAS_BUDGET = 40000;
 
-interface DeployedPackage {
+export interface DeployedPackageInfo {
   name: string, 
-  addresses: string[] | undefined
+  address: string | undefined
 }
 
 import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
@@ -23,7 +23,7 @@ function DeploymentPage() {
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [compileError, setCompileError] = useState<string>('');
   const [deployedModules, setDeployedModules] = useState<string[]>([]);
-  const [deployedObjects, setDeployedObjects] = useState<string[]>([]);
+  const [deployedObjects, setDeployedObjects] = useState<DeployedPackageInfo[]>([]);
   const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
 
 
@@ -156,45 +156,22 @@ function DeploymentPage() {
         console.log('publishTxnCreated', publishTxnCreated);
         console.log('publishTxnDigest', publishTxnDigest);
 
-        // // split objects into modules and structs
-        // const modules = publishTxnCreated?.filter((module) => {
-        //   return typeof module.owner == 'string';
-        // });
+        const packageInfos = publishTxnCreated?.map((object) => {
+          return {name: currentProject.package, address: object.reference.objectId};
+        });
 
-        // const structs = publishTxnCreated?.filter((module) => {
-        //   return typeof module.owner !== 'string';
-        // });
-
-        // console.log('modules', modules);
-        // console.log('structs', structs);
-
-        // if (modules) {
-        //   setDeployedModules([...deployedModules, ...modules.map((module) => module.reference.objectId)]);
-        // }
+        if (!packageInfos) {
+          return;
+        }
 
         if (publishTxnCreated) {
-          setDeployedObjects([...deployedObjects, ...publishTxnCreated.map((object) => object.reference.objectId)]);
+          setDeployedObjects([...deployedObjects, ...packageInfos]);
         }
-         
-
-        // const deployedPackage = {
-        //   name: currentProject.package,
-        //   addresses: publishTxnCreated?.map((module) => {
-        //     const objectId = module.reference.objectId;
-        //     const owner = module.owner;
-        //     if (typeof owner === 'string') {
-              
-        //     }
-        //   })
-        // }
-
-        // setDeployedPackages([...deployedPackages, deployedPackage]);
-
+        
       });
     });
   }
 
-  // console.log('deployedPackages', deployedPackages);
 
   return (
     <div>

@@ -1,18 +1,26 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { DeployedPackageInfo } from '../pages/DeploymentPage';
 import './DeployCanvas.css'
-import {DeployedModule, DeployedObject} from './DeployedObjects'
+import {DeployedPackage, DeployedObject} from './DeployedObjects'
 
 function DeployCanvas (
   props: {
-    deployedObjects: string[]
+    deployedObjects: DeployedPackageInfo[]
   }
 ) {
 
   const [deployedObjects, setDeployedObjects] = useState<JSX.Element[]>()
 
   useEffect(() => {
-    props.deployedObjects.map(async (objectId) => {
+    const objects = props.deployedObjects.map(async (deployedPackageInfo) => {
+
+      const objectId = deployedPackageInfo.address;
+
+      if (objectId == undefined) {
+        return;
+      }
+
       axios.post('http://localhost:5001/object-details', {objectId: objectId}).then((res) => {
         console.log('res', res);
         if (res == undefined || res.data.status != 'Exists') {
@@ -22,11 +30,12 @@ function DeployCanvas (
         const objectData = res.data.details.data;
         if (objectData.dataType == 'package') {
 
-          const newObject = <DeployedModule
+          console.log('objectData.disassembled', objectData.disassembled)
+
+          const newObject = <DeployedPackage
             address={objectId}
-            // name={objectData.name}
-            // version={objectData.version}
-            // source={objectData.source}
+            modules={objectData.disassembled}
+            packageName={deployedPackageInfo.name}
           />;
 
           setDeployedObjects((prev) => {
@@ -62,12 +71,6 @@ function DeployCanvas (
       });
     });
   }, [props.deployedObjects])
-
-    // return (
-    //   <DeployedModule
-    //     address={objectId}
-    //   />
-    // ) 
 
 
   return (

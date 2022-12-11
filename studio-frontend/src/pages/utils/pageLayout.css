@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  grid-template-columns: 5% 25% auto;
+  grid-template-columns: 5% 20% auto;
   grid-template-rows: 65px auto;
 
   overflow: hidden;
