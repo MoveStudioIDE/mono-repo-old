@@ -292,21 +292,6 @@ function App() {
   }
 
   const compileCode = () => {
-    // const callCompile = async () => {
-    //   if (!currentProject) {
-    //     return;
-    //   }
-    //   const compileResults = await compile(currentProject);
-    //   console.log('compileResults', compileResults);
-    //   if (typeof compileResults === 'string') {
-    //     setCompiledModules([]);
-    //     setCompileError(compileResults);
-    //     return;
-    //   }
-    //   setCompiledModules(compileResults);
-    //   setCompileError('');
-    // }
-    // callCompile();
     if (!currentProject) {
       return;
     }

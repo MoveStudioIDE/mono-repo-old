@@ -1,8 +1,10 @@
 import cors from 'cors';
 import express from 'express';
 import { appendFileSync } from 'fs';
+import { resetLevel } from 'loglevel';
 import { compile, publish } from './compile';
 import { getProjectsOfAddress } from './gets';
+import { getObjectDetails } from './object-details';
 import { Project } from './schema/user-schema';
 
 const app = express();
@@ -50,6 +52,18 @@ app.post('/publish', async (req, res) => {
 
   res.send(compileResult);
 
+});
+
+app.post('/object-details', async (req, res) => {
+  const objectId = req.body.objectId as string;
+
+  console.log(objectId);
+
+  const objectDetails = await getObjectDetails(objectId);
+
+  console.log(objectDetails);
+
+  res.send(objectDetails);
 });
 
 app.listen(process.env.PORT || port, () => {

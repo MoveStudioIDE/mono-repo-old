@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { IndexedDb } from "../db/ProjectsDB";
 import { getProjectData } from "../db/ProjectDB";
 import { Project } from "../types/project-types";
+import OuterSidebar from "../components/OuterSidebar";
+import axios from "axios";
 
 function BuildPage() {
 
@@ -24,6 +26,9 @@ function BuildPage() {
   const [projectList, setProjectList] = useState<string[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [currentModule, setCurrentModule] = useState<string | null>(null);
+  const [compiledModules, setCompiledModules] = useState<string[]>([]);
+  const [compileError, setCompileError] = useState<string>('');
+  
 
   //---Helpers---//
   const getProjects = async () => {
@@ -42,6 +47,23 @@ function BuildPage() {
     setCurrentProject(projectData);
     // console.log('projectData', projectData);
     // return projectData;
+  }
+
+  const compileCode = () => {
+    if (!currentProject) {
+      return;
+    }
+    axios.post('http://localhost:5001/compile', currentProject).then((res) => {
+      const compileResults = res.data as string | string[];
+      console.log('res', compileResults);
+      if (typeof compileResults === 'string') {
+        setCompiledModules([]);
+        setCompileError(compileResults);
+        return;
+      }
+      setCompiledModules(compileResults);
+      setCompileError('');
+    });
   }
   
 
@@ -65,6 +87,8 @@ function BuildPage() {
       // compileCode();
     });
     setCode(newCode);
+    setCompileError('');
+    setCompiledModules([]);
   }
 
   const handleProjectChange = (projectChange: string) => {
@@ -200,11 +224,15 @@ function BuildPage() {
     <div>
       <PageLayout
         header={<h1>Build Page</h1>}
-        outerSidebar={<h1>outer sidebar</h1>}
+        outerSidebar={<OuterSidebar/>}
         innerSidebar={
           <BuildInnerSidebar
             projectList={projectList}
             currentProject={currentProject}
+            currentModule={currentModule}
+            compileCode={compileCode} 
+            compiledModules={compiledModules}
+            compileError={compileError}
             changeProject={handleProjectChange}
             deleteProject={handleProjectDelete}
             changeModule={handleModuleChange}

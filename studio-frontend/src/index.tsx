@@ -28,14 +28,17 @@ root.render(
   //   </WalletKitProvider>
   // </React.StrictMode>
 
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<LandingPage />} />
-      <Route path="/build" element={<BuildPage />} />
-      <Route path="/deployment" element={<DeploymentPage />} />
-    </Routes>
-  </BrowserRouter>
+  <WalletKitProvider>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/build" element={<BuildPage />} />
+        <Route path="/deployment" element={<DeploymentPage />} />
+      </Routes>
+    </BrowserRouter>
+  </WalletKitProvider>
 );
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

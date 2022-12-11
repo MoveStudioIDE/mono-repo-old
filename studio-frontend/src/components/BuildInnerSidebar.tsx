@@ -1,10 +1,14 @@
 import { Dependency, Module, Project } from "../types/project-types";
-
+import './BuildInnerSidebar.css'
 
 function BuildInnerSidebar(
   props: {
     projectList: string[],
     currentProject: Project | null,
+    currentModule: string | null,
+    compileCode: () => void,
+    compiledModules: string[],
+    compileError: string
     changeProject: (project: string) => void,
     deleteProject: (project: string) => void,
     changeModule: (module: string) => void,
@@ -53,6 +57,9 @@ function BuildInnerSidebar(
   }
 
   const handleProjectDelete = () => {
+    // confirm delete with user
+    if (prompt('Type "delete" to confirm deletion of project') !== 'delete') return;
+
     console.log('handleProjectDelete', props.currentProject);
     if (props.currentProject) {
       props.deleteProject(props.currentProject.package);
@@ -71,6 +78,9 @@ function BuildInnerSidebar(
   }
 
   const handleModuleDelete = () => {
+    // confirm delete with user
+    if (prompt('Type "delete" to confirm deletion of module') !== 'delete') return;
+
     console.log('handleModuleDelete', props.currentProject);
     const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
 
@@ -95,51 +105,60 @@ function BuildInnerSidebar(
 
   return (
     <div>
-      <h1>Build Inner Sidebar</h1>
+      <h1>Packages</h1>
       <select 
         name="project" 
         id="projectSelector"
         onChange={handleProjectChange}
+        style={{width: '60%'}}
       >
         <option value="default">--Select a project--</option>
         <option value="addProject">++Add Project++</option>
         {projects}
       </select>
-      <button onClick={handleProjectDelete}>Delete Project</button>
-      <table>
-        <tr>
-          <th>
-            <p>Dependency</p>
-          </th>
-          <th>
-            <p>Address</p>
-          </th>
-        </tr>
-          {dependencies}
-        <tr>
-          <td>
-            <input type="text" id="dependency" placeholder="package" />
-          </td>
-          <td>
-            <input type="text" id="address" placeholder="0x..." />
-          </td>
-        </tr>
-        <tr>
-          <th colSpan={2}>
-            <button onClick={addDepencies}>Add Dependency</button>
-          </th>
-        </tr>
-      </table>
-      <select 
-        name="modules"
-        id="moduleSelector"
-        onChange={handleModuleChange}
-      >
-        <option value="default">--Select a module--</option>
-        <option value="addModule">++Add Module++</option>
-        {modules}
-      </select>
-      <button onClick={handleModuleDelete}>Delete Module</button>
+      {props.currentProject && <button onClick={handleProjectDelete}>Delete Project</button>}
+      {props.currentProject && <div>
+        <table className="dependency-table">
+          <tr>
+            <th>
+              <p>Dependency</p>
+            </th>
+            <th>
+              <p>Address</p>
+            </th>
+          </tr>
+            {dependencies}
+          <tr>
+            <td>
+              <input type="text" id="dependency" placeholder="package" />
+            </td>
+            <td>
+              <input type="text" id="address" placeholder="0x..." />
+            </td>
+          </tr>
+          <tr>
+            <th colSpan={2}>
+              <button onClick={addDepencies}>Add Dependency</button>
+            </th>
+          </tr>
+        </table>
+        <select 
+          name="modules"
+          id="moduleSelector"
+          onChange={handleModuleChange}
+          style={{width: '40%'}}
+        >
+          <option value="default">--Select a module--</option>
+          <option value="addModule">++Add Module++</option>
+          {modules}
+        </select>
+        {props.currentModule && <button onClick={handleModuleDelete}>Delete Module</button>}
+        {props.currentModule && <button onClick={props.compileCode}>Compile</button>}
+        {props.compileError && <p>{props.compileError}</p>}
+        {props.compiledModules && props.compiledModules.length > 0 && <ul>{props.compiledModules.map((module: string) => {
+        return <p>{module}</p>
+      })}</ul>}
+      </div>}
     </div>
   );
 }

@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  grid-template-columns: 5% 20% auto;
+  grid-template-columns: 5% 25% auto;
   grid-template-rows: 65px auto;
 
   overflow: hidden;
@@ -14,7 +14,7 @@
 }
 
 .header {
-  grid-column-start: 1;
+  grid-column-start: 2;
   grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 2;
@@ -47,7 +47,7 @@
 .outer-sidebar-section {
   grid-column-start: 1;
   grid-column-end: 2;
-  grid-row-start: 2;
+  grid-row-start: 1;
   grid-row-end: 6;
 /*   
   border-bottom: 3px solid black;

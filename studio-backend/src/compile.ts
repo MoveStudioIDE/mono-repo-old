@@ -86,7 +86,7 @@ export async function compile(project: Project): Promise<string | string[]> {
     const errorMessage = error.stdout;
 
     // Remove the temporary project directory
-    fs.rmdirSync(tempProjectPath, { recursive: true });
+    // fs.rmdirSync(tempProjectPath, { recursive: true });
     
 
     return errorMessage as string;
