@@ -1,4 +1,8 @@
+import { useState } from 'react';
 import './DeployedObjects.css';
+import PackageFunction from './PackageFunction';
+
+
 
 export function DeployedPackage (
   props: {
@@ -8,24 +12,79 @@ export function DeployedPackage (
   }
 ) {
 
-  console.log('props.modules', props.modules)
+  const [selectedDetailed, setSelectedDetailed] = useState<object | null>(null);
 
-  const moduleListEntries = Object.entries(props.modules).map((module) => {
-    return (
-      <li>{module[0]}</li>
-    )
+  const structs = Object.entries(props.modules).flatMap((module: [string, object]) => {
+    return Object.entries(module[1]).flatMap((moduleDetails: [string, object]) => {
+      if (moduleDetails[0] == 'structs') {
+        return Object.entries(moduleDetails[1]).map((struct: [string, object]) => {
+          return (
+            <option value={`${module[0]}::${struct[0]}`}>{`${module[0]}::${struct[0]}`}</option>
+          )
+        });
+      }
+    });
   });
+
+  const functions = Object.entries(props.modules).flatMap((module: [string, object]) => {
+    return Object.entries(module[1]).flatMap((moduleDetails: [string, object]) => {
+      if (moduleDetails[0] == 'exposed_functions') {
+        return Object.entries(moduleDetails[1]).map((func: [string, object]) => {
+          return (
+            <option value={`${module[0]}::${func[0]}`}>{`${module[0]}::${func[0]}`}</option>
+          )
+        });
+      }
+    });
+  });
+
+
+  const handleDetailChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+
+    if (event.target.value == 'package details') {
+      setSelectedDetailed(null);
+      return;
+    }
+
+    const selected = event.target.value;
+    const selectedModule = selected.split('::')[0];
+    const selectedDetail = selected.split('::')[1];
+
+    const selectedFunctionDetails = (props.modules as any)[selectedModule].exposed_functions[selectedDetail];
+
+    selectedFunctionDetails.name = selectedDetail;
+
+    setSelectedDetailed(selectedFunctionDetails);
+
+  }
 
   return (
     <div className="module-box">
-      <h1>{props.packageName}</h1>
-      {/* <p><b>Package name: </b></p> */}
-      <p><b>Package address: </b></p>
-      <p>{props.address}</p>
-      <p><b>Modules: </b></p>
-      <ul>
-        {moduleListEntries}
-      </ul>
+      <div style={{textAlign: 'center'}}>
+        <h1>{props.packageName}</h1>
+        <p>{props.address}</p>
+      </div>
+      <select
+        name="details" 
+        id="detailSelector"
+        onChange={handleDetailChange}
+      >
+        <option value="package details">Package Details</option>
+        <optgroup label="Package structs">
+          {structs}
+        </optgroup>
+        <optgroup label="Package functions">
+          {functions}
+        </optgroup>
+      </select>
+      {
+        selectedDetailed != null && 
+        <div>
+          <PackageFunction
+            functionDetails={selectedDetailed}
+          />
+        </div>
+      }
     </div>
   )
 }

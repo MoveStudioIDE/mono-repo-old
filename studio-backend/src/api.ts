@@ -4,7 +4,7 @@ import { appendFileSync } from 'fs';
 import { resetLevel } from 'loglevel';
 import { compile, publish } from './compile';
 import { getProjectsOfAddress } from './gets';
-import { getObjectDetails } from './object-details';
+import { getObjectDetails, getPackageDetails } from './object-details';
 import { Project } from './schema/user-schema';
 
 const app = express();
@@ -64,6 +64,18 @@ app.post('/object-details', async (req, res) => {
   console.log(objectDetails);
 
   res.send(objectDetails);
+});
+
+app.post('/package-details', async (req, res) => {
+  const packageId = req.body.packageId as string;
+
+  console.log(packageId);
+
+  const packageDetails = await getPackageDetails(packageId);
+
+  console.log(packageDetails);
+
+  res.send(packageDetails);
 });
 
 app.listen(process.env.PORT || port, () => {

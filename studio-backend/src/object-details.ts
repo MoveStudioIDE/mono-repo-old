@@ -7,3 +7,9 @@ export async function getObjectDetails(objectId: string) {
 
   return objectDetails;
 }
+
+export async function getPackageDetails(packageId: string) {
+  const provider = new JsonRpcProvider();
+  const packageDetails = await provider.getNormalizedMoveModulesByPackage(packageId);
+  return packageDetails;
+}

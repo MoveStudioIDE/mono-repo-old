@@ -30,21 +30,41 @@ function DeployCanvas (
         const objectData = res.data.details.data;
         if (objectData.dataType == 'package') {
 
-          console.log('objectData.disassembled', objectData.disassembled)
+          axios.post('http://localhost:5001/package-details', {packageId: objectId}).then((res) => {
 
-          const newObject = <DeployedPackage
-            address={objectId}
-            modules={objectData.disassembled}
-            packageName={deployedPackageInfo.name}
-          />;
+            const packageDetails = res.data;
 
-          setDeployedObjects((prev) => {
-            if (prev) {
-              return [...prev, newObject];
-            } else {
-              return [newObject];
-            }
-          });
+            const newObject = <DeployedPackage
+              address={objectId}
+              modules={packageDetails}
+              packageName={deployedPackageInfo.name}
+            />;
+
+            setDeployedObjects((prev) => {
+              if (prev) {
+                return [...prev, newObject];
+              } else {
+                return [newObject];
+              }
+            });
+
+          }); 
+
+          // console.log('objectData.disassembled', objectData.disassembled)
+
+          // const newObject = <DeployedPackage
+          //   address={objectId}
+          //   modules={objectData.disassembled}
+          //   packageName={deployedPackageInfo.name}
+          // />;
+
+          // setDeployedObjects((prev) => {
+          //   if (prev) {
+          //     return [...prev, newObject];
+          //   } else {
+          //     return [newObject];
+          //   }
+          // });
         } else if (objectData.dataType == 'moveObject') {
 
           const fullName = objectData.type;
