@@ -13,6 +13,7 @@ export function DeployedPackage (
 ) {
 
   const [selectedDetailed, setSelectedDetailed] = useState<object | null>(null);
+  const [selectedModule, setSelectedModule] = useState<string | null>(null);
 
   const structs = Object.entries(props.modules).flatMap((module: [string, object]) => {
     return Object.entries(module[1]).flatMap((moduleDetails: [string, object]) => {
@@ -43,6 +44,7 @@ export function DeployedPackage (
 
     if (event.target.value == 'package details') {
       setSelectedDetailed(null);
+      setSelectedModule(null);
       return;
     }
 
@@ -55,6 +57,7 @@ export function DeployedPackage (
     selectedFunctionDetails.name = selectedDetail;
 
     setSelectedDetailed(selectedFunctionDetails);
+    setSelectedModule(selectedModule);
 
   }
 
@@ -82,6 +85,8 @@ export function DeployedPackage (
         <div>
           <PackageFunction
             functionDetails={selectedDetailed}
+            packageAddress={props.address}
+            moduleName={selectedModule || ''}
           />
         </div>
       }
