@@ -7,6 +7,7 @@ import { getProjectData } from "../db/ProjectDB";
 import { Project } from "../types/project-types";
 import OuterSidebar from "../components/OuterSidebar";
 import axios from "axios";
+import { useLocation } from "react-router-dom";
 
 function BuildPage() {
 

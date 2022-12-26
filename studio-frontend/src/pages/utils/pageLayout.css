@@ -1,6 +1,6 @@
 .page {
   display: grid;
-  grid-template-columns: 5% 20% auto;
+  grid-template-columns: 55px 20% auto;
   grid-template-rows: 65px auto;
 
   overflow: hidden;
@@ -53,9 +53,10 @@
   border-bottom: 3px solid black;
   border-left: 3px solid black; */
   border-right: 2px solid #495879; 
-  
-  align-items: center ;
 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   overflow: auto;
 
 
