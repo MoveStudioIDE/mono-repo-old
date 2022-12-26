@@ -38,6 +38,8 @@ app.post('/compile', async (req, res) => {
   // Call compile function
   const compileResult = await compile(project);
 
+  console.log(compileResult)
+
   res.send(compileResult);
 
 });
