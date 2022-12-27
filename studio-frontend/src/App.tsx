@@ -432,26 +432,27 @@ function App() {
     <div>
       <ProjectContext.Provider value={projectsContext}>
       <ConnectButton />
-      <button onClick={handleClick}>handleClick</button>
-      <button onClick={handlePublish}>handleExecuteMoveCall</button>
+      {/* <button onClick={handleClick}>handleClick</button>
+      <button onClick={handlePublish}>handleExecuteMoveCall</button> */}
+      
         {/* <button onClick={addProject} id="addProject">Add project</button>
         <button onClick={removeProject} id="removeProject">Remove project</button> */}
         <PageLayout
           header={<Header />}
           innerSidebar={<p></p>}
-          outerSidebar={
-            <Sidebar 
-              compileCode={compileCode} 
-              publishPackage={handlePublish}
-              compiledModules={compiledModules}
-              compileError={compileError}
-              changeProject={handleProjectChange}
-              deleteProject={handleProjectDelete}
-              changeModule={handleModuleChange}
-              deleteModule={handleModuleDelete}
-              addDependency={handleDependencyAdd}
-            />
-          }
+          // outerSidebar={
+          //   <Sidebar 
+          //     compileCode={compileCode} 
+          //     publishPackage={handlePublish}
+          //     compiledModules={compiledModules}
+          //     compileError={compileError}
+          //     changeProject={handleProjectChange}
+          //     deleteProject={handleProjectDelete}
+          //     changeModule={handleModuleChange}
+          //     deleteModule={handleModuleDelete}
+          //     addDependency={handleDependencyAdd}
+          //   />
+          // }
           canvas={
             <Canvas 
               setCode={handleNewCode} 

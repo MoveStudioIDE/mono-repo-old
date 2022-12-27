@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import './PackageFunction.css'
 import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
+import { extractMutableReference } from '@mysten/sui.js';
+import { shorten } from '../utils/address-shortener';
 
 
 function PackageFunction(
@@ -32,15 +34,41 @@ function PackageFunction(
 
     for (let i = 0; i < params.length; i++) {
       console.log('param', params[i])
-      console.log('type', types[i])
-      paramsAndTypes.push(
-        <FunctionParameter
-          parameterName={params[i]}
-          parameterType={types[i]}
-          parameterIndex={i}
-          handleParameterChange={handleParameterChange}
-        />
-      )
+      console.log('param type', typeof params[i])
+
+      // console.log('type', types[i])
+
+      if (typeof params[i] == 'object') {
+        console.log('e')
+        const object = extractMutableReference(params[i])
+        if (object === undefined) {
+          continue;
+        }
+        console.log("object", object)
+        const struct = (object as any).Struct as {address: string, module: string, name: string};
+        if (struct.address == "0x2" && struct.name == "TxContext") {
+          continue; // Make sure this works. the TxContext might need to also be at the end of the list
+        } else {
+          paramsAndTypes.push(
+            <FunctionParameter
+              parameterName={`${shorten(struct.address)}::${struct.module}::${struct.name}`}
+              // parameterType={types[i]}
+              parameterIndex={i}
+              handleParameterChange={handleParameterChange}
+            />
+          )
+        }
+      } else {
+        console.log('f')
+        paramsAndTypes.push(
+          <FunctionParameter
+            parameterName={params[i]}
+            // parameterType={types[i]}
+            parameterIndex={i}
+            handleParameterChange={handleParameterChange}
+          />
+        )
+      }
     }
 
     setFunctionParameterList(paramsAndTypes);
@@ -52,14 +80,24 @@ function PackageFunction(
     return paramsAndTypes;
   }
 
-  const handleParameterChange = (index: number, parameter: any, type: string) => {
-    console.log(index, parameter, type)
-    if (functionParameters == undefined) {
-      return;
+  const handleParameterChange = (index: number, parameter: any) => {
+    console.log(index, parameter)
+    console.log('function params', functionParameters)
+    if (functionParameters === undefined) {
+      console.log('in it')
+      const newParams = [] as string[];
+      newParams.fill('', 0, index)
+      newParams[index] = parameter;
+      setFunctionParameters(newParams);
+    } else {
+      console.log('passt it')
+      const newParams = functionParameters;
+      newParams[index] = parameter;
+      setFunctionParameters(newParams);
     }
-    const newParams = functionParameters;
-    newParams[index] = parameter;
-    setFunctionParameters(newParams);
+
+    console.log('functionParams', functionParameters)
+    
   }
 
   console.log('function parameters', functionParameters)
@@ -100,6 +138,7 @@ function PackageFunction(
         {functionParameterList}
       </div>
       <button onClick={handleExecuteMoveCall}>Execute</button>
+      <button onClick={() => {console.log('function params', functionParameters)}}>args</button>
     </div>
   )
 }
@@ -107,9 +146,9 @@ function PackageFunction(
 function FunctionParameter(
   props: {
     parameterName: string,
-    parameterType: string,
+    // parameterType: string,
     parameterIndex: number,
-    handleParameterChange: (index: number, parameter: string, type: string) => void
+    handleParameterChange: (index: number, parameter: string) => void
   }
 ) {
 
@@ -117,13 +156,13 @@ function FunctionParameter(
     props.handleParameterChange(
       props.parameterIndex,
       event.target.value,
-      props.parameterType
+      // props.parameterType
     );
   }
 
   return (
     <div className='function-parameter'>
-      <p>{`${props.parameterName} (${props.parameterType})`}</p>
+      <p><b>{props.parameterName}:</b></p>
       <div style={{left: '-50%'}}>
         <input 
           style={{position: 'relative', left: '50%'}} 

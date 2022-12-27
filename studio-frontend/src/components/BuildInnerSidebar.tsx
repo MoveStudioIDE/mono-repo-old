@@ -104,60 +104,73 @@ function BuildInnerSidebar(
   //---Render---//
 
   return (
-    <div>
-      <h1>Packages</h1>
+    <div style={{padding:"5px", overflow: "clip"}}>
+      {/* <h1 style={{textAlign:"center"}}>Packages</h1> */}
       <select 
         name="project" 
         id="projectSelector"
         onChange={handleProjectChange}
-        style={{width: '60%'}}
+        style={{margin:"5px 0px"}}
+        className="select select-primary w-full select-xs max-w-xs"
       >
         <option value="default">--Select a project--</option>
         <option value="addProject">++Add Project++</option>
         {projects}
       </select>
-      {props.currentProject && <button onClick={handleProjectDelete}>Delete Project</button>}
+      <div style={{display: "flex", justifyContent: "space-around"}}>
+        {
+          props.currentProject && 
+          <button 
+            onClick={props.compileCode} 
+            className="btn btn-xs btn-info"
+            style={{margin:"2px 5px"}}
+          >
+            Compile
+          </button>
+        }
+        {
+          props.currentProject && 
+          <button 
+            onClick={handleProjectDelete} 
+            className="btn btn-xs btn-error"
+            style={{margin:"2px 5px"}}
+          >
+            Delete
+          </button>
+        }
+      </div>
+      {
+        props.compileError && <p>{props.compileError}</p>}
+        {props.compiledModules && props.compiledModules.length > 0 && <ul>{props.compiledModules.map((module: string) => {
+        return <p>{module}</p>
+      })}</ul>}
       {props.currentProject && <div>
-        <table className="dependency-table">
-          <tr>
-            <th>
-              <p>Dependency</p>
-            </th>
-            <th>
-              <p>Address</p>
-            </th>
-          </tr>
+        <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full">
+          <thead>
+            <tr>
+              <th>Dependency</th>
+              <th>Address</th>
+            </tr>
+          </thead>
+          <tbody>
             {dependencies}
-          <tr>
-            <td>
-              <input type="text" id="dependency" placeholder="package" />
-            </td>
-            <td>
-              <input type="text" id="address" placeholder="0x..." />
-            </td>
-          </tr>
-          <tr>
-            <th colSpan={2}>
-              <button onClick={addDepencies}>Add Dependency</button>
-            </th>
-          </tr>
+          </tbody>
         </table>
         <select 
           name="modules"
           id="moduleSelector"
           onChange={handleModuleChange}
-          style={{width: '40%'}}
+          style={{marginTop:"25px", marginBottom:"5px"}}
+          className="select select-primary w-full select-xs max-w-xs"
         >
           <option value="default">--Select a module--</option>
           <option value="addModule">++Add Module++</option>
           {modules}
         </select>
-        {props.currentModule && <button onClick={handleModuleDelete}>Delete Module</button>}
-        {props.currentProject && <button onClick={props.compileCode}>Compile</button>}
-        {props.compileError && <p>{props.compileError}</p>}
-        {props.compiledModules && props.compiledModules.length > 0 && <ul>{props.compiledModules.map((module: string) => {
-        return <p>{module}</p>
-      })}</ul>}
+        <div style={{display: "flex", justifyContent: "space-around"}}>
+          {props.currentModule && <button onClick={handleModuleDelete} className="btn btn-xs btn-error">Delete Module</button>}
+        </div>
+        
       </div>}
     </div>
   );

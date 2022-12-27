@@ -112,7 +112,8 @@ export function DeployedObject (
     fields: object,
     packageAddress: string,
     moduleName: string,
-    objectName: string
+    objectName: string,
+    updateHandler: (address: string) => void
   }
 ) {
 
@@ -137,8 +138,14 @@ export function DeployedObject (
     )
   });
 
+  const refreshHandler = async () => {
+    console.log('refresh')
+    props.updateHandler(props.address)
+  }
+
   return (
     <div className="module-box">
+      <button onClick={refreshHandler}>refresh</button>
       <h1 style={{textAlign: 'center'}}>{props.objectName}</h1>
       <p><b>Package address: </b></p>
       <p>

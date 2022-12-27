@@ -8,6 +8,7 @@ import { Project } from "../types/project-types";
 import OuterSidebar from "../components/OuterSidebar";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import Header from "../components/Header";
 
 function BuildPage() {
 
@@ -224,8 +225,7 @@ function BuildPage() {
   return (
     <div>
       <PageLayout
-        header={<h1>Build Page</h1>}
-        outerSidebar={<OuterSidebar/>}
+        header={<Header/>}
         innerSidebar={
           <BuildInnerSidebar
             projectList={projectList}

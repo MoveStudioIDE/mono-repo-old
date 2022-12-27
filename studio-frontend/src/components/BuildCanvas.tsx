@@ -65,13 +65,18 @@ function BuildCanvas(
       >
       </textarea> */}
       {/* <p>test</p> */}
+      <div className="tabs ">
+        <a className="tab tab-bordered">Tab 1</a> 
+        <a className="tab tab-bordered tab-active">Tab 2</a> 
+        <a className="tab tab-bordered">Tab 3</a>
+      </div>
       <Editor
-        height="85vh"
+        height="90vh"
         width={`100%`}
         language={"sui-move"}
         value={props.code}
         onChange={handleEditorChange}
-        // theme="vs-dark"
+        theme="vs-dark"
       />
     </div>
     // <CodeEditorWindow/>

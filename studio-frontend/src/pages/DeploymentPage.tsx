@@ -177,7 +177,6 @@ function DeploymentPage() {
     <div>
       <PageLayout
         header={<DeployHeader/>}
-        outerSidebar={<OuterSidebar/>}
         innerSidebar={
           <DeployInnerSidebar 
             projectList={projectList}

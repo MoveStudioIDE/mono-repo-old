@@ -78,6 +78,7 @@ function DeployCanvas (
             packageAddress={splitFullName[0]}
             moduleName={splitFullName[1]}
             objectName={splitFullName[2]}
+            updateHandler={updateObjectByAddress}
           />;
 
           setDeployedObjects((prev) => {
@@ -91,6 +92,43 @@ function DeployCanvas (
       });
     });
   }, [props.deployedObjects])
+
+  const updateObjectByAddress = async (address: string) => {
+    console.log('refreshing', address)
+    if (deployedObjects == undefined) {
+      return
+    }
+    for (let object of deployedObjects) {
+      console.log(object)
+      if (object.props.address == address) {
+        axios.post('http://localhost:5001/object-details', {objectId: address}).then((res) => {
+        console.log('res', res);
+        if (res == undefined || res.data.status != 'Exists') {
+          return;
+        }
+
+        const objectData = res.data.details.data;
+        if (objectData.dataType == 'package') {
+          return;
+        } else if (objectData.dataType == 'moveObject') {
+
+          const fullName = objectData.type;
+
+          const splitFullName = fullName.split('::');
+          
+          object = <DeployedObject
+            address={address}
+            fields={objectData.fields}
+            packageAddress={splitFullName[0]}
+            moduleName={splitFullName[1]}
+            objectName={splitFullName[2]}
+            updateHandler={updateObjectByAddress}
+          />;
+        }
+      });
+      }
+    }
+  }
 
 
   return (
