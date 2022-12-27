@@ -1,5 +1,4 @@
 import { Dependency, Module, Project } from "../types/project-types";
-import './BuildInnerSidebar.css'
 
 function BuildInnerSidebar(
   props: {
@@ -154,8 +153,29 @@ function BuildInnerSidebar(
           </thead>
           <tbody>
             {dependencies}
+            <tr>
+              <td>
+                <input
+                  type="text" 
+                  id="dependency"
+                  placeholder="Dependency"
+                  className="input input-bordered input-accent w-full max-w-xs input-xs"
+                />
+              </td>
+              <td>
+                <input
+                  type="text"
+                  id="address"
+                  placeholder="Address"
+                  className="input input-bordered input-accent w-full max-w-xs input-xs"
+                />
+              </td>
+            </tr>
           </tbody>
         </table>
+        <div style={{display: "flex", justifyContent: "space-around"}}>
+          <button onClick={addDepencies} className="btn btn-xs btn-success">Add Dependency</button>
+        </div>
         <select 
           name="modules"
           id="moduleSelector"
