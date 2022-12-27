@@ -16,14 +16,14 @@ function DeployHeader() {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
           </button>
           <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
-            <li><a><Link to="/">Home</Link></a></li>
+            {/* <li><a><Link to="/">Home</Link></a></li> */}
             <li><a><Link to="/build">Build</Link></a></li>
             <li><a><Link to="/deployment">Deploy</Link></a></li>
           </ul>
         </div>
       </div>
       <div className="flex-1">
-        <a className="btn btn-ghost normal-case text-xl">Move Studio</a>
+        <a className="btn btn-ghost normal-case text-xl"><Link to="/">Move Studio</Link></a>
       </div>
       <ConnectButton />
       <div className="flex-none">
