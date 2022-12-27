@@ -28,7 +28,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "css": "yarn tailwindcss -i ./src/index.css -o ./dist/output.css --watch"
   },
   "browser": {
     "child_process": false,

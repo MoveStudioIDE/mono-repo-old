@@ -3,6 +3,7 @@ import './DeployedObjects.css';
 import PackageFunction from './PackageFunction';
 import copyIcon from "../icons/copy-24.png";
 import copyIcon2 from "../icons/copy2-24.png";
+import { shortenAddress } from '../utils/address-shortener';
 
 
 
@@ -65,44 +66,87 @@ export function DeployedPackage (
   }
 
   return (
-    <div className="module-box">
-      <div style={{textAlign: 'center'}}>
-        <h1>{props.packageName}</h1>
-        <p>
-          {props.address}
-          <img 
-          className="copy-button" src={copyIcon2}
-          onClick={async () => {
-            navigator.clipboard.writeText(props.address)
-            console.log('clipboard', await navigator.clipboard.readText())
-          }}
-        />
-        </p>
-      </div>
-      <select
-        name="details" 
-        id="detailSelector"
-        onChange={handleDetailChange}
-      >
-        <option value="package details">Package Details</option>
-        <optgroup label="Package structs">
-          {structs}
-        </optgroup>
-        <optgroup label="Package functions">
-          {functions}
-        </optgroup>
-      </select>
-      {
-        selectedDetailed != null && 
+    <div className="card h-min bg-neutral text-neutral-content shadow-xl card-bordered card-compact" style={{overflow: "auto", margin: "10px"}}>
+      <div className="card-body">
+        <div className="card-actions justify-end">
+            <button className="btn btn-square btn-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
         <div>
-          <PackageFunction
-            functionDetails={selectedDetailed}
-            packageAddress={props.address}
-            moduleName={selectedModule || ''}
-          />
+          <h1 className="card-title text-center">{props.packageName}</h1>
+          <p className="text-center">
+            {shortenAddress(props.address, 5)}
+          </p>
+          <select
+            name="details" 
+            id="detailSelector"
+            onChange={handleDetailChange}
+            style={{marginTop:"5px", marginBottom:"5px"}}
+            className="select w-full select-xs max-w-xs"
+          >
+            <option value="package details">Package Details</option>
+            <optgroup label="Package structs">
+              {structs}
+            </optgroup>
+            <optgroup label="Package functions">
+              {functions}
+            </optgroup>
+          </select>
+          {
+            selectedDetailed != null && 
+            <div>
+              <PackageFunction
+                functionDetails={selectedDetailed}
+                packageAddress={props.address}
+                moduleName={selectedModule || ''}
+              />
+            </div>
+          }
         </div>
-      }
+        <div className="card-actions justify-end">
+          <div className="badge badge-outline">Module</div> 
+        </div>
+      </div>
     </div>
+    // <div className="module-box">
+    //   <div style={{textAlign: 'center'}}>
+    //     <h1>{props.packageName}</h1>
+    //     <p>
+    //       {props.address}
+    //       <img 
+    //       className="copy-button" src={copyIcon2}
+    //       onClick={async () => {
+    //         navigator.clipboard.writeText(props.address)
+    //         console.log('clipboard', await navigator.clipboard.readText())
+    //       }}
+    //     />
+    //     </p>
+    //   </div>
+    //   <select
+    //     name="details" 
+    //     id="detailSelector"
+    //     onChange={handleDetailChange}
+    //   >
+    //     <option value="package details">Package Details</option>
+    //     <optgroup label="Package structs">
+    //       {structs}
+    //     </optgroup>
+    //     <optgroup label="Package functions">
+    //       {functions}
+    //     </optgroup>
+    //   </select>
+    //   {
+    //     selectedDetailed != null && 
+    //     <div>
+    //       <PackageFunction
+    //         functionDetails={selectedDetailed}
+    //         packageAddress={props.address}
+    //         moduleName={selectedModule || ''}
+    //       />
+    //     </div>
+    //   }
+    // </div>
   )
 }
 
@@ -129,12 +173,18 @@ export function DeployedObject (
     // TODO: hard fix - fix to be robust for nested structs
     if (typeof field[1] == 'object') {
       return (
-        <li>{field[0]}: <i>{field[1].id}</i></li>
+        <tr>
+          <td>{field[0]}</td>
+          <td>{field[1].id}</td>
+        </tr>
       )
     }
 
     return (
-      <li>{field[0]}: <i>{field[1].toString()}</i></li>
+      <tr>
+        <td>{field[0]}</td>
+        <td>{field[1].toString()}</td>
+      </tr>
     )
   });
 
@@ -144,47 +194,38 @@ export function DeployedObject (
   }
 
   return (
-    <div className="module-box">
-      <button onClick={refreshHandler}>refresh</button>
-      <h1 style={{textAlign: 'center'}}>{props.objectName}</h1>
-      <p><b>Package address: </b></p>
-      <p>
-        {props.packageAddress}
-        <img 
-          className="copy-button" src={copyIcon2}
-          onClick={async () => {
-            navigator.clipboard.writeText(props.packageAddress)
-            console.log('clipboard', await navigator.clipboard.readText())
-          }}
-        />
-      </p>
-      <p><b>Module name: </b></p>
-      <p>
-        {props.moduleName}
-        {/* <img 
-          className="copy-button" src={copyIcon2}
-          onClick={async () => {
-            navigator.clipboard.writeText(props.moduleName)
-            console.log('clipboard', await navigator.clipboard.readText())
-          }}
-        /> */}
-      </p>
-      <p><b>ObjectId: </b></p>
-      <p>
-        {props.address}
-        <img 
-          className="copy-button" src={copyIcon2}
-          onClick={async () => {
-            navigator.clipboard.writeText(props.address)
-            console.log('clipboard', await navigator.clipboard.readText())
-          }}
-        />
-      </p>
-
-      <p><b>Fields: </b></p>
-      <ul className='object-fields'>
-        {fieldListEntries}
-      </ul>
+    <div className="card h-min bg-neutral text-neutral-content shadow-xl card-bordered card-compact" style={{overflow: "auto", margin: "10px"}}>
+      <div className="card-body">
+        <div className="card-actions justify-end">
+            <button className="btn btn-square btn-sm">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+            </button>
+          </div>
+        <div>
+          <h1 className="card-title text-center">{props.objectName}</h1>
+          <p className="text-center">
+            {shortenAddress(props.packageAddress, 3)}
+            ::
+            {props.moduleName}
+            ::
+            {shortenAddress(props.address, 3)}
+          </p>
+          <table style={{marginTop:"15px"}} className="table table-compact table-zebra w-full">
+            <thead>
+              <tr>
+                <th>Attributes</th>
+                <th>values</th>
+              </tr>
+            </thead>
+            <tbody>
+              {fieldListEntries}
+            </tbody>
+          </table>
+        </div>
+        <div className="card-actions justify-end">
+          <div className="badge badge-outline">Object</div> 
+        </div>
+      </div>
     </div>
   )
 }

@@ -188,7 +188,16 @@ function BuildInnerSidebar(
           {modules}
         </select>
         <div style={{display: "flex", justifyContent: "space-around"}}>
-          {props.currentModule && <button onClick={handleModuleDelete} className="btn btn-xs btn-error">Delete Module</button>}
+          {
+            props.currentModule && 
+            <button 
+              onClick={handleModuleDelete} 
+              className="btn btn-xs btn-error" 
+              style={{margin:"2px 5px"}}
+            >
+              Delete Module
+            </button>
+          }
         </div>
         
       </div>}

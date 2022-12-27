@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import './PackageFunction.css'
 import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import { extractMutableReference } from '@mysten/sui.js';
-import { shorten } from '../utils/address-shortener';
+import { shortenAddress } from '../utils/address-shortener';
 
 
 function PackageFunction(
@@ -51,7 +51,7 @@ function PackageFunction(
         } else {
           paramsAndTypes.push(
             <FunctionParameter
-              parameterName={`${shorten(struct.address)}::${struct.module}::${struct.name}`}
+              parameterName={`${shortenAddress(struct.address, 1)}::${struct.module}::${struct.name}`}
               // parameterType={types[i]}
               parameterIndex={i}
               handleParameterChange={handleParameterChange}
@@ -130,15 +130,30 @@ function PackageFunction(
 
 
   return (
-    <div className="function-box">
-      <div style={{textAlign: 'center'}}>
-        <h1>{functionName}</h1>
+    <div 
+      className="card h-min bg-neutral-focus text-neutral-content shadow-xl card-bordered card-compact" 
+      style={{margin: '10px 0px'}}
+    >
+      <div className="card-body">
+        {/* <div style={{textAlign: 'center'}}>
+          <h1>{functionName}</h1>
+        </div> */}
+        <h1 className="card-title">{functionName}</h1>
+        {/* <div className='function-parameters'>
+          {functionParameterList}
+        </div> */}
+        <div className="form-control">
+          {functionParameterList}
+        </div>
+        <button 
+          className="btn btn-xs glass" 
+          style={{margin:"2px 5px"}}
+          onClick={handleExecuteMoveCall}
+        >
+          Execute
+        </button>
+        <button onClick={() => {console.log('function params', functionParameters)}}>args</button>
       </div>
-      <div className='function-parameters'>
-        {functionParameterList}
-      </div>
-      <button onClick={handleExecuteMoveCall}>Execute</button>
-      <button onClick={() => {console.log('function params', functionParameters)}}>args</button>
     </div>
   )
 }
@@ -161,16 +176,20 @@ function FunctionParameter(
   }
 
   return (
-    <div className='function-parameter'>
-      <p><b>{props.parameterName}:</b></p>
-      <div style={{left: '-50%'}}>
-        <input 
-          style={{position: 'relative', left: '50%'}} 
-          type="text" placeholder='Enter parameter here'
-          onChange={handleParameterChange} 
-        />
-      </div>
-    </div>
+    // <div className='function-parameter'>
+    //   <p><b>{props.parameterName}:</b></p>
+    //   <div style={{left: '-50%'}}>
+    //     <input 
+    //       style={{position: 'relative', left: '50%'}} 
+    //       type="text" placeholder='Enter parameter here'
+    //       onChange={handleParameterChange} 
+    //     />
+    //   </div>
+    // </div>
+    <label className="input-group input-group-xs" style={{margin: "2px"}}>
+      <span>Arg{props.parameterIndex}</span>
+      <input type="text" placeholder={props.parameterName} className="input input-bordered input-xs" onChange={handleParameterChange} />
+    </label>
   )
 }
 

@@ -1,6 +1,6 @@
 .deploy-canvas {
   overflow: auto;
-  background-color: antiquewhite;
+  background-color: hsl(var(--b3));
   width: 100%;
   height: 100%;
   display: flex;

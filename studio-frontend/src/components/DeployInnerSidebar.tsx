@@ -32,24 +32,53 @@ function DeployInnerSidebar(
   }
 
   return (
-    <div>
-      <h2>Publish Package</h2>
+    <div style={{padding:"5px", overflow: "auto"}}>
+      <h1 style={{textAlign: "center",marginTop:"10px"}}>Publish new package</h1>
       <select 
         name="project" 
         id="projectSelector"
         onChange={handleProjectChange}
-        style={{width: '60%'}}
+        style={{marginTop:"5px", marginBottom:"5px"}}
+        className="select select-primary w-full select-xs max-w-xs"
       >
         <option value="default">--Select a project--</option>
-        <option value="addProject">++Add Project++</option>
         {projects}
       </select>
-      {props.currentProject && <button onClick={props.publishPackage}>Publish</button>}
+      {/* <div className="form-control ">
+        <div className="input-group input-group-xs ">
+          <select className="select select-bordered select-xs">
+            <option disabled selected>--Select a project--</option>
+            {projects}
+          </select>
+          <button onClick={props.publishPackage} className="btn btn-xs btn-primary">Publish</button>
+        </div>
+      </div> */}
+      <div style={{display: "flex", justifyContent: "space-around"}}>
+        {
+          props.currentProject && 
+          <button 
+            onClick={props.publishPackage} 
+            className="btn btn-xs btn-accent"
+            style={{margin:"2px 5px"}}
+          >
+            Publish
+          </button>
+        }
+      </div>
       {props.compileError != '' && <p>{props.compileError}</p>}
-      <h2>Add published Modules</h2>
-      <p>Coming soon...</p>
-      <h2>Add deployed objects</h2>
-      <p>Coming soon...</p>
+      <div style={{marginTop:"25px", marginBottom:"5px"}}>
+        <h2 style={{textAlign: "center"}}>Add existing package or object</h2>
+        <div style={{display: "flex", justifyContent: "center"}}>
+          <div className="form-control">
+            <div className="input-group input-group-xs">
+              <input type="text" placeholder="0x00...000" className="input input-bordered input-xs" />
+              <button className="btn btn-xs btn-primary">
+                Add
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   )
 }
