@@ -13,6 +13,10 @@ function DeployCanvas (
   const [deployedObjects, setDeployedObjects] = useState<JSX.Element[]>()
 
   useEffect(() => {
+    updateDeployedObjects();
+  }, [props.deployedObjects]);
+
+  const updateDeployedObjects = () => {
     const objects = props.deployedObjects.map(async (deployedPackageInfo) => {
 
       const objectId = deployedPackageInfo.address;
@@ -21,7 +25,7 @@ function DeployCanvas (
         return;
       }
 
-      axios.post('http://localhost:5001/object-details', {objectId: objectId}).then((res) => {
+      return axios.post('http://localhost:5001/object-details', {objectId: objectId}).then((res) => {
         console.log('res', res);
         if (res == undefined || res.data.status != 'Exists') {
           return;
@@ -30,49 +34,26 @@ function DeployCanvas (
         const objectData = res.data.details.data;
         if (objectData.dataType == 'package') {
 
-          axios.post('http://localhost:5001/package-details', {packageId: objectId}).then((res) => {
+          return axios.post('http://localhost:5001/package-details', {packageId: objectId}).then((res) => {
 
             const packageDetails = res.data;
 
-            const newObject = <DeployedPackage
+            return <DeployedPackage
               address={objectId}
               modules={packageDetails}
               packageName={deployedPackageInfo.name}
+              refreshHandler={updateDeployedObjects}
             />;
-
-            setDeployedObjects((prev) => {
-              if (prev) {
-                return [...prev, newObject];
-              } else {
-                return [newObject];
-              }
-            });
 
           }); 
 
-          // console.log('objectData.disassembled', objectData.disassembled)
-
-          // const newObject = <DeployedPackage
-          //   address={objectId}
-          //   modules={objectData.disassembled}
-          //   packageName={deployedPackageInfo.name}
-          // />;
-
-          // setDeployedObjects((prev) => {
-          //   if (prev) {
-          //     return [...prev, newObject];
-          //   } else {
-          //     return [newObject];
-          //   }
-          // });
+          
         } else if (objectData.dataType == 'moveObject') {
-
           const fullName = objectData.type;
-
           const splitFullName = fullName.split('::');
           
 
-          const newObject = <DeployedObject
+          return <DeployedObject
             address={objectId}
             fields={objectData.fields}
             packageAddress={splitFullName[0]}
@@ -80,19 +61,16 @@ function DeployCanvas (
             objectName={splitFullName[2]}
             updateHandler={updateObjectByAddress}
             dragStartHandler={handleDragStart}
+            refreshHandler={updateDeployedObjects}
           />;
-
-          setDeployedObjects((prev) => {
-            if (prev) {
-              return [...prev, newObject];
-            } else {
-              return [newObject];
-            }
-          });
         }
       });
     });
-  }, [props.deployedObjects])
+
+    Promise.all(objects).then((objects) => {
+      setDeployedObjects(objects as JSX.Element[]);
+    });
+  }
 
   const updateObjectByAddress = async (address: string) => {
     console.log('refreshing', address)
@@ -125,6 +103,7 @@ function DeployCanvas (
             objectName={splitFullName[2]}
             updateHandler={updateObjectByAddress}
             dragStartHandler={handleDragStart}
+            refreshHandler={updateDeployedObjects}
           />;
         }
       });
@@ -141,6 +120,7 @@ function DeployCanvas (
 
   return (
     <div className="deploy-canvas">
+      {/* <button onClick={updateDeployedObjects}>refresh</button> */}
       {deployedObjects}
     </div>
   )

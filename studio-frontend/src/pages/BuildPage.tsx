@@ -12,6 +12,12 @@ import Header from "../components/Header";
 
 function BuildPage() {
 
+  const [theme, setTheme] = useState('dark');
+
+  useEffect(() => {
+    document.querySelector('html')?.setAttribute('data-theme', theme);
+  }, [theme]);
+
   // Initialize indexedDb
   let indexedDb: IndexedDb;
   useEffect(() => {
@@ -260,7 +266,9 @@ function BuildPage() {
   return (
     <div>
       <PageLayout
-        header={<Header/>}
+        header={
+          <Header setTheme={setTheme}/>
+        }
         innerSidebar={
           <BuildInnerSidebar
             projectList={projectList}
@@ -283,6 +291,7 @@ function BuildPage() {
             code={code} setCode={handleNewCode} 
             changeModule={handleModuleChange}
             deleteModule={handleModuleDelete}
+            theme={theme}
           />
         }
       />

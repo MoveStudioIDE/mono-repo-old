@@ -4,6 +4,7 @@ import PackageFunction from './PackageFunction';
 import copyIcon from "../icons/copy-24.png";
 import copyIcon2 from "../icons/copy2-24.png";
 import { shortenAddress } from '../utils/address-shortener';
+import PackageStruct from './PackageStruct';
 
 
 
@@ -12,11 +13,13 @@ export function DeployedPackage (
   props: {
     address: string,
     modules: object,
-    packageName: string
+    packageName: string,
+    refreshHandler: () => void
   }
 ) {
 
-  const [selectedDetailed, setSelectedDetailed] = useState<object | null>(null);
+  const [selectedFunction, setSelectedFunction] = useState<object | null>(null);
+  const [selectedStruct, setSelectedStruct] = useState<object | null>(null);
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
 
   const structs = Object.entries(props.modules).flatMap((module: [string, object]) => {
@@ -47,37 +50,66 @@ export function DeployedPackage (
   const handleDetailChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 
     if (event.target.value == 'package details') {
-      setSelectedDetailed(null);
+      setSelectedFunction(null);
       setSelectedModule(null);
+      setSelectedStruct(null);
       return;
     }
+
+    // get optgroup label
+    const optgroup = event.target.selectedOptions[0].parentElement as HTMLOptGroupElement;
+    const optgroupLabel = optgroup.label;
 
     const selected = event.target.value;
     const selectedModule = selected.split('::')[0];
     const selectedDetail = selected.split('::')[1];
 
-    const selectedFunctionDetails = (props.modules as any)[selectedModule].exposed_functions[selectedDetail];
+    if (optgroupLabel == 'Package structs') {
+      const selectedStructDetails = (props.modules as any)[selectedModule].structs[selectedDetail];
+      selectedStructDetails.name = selectedDetail;
+      setSelectedStruct(selectedStructDetails);
+      setSelectedFunction(null);
+      console.log('selectedStructDetails', selectedStructDetails)
+    } else if (optgroupLabel == 'Package functions') {
+      const selectedFunctionDetails = (props.modules as any)[selectedModule].exposed_functions[selectedDetail];
+      selectedFunctionDetails.name = selectedDetail;
+      setSelectedFunction(selectedFunctionDetails);
+      setSelectedStruct(null);
+    }
 
-    selectedFunctionDetails.name = selectedDetail;
-
-    setSelectedDetailed(selectedFunctionDetails);
     setSelectedModule(selectedModule);
-
   }
 
   return (
     <div className="card h-min bg-neutral text-neutral-content shadow-xl card-bordered card-compact" style={{overflow: "auto", margin: "10px"}}>
       <div className="card-body">
         <div className="card-actions justify-end">
-            <button className="btn btn-square btn-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          <a className="link link-hover" href={`https://explorer.sui.io/object/${props.address}`}>
+            <button className="btn btn-square btn-sm" >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>            
             </button>
-          </div>
+          </a> 
+          <button className="btn btn-square btn-sm" >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
         <div>
           <h1 className="card-title text-center">{props.packageName}</h1>
-          <p className="text-center">
-            {shortenAddress(props.address, 5)}
-          </p>
+          <div>
+            <p className="text-center">
+              {shortenAddress(props.address, 5)}
+              <label 
+                tabIndex={0} 
+                className="btn btn-circle btn-ghost btn-xs text-info" 
+                onClick={async () => {
+                  navigator.clipboard.writeText(props.address)
+                  console.log('clipboard', await navigator.clipboard.readText())
+                }}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+              </label>
+            </p>
+          </div>
           <select
             name="details" 
             id="detailSelector"
@@ -94,10 +126,21 @@ export function DeployedPackage (
             </optgroup>
           </select>
           {
-            selectedDetailed != null && 
+            selectedFunction != null && 
             <div>
               <PackageFunction
-                functionDetails={selectedDetailed}
+                functionDetails={selectedFunction}
+                packageAddress={props.address}
+                moduleName={selectedModule || ''}
+                refreshHandler={props.refreshHandler}
+              />
+            </div>
+          }
+          {
+            selectedStruct != null && 
+            <div>
+              <PackageStruct
+                structDetails={selectedStruct}
                 packageAddress={props.address}
                 moduleName={selectedModule || ''}
               />
@@ -109,44 +152,6 @@ export function DeployedPackage (
         </div>
       </div>
     </div>
-    // <div className="module-box">
-    //   <div style={{textAlign: 'center'}}>
-    //     <h1>{props.packageName}</h1>
-    //     <p>
-    //       {props.address}
-    //       <img 
-    //       className="copy-button" src={copyIcon2}
-    //       onClick={async () => {
-    //         navigator.clipboard.writeText(props.address)
-    //         console.log('clipboard', await navigator.clipboard.readText())
-    //       }}
-    //     />
-    //     </p>
-    //   </div>
-    //   <select
-    //     name="details" 
-    //     id="detailSelector"
-    //     onChange={handleDetailChange}
-    //   >
-    //     <option value="package details">Package Details</option>
-    //     <optgroup label="Package structs">
-    //       {structs}
-    //     </optgroup>
-    //     <optgroup label="Package functions">
-    //       {functions}
-    //     </optgroup>
-    //   </select>
-    //   {
-    //     selectedDetailed != null && 
-    //     <div>
-    //       <PackageFunction
-    //         functionDetails={selectedDetailed}
-    //         packageAddress={props.address}
-    //         moduleName={selectedModule || ''}
-    //       />
-    //     </div>
-    //   }
-    // </div>
   )
 }
 
@@ -159,6 +164,7 @@ export function DeployedObject (
     objectName: string,
     updateHandler: (address: string) => void,
     dragStartHandler: (event: React.DragEvent<HTMLDivElement>) => void,
+    refreshHandler: () => void,
   }
 ) {
 
@@ -191,7 +197,7 @@ export function DeployedObject (
 
   const refreshHandler = async () => {
     console.log('refresh')
-    props.updateHandler(props.address)
+    props.refreshHandler()
   }
 
   return (
@@ -204,10 +210,18 @@ export function DeployedObject (
     >
       <div className="card-body">
         <div className="card-actions justify-end">
-            <button className="btn btn-square btn-sm">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          <button className="btn btn-square btn-sm" onClick={refreshHandler}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"> <path d="M2.5 2v6h6M21.5 22v-6h-6"/><path d="M22 11.5A10 10 0 0 0 3.2 7.2M2 12.5a10 10 0 0 0 18.8 4.2"/></svg>
+          </button>
+          <a className="link link-hover" href={`https://explorer.sui.io/object/${props.address}`}>
+            <button className="btn btn-square btn-sm" >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>            
             </button>
-          </div>
+          </a> 
+          <button className="btn btn-square btn-sm">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </button>
+        </div>
         <div>
           <h1 className="card-title text-center">{props.objectName}</h1>
           <p className="text-center">
@@ -216,6 +230,16 @@ export function DeployedObject (
             {props.moduleName}
             ::
             {shortenAddress(props.address, 3)}
+            <label 
+              tabIndex={0} 
+              className="btn btn-circle btn-ghost btn-xs text-info" 
+              onClick={async () => {
+                navigator.clipboard.writeText(props.address)
+                console.log('clipboard', await navigator.clipboard.readText())
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+            </label>
           </p>
           <table style={{marginTop:"15px"}} className="table table-compact table-zebra w-full">
             <thead>

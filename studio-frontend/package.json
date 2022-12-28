@@ -16,6 +16,7 @@
     "daisyui": "^2.46.0",
     "fs": "^0.0.1-security",
     "monaco-editor": "^0.34.1",
+    "monaco-themes": "^0.4.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",

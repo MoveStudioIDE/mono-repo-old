@@ -2,7 +2,47 @@ import React from "react";
 import {ConnectButton} from '@suiet/wallet-kit';
 import { Link } from "react-router-dom";
 
-function Header() {
+
+const daisyThemes = [
+  'light',
+  'dark',
+  'cupcake',
+  'bumblebee',
+  'emerald',
+  'corporate',
+  'synthwave',
+  'retro',
+  'cyberpunk',
+  'valentine',
+  'halloween',
+  'garden',
+  'forest',
+  'aqua',
+  'lofi',
+  'pastel',
+  'fantasy',
+  'wireframe',
+  'black',
+  'luxury',
+  'dracula',
+  'cmyk',
+  'autumn',
+  'business',
+  'acid',
+  'lemonade',
+  'night',
+  'coffee',
+  'winter'
+];
+
+function Header(
+  props: {
+    setTheme: (theme: string) => void;
+  }
+) {
+
+  
+
   return (
     <div className="navbar bg-base-300 ">
       <div className="flex-none">
@@ -20,18 +60,16 @@ function Header() {
         <a className="btn btn-ghost normal-case text-xl"><Link to="/">Move Studio</Link></a>
       </div>
       <div className="flex-none">
-        <ul className="menu menu-horizontal px-1">
-        <li>
-        <select className="select w-full max-w-xs">
-          <option disabled selected>Pick your favorite Simpson</option>
-          <option>Homer</option>
-          <option>Marge</option>
-          <option>Bart</option>
-          <option>Lisa</option>
-          <option>Maggie</option>
-        </select>  
-        </li>
-      </ul>
+        <div className="dropdown dropdown-end ">
+          <label tabIndex={0} className="btn btn-ghost rounded-btn">Theme</label>
+          <ul tabIndex={0} className="menu dropdown-content menu-compact p-2 shadow bg-base-100 rounded-box w-52 mt-4 h-40" style={{display: "inline", overflow: "auto"}}>
+            {
+              daisyThemes.map((theme) => {
+                return <li><a className="btn m-1 btn-secondary" onClick={() => {props.setTheme(theme)}}>{theme}</a></li> 
+              })
+            }
+          </ul>
+        </div>
         <div className="dropdown dropdown-end">
           <button className="btn btn-square btn-ghost">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>

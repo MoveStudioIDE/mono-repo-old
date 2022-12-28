@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import './PackageFunction.css'
 import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import { extractMutableReference } from '@mysten/sui.js';
 import { shortenAddress } from '../utils/address-shortener';
@@ -9,34 +8,35 @@ function PackageFunction(
   props: {
     functionDetails: object,
     packageAddress: string,
-    moduleName: string
+    moduleName: string,
+    refreshHandler: () => void
   }
 ) {
 
-  const [functionParameters, setFunctionParameters] = useState<any[]>();
+  // const functionArguments = [] as string[];
+  const [functionArguments, setfunctionArguments] = useState<string[]>([]);
   const [functionParameterList, setFunctionParameterList] = useState<JSX.Element[]>([]);
 
   const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
 
   const functionName = (props.functionDetails as any).name
-  
-  console.log('function', props.functionDetails);
+
 
   useEffect(() => {
+    console.log('function details', props.functionDetails)
     getFunctionParameterList();
+
   }, [props.functionDetails])
 
   const getFunctionParameterList = () => {
     const params = (props.functionDetails as any).parameters;
-    const types = (props.functionDetails as any).type_parameters;
+    console.log('params', params)
 
-    const paramsAndTypes = [];
+    const functionParams = [];
 
     for (let i = 0; i < params.length; i++) {
       console.log('param', params[i])
       console.log('param type', typeof params[i])
-
-      // console.log('type', types[i])
 
       if (typeof params[i] == 'object') {
         console.log('e')
@@ -49,7 +49,7 @@ function PackageFunction(
         if (struct.address == "0x2" && struct.name == "TxContext") {
           continue; // Make sure this works. the TxContext might need to also be at the end of the list
         } else {
-          paramsAndTypes.push(
+          functionParams.push(
             <FunctionParameter
               parameterName={`${shortenAddress(struct.address, 1)}::${struct.module}::${struct.name}`}
               // parameterType={types[i]}
@@ -60,7 +60,7 @@ function PackageFunction(
         }
       } else {
         console.log('f')
-        paramsAndTypes.push(
+        functionParams.push(
           <FunctionParameter
             parameterName={params[i]}
             // parameterType={types[i]}
@@ -71,45 +71,51 @@ function PackageFunction(
       }
     }
 
-    setFunctionParameterList(paramsAndTypes);
+    setFunctionParameterList(functionParams);
 
-    const functionParams = [] as string[];
+    while(functionArguments.length > 0) {
+      functionArguments.pop();
+    }
 
-    setFunctionParameters(functionParams.fill('', 0, params.length))
+    functionParams.forEach(() => {
+      functionArguments.push('')
+    });
 
-    return paramsAndTypes;
+    console.log('function arguments', functionArguments)
+
+    // setfunctionArguments(functionArguments)
+
+    return functionParams;
   }
 
   const handleParameterChange = (index: number, parameter: any) => {
     console.log(index, parameter)
-    console.log('function params', functionParameters)
-    if (functionParameters === undefined) {
-      console.log('in it')
-      const newParams = [] as string[];
-      newParams.fill('', 0, index)
-      newParams[index] = parameter;
-      setFunctionParameters(newParams);
-    } else {
-      console.log('passt it')
-      const newParams = functionParameters;
-      newParams[index] = parameter;
-      setFunctionParameters(newParams);
-    }
-
-    console.log('functionParams', functionParameters)
+    console.log('function arguments', functionArguments)
     
+    if (functionArguments == undefined) {
+      return;
+    } 
+
+    console.log('function arguments before', functionArguments)
+
+
+    functionArguments[index] = parameter;
+
+    console.log('function arguments after', functionArguments)
+
+    // setfunctionArguments(functionArguments);
   }
 
-  console.log('function parameters', functionParameters)
+  console.log('function arugments outside', functionArguments)
 
   const handleExecuteMoveCall = async () => {
     console.log('execute move call')
-    console.log('function parameters', functionParameters)
+    console.log('function parameters', functionArguments)
     console.log('function name', functionName)
     console.log('package address', props.packageAddress)
     console.log('type parameters', [])
 
-    if (functionParameters == undefined) {
+    if (functionArguments == undefined) {
       return;
     }
 
@@ -120,12 +126,14 @@ function PackageFunction(
         module: props.moduleName,
         function: functionName,
         typeArguments: [],
-        arguments: functionParameters,
+        arguments: functionArguments,
         gasBudget: 300000
       }
     });
 
     console.log('move call txn', moveCallTxn);
+
+    props.refreshHandler();
   }
 
 
@@ -152,7 +160,6 @@ function PackageFunction(
         >
           Execute
         </button>
-        <button onClick={() => {console.log('function params', functionParameters)}}>args</button>
       </div>
     </div>
   )
@@ -161,34 +168,27 @@ function PackageFunction(
 function FunctionParameter(
   props: {
     parameterName: string,
-    // parameterType: string,
     parameterIndex: number,
     handleParameterChange: (index: number, parameter: string) => void
   }
 ) {
 
+  useEffect(() => {
+    const input = document.getElementById('input') as HTMLInputElement;
+    input.value = '';
+  })
+
   const handleParameterChange = (event: any) => {
     props.handleParameterChange(
       props.parameterIndex,
       event.target.value,
-      // props.parameterType
     );
   }
 
   return (
-    // <div className='function-parameter'>
-    //   <p><b>{props.parameterName}:</b></p>
-    //   <div style={{left: '-50%'}}>
-    //     <input 
-    //       style={{position: 'relative', left: '50%'}} 
-    //       type="text" placeholder='Enter parameter here'
-    //       onChange={handleParameterChange} 
-    //     />
-    //   </div>
-    // </div>
     <label className="input-group input-group-xs" style={{margin: "2px"}}>
       <span>Arg{props.parameterIndex}</span>
-      <input type="text" placeholder={props.parameterName} className="input input-bordered input-xs" onChange={handleParameterChange} />
+      <input type="text" id="input" placeholder={props.parameterName} className="input input-bordered input-xs" onChange={handleParameterChange} />
     </label>
   )
 }

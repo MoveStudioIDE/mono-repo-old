@@ -19,6 +19,7 @@ import axios from "axios";
 
 function DeploymentPage() {
 
+  const [theme, setTheme] = useState('dark');
   const [projectList, setProjectList] = useState<string[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [compileError, setCompileError] = useState<string>('');
@@ -38,6 +39,10 @@ function DeploymentPage() {
       getProjects();
     });
   }, []);
+
+  useEffect(() => {
+    document.querySelector('html')?.setAttribute('data-theme', theme);
+  }, [theme]);
 
   //---Helpers---//
 
@@ -62,6 +67,8 @@ function DeploymentPage() {
   //---Handlers---//
 
   const handleProjectChange = (projectChange: string) => {
+
+
     if (projectChange === 'default') {
       setCurrentProject(null);
       console.log('default');
@@ -94,6 +101,8 @@ function DeploymentPage() {
       getProjectData(projectChange);
       console.log('currentProject', currentProject);
     }
+
+    setCompileError('');
   }
 
   const handlePackagePublish = () => {
@@ -167,22 +176,40 @@ function DeploymentPage() {
         if (publishTxnCreated) {
           setDeployedObjects([...deployedObjects, ...packageInfos]);
         }
+
+        setCurrentProject(null)
         
       });
     });
+  }
+
+  const addExistingObject = (objectId: string) => {
+    const existingObject = {name: 'manual', address: objectId};
+    setDeployedObjects([...deployedObjects, existingObject]);
+  }
+
+  // Remove the specific object from the deployedObjects array
+  const removeDeployedObject = (objectId: string) => {
+    
+    
   }
 
 
   return (
     <div>
       <PageLayout
-        header={<DeployHeader/>}
+        header={
+          <DeployHeader
+            setTheme={setTheme}
+          />
+        }
         innerSidebar={
           <DeployInnerSidebar 
             projectList={projectList}
             currentProject={currentProject}
             changeProject={handleProjectChange}
             publishPackage={handlePackagePublish}
+            addExistingObject={addExistingObject}
             compileError={compileError}
           />
         }
