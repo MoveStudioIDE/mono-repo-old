@@ -7,13 +7,13 @@ function PageLayout (props: {header: JSX.Element, innerSidebar: JSX.Element, can
 
   return (
     <div className="page" style={{height: '100vh'}}> 
-      <div className='header'>
+      <div className='header '>
         {props.header}
       </div>
-      <div className='inner-sidebar-section'>
+      <div className='inner-sidebar-section bg-base-300'>
         {props.innerSidebar}
       </div>
-      <div className="canvas-section">
+      <div className="canvas-section bg-base-200">
         {props.canvas}
       </div>
     </div>

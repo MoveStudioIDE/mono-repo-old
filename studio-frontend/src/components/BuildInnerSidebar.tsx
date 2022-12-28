@@ -100,17 +100,26 @@ function BuildInnerSidebar(
     }
   }
 
+  const handleNewModuleClick = () => {
+    const moduleSelect = document.getElementById('newModuleInput') as HTMLInputElement;
+    if (moduleSelect.value) {
+      props.changeModule(`1${moduleSelect.value}`);
+      moduleSelect.value = '';
+    }
+  }
+
+
   //---Render---//
 
   return (
-    <div style={{padding:"5px", overflow: "clip"}}>
+    <div style={{padding:"5px", overflow: "clip", display: "flex", justifyContent: "center", flexDirection: "column"}} >
       {/* <h1 style={{textAlign:"center"}}>Packages</h1> */}
       <select 
         name="project" 
         id="projectSelector"
         onChange={handleProjectChange}
         style={{margin:"5px 0px"}}
-        className="select select-primary w-full select-xs max-w-xs"
+        className="select w-full select-xs max-w-xs"
       >
         <option value="default">--Select a project--</option>
         <option value="addProject">++Add Project++</option>
@@ -159,7 +168,7 @@ function BuildInnerSidebar(
                   type="text" 
                   id="dependency"
                   placeholder="Dependency"
-                  className="input input-bordered input-accent w-full max-w-xs input-xs"
+                  className="input input-bordered input-warning w-full max-w-xs input-xs"
                 />
               </td>
               <td>
@@ -167,16 +176,26 @@ function BuildInnerSidebar(
                   type="text"
                   id="address"
                   placeholder="Address"
-                  className="input input-bordered input-accent w-full max-w-xs input-xs"
+                  className="input input-bordered input-warning w-full max-w-xs input-xs"
                 />
               </td>
             </tr>
           </tbody>
         </table>
         <div style={{display: "flex", justifyContent: "space-around"}}>
-          <button onClick={addDepencies} className="btn btn-xs btn-success">Add Dependency</button>
+          <button style={{marginTop:"5px"}} onClick={addDepencies} className="btn btn-xs btn-warning">Add Dependency</button>
         </div>
-        <select 
+        <div style={{display: "flex", justifyContent: "space-around"}}>
+          <div className="form-control" style={{marginTop:"25px"}}>
+            <label className="input-group input-group-xs ">
+              <input type="text" placeholder="new module" className="input input-xs" id="newModuleInput"/>
+              <button className="btn btn-xs bg-secondary" onClick={handleNewModuleClick}>
+                Add
+              </button>
+            </label>
+          </div>
+        </div>
+        {/* <select 
           name="modules"
           id="moduleSelector"
           onChange={handleModuleChange}
@@ -186,8 +205,8 @@ function BuildInnerSidebar(
           <option value="default">--Select a module--</option>
           <option value="addModule">++Add Module++</option>
           {modules}
-        </select>
-        <div style={{display: "flex", justifyContent: "space-around"}}>
+        </select> */}
+        {/* <div style={{display: "flex", justifyContent: "space-around"}}>
           {
             props.currentModule && 
             <button 
@@ -198,7 +217,7 @@ function BuildInnerSidebar(
               Delete Module
             </button>
           }
-        </div>
+        </div> */}
         
       </div>}
     </div>

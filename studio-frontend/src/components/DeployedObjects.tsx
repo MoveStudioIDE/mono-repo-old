@@ -157,7 +157,8 @@ export function DeployedObject (
     packageAddress: string,
     moduleName: string,
     objectName: string,
-    updateHandler: (address: string) => void
+    updateHandler: (address: string) => void,
+    dragStartHandler: (event: React.DragEvent<HTMLDivElement>) => void,
   }
 ) {
 
@@ -194,7 +195,13 @@ export function DeployedObject (
   }
 
   return (
-    <div className="card h-min bg-neutral text-neutral-content shadow-xl card-bordered card-compact" style={{overflow: "auto", margin: "10px"}}>
+    <div 
+      className="card h-min bg-neutral text-neutral-content shadow-xl card-bordered card-compact" 
+      style={{overflow: "auto", margin: "10px"}}
+      draggable="true"
+      onDragStart={props.dragStartHandler}
+      id={props.address}
+    >
       <div className="card-body">
         <div className="card-actions justify-end">
             <button className="btn btn-square btn-sm">

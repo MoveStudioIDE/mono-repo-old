@@ -25,9 +25,12 @@ function BuildPage() {
   }, []);
 
   const [code, setCode] = useState('');
+
   const [projectList, setProjectList] = useState<string[]>([]);
+
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [currentModule, setCurrentModule] = useState<string | null>(null);
+
   const [compiledModules, setCompiledModules] = useState<string[]>([]);
   const [compileError, setCompileError] = useState<string>('');
   
@@ -71,18 +74,27 @@ function BuildPage() {
 
   //---Handlers---//
 
-  const handleNewCode = (newCode: string) => {
+  const handleNewCode = (newCode: string, module: string) => {
     const updateModuleInIndexdb = async (newCode: string) => {
       indexedDb = new IndexedDb('test');
       await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
       if (!currentProject || !currentModule) {
+        console.log('f')
         return;
       }
       await indexedDb.updateModule('projects', currentProject.package, currentModule, newCode);
     }
     if (!currentProject || !currentModule) {
+      console.log('f')
+      console.log('currentProject', currentProject);
+      console.log('currentModule', currentModule);
       return;
     }
+
+    console.log('heere')
+    console.log('handling code', newCode);
+    console.log('currentModule', currentModule);
+    console.log('module to update', module);
     updateModuleInIndexdb(newCode).then(() => {
       getProjectData(currentProject.package);
     }).then(() => {
@@ -141,30 +153,36 @@ function BuildPage() {
       await indexedDb.deleteValue('projects', projectName);
     }
     removeFromIndexdb(projectName).then(() => {
+      setCurrentProject(null);
+      setCurrentModule(null);
+      setCode('')
       getProjects();
     });
   }
 
   const handleModuleChange = (module: string) => {
-    if (module === 'default') {
+    if (module === '0') {
       setCurrentModule(null);
       setCode('')
       console.log('default');
-    } else if (module === 'addModule') {
-      console.log('addModule');
+    } else if (module.startsWith('1')) {
+      console.log('addModule:', module.slice(1));
       const addModuleToIndexdb = async (newModuleName: string) => {
         indexedDb = new IndexedDb('test');
         await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
         if (!currentProject) {
+          console.log('f')
           return;
         }
         await indexedDb.addNewModule('projects', currentProject.package, newModuleName);
       }
       if (!currentProject) {
+        console.log('f')
         return;
       }
-      const newModuleName = prompt('Enter module name');
+      const newModuleName = module.slice(1)
       if (!newModuleName) {
+        console.log('f')
         return;
       }
       addModuleToIndexdb(newModuleName).then(() => {
@@ -177,13 +195,30 @@ function BuildPage() {
     } else {
       console.log('newModule', module);
       if (!currentProject) {
+        console.log('f')
         return;
       }
+      
       setCurrentModule(module);
-      setCode(currentProject.modules.find((m) => m.name === module)?.code || '');
+      console.log('new module set', currentModule);
+
+      // setCode(currentProject.modules.find((m) => m.name === module)?.code || '');
+
+      // console.log('code set', code);
       // setCurrentModuleCode(currentProject.modules.find((m) => m.name === module)?.code || '');
     }
   }
+
+  useEffect(() => {
+    if (!currentProject || !currentModule) {
+      console.log('f')
+      return;
+    }
+
+    setCode(currentProject.modules.find((m) => m.name === currentModule)?.code || '');
+    console.log('code set', code);
+  }, [currentModule])
+
 
   const handleModuleDelete = (moduleName: string) => {
     const removeModuleFromIndexdb = async (moduleName: string) => {
@@ -241,7 +276,15 @@ function BuildPage() {
             addDependency={handleDependencyAdd}
           />
         }
-        canvas={<BuildCanvas code={code} setCode={handleNewCode} />}
+        canvas={
+          <BuildCanvas 
+            currentProject={currentProject} 
+            currentModule={currentModule}
+            code={code} setCode={handleNewCode} 
+            changeModule={handleModuleChange}
+            deleteModule={handleModuleDelete}
+          />
+        }
       />
     </div>
   );

@@ -1,12 +1,12 @@
 .deploy-canvas {
   overflow: auto;
-  background-color: hsl(var(--b3));
+  background-color: hsl(var(--b1));
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
-  align-content: center;
-  align-items: baseline;
+  align-content:space-around;
+  align-items:center
 }

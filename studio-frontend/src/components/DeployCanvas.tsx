@@ -79,6 +79,7 @@ function DeployCanvas (
             moduleName={splitFullName[1]}
             objectName={splitFullName[2]}
             updateHandler={updateObjectByAddress}
+            dragStartHandler={handleDragStart}
           />;
 
           setDeployedObjects((prev) => {
@@ -123,11 +124,18 @@ function DeployCanvas (
             moduleName={splitFullName[1]}
             objectName={splitFullName[2]}
             updateHandler={updateObjectByAddress}
+            dragStartHandler={handleDragStart}
           />;
         }
       });
       }
     }
+  }
+
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
+    e.dataTransfer.setData('text/plain', e.currentTarget.id);
+    console.log('drag start', e.currentTarget.id)
+
   }
 
 

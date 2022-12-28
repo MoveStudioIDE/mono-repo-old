@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 function Header() {
   return (
-    <div className="navbar bg-base-100">
+    <div className="navbar bg-base-300 ">
       <div className="flex-none">
         <div className="dropdown dropdown-bottom">
           <button className="btn btn-square btn-ghost">
@@ -20,6 +20,18 @@ function Header() {
         <a className="btn btn-ghost normal-case text-xl"><Link to="/">Move Studio</Link></a>
       </div>
       <div className="flex-none">
+        <ul className="menu menu-horizontal px-1">
+        <li>
+        <select className="select w-full max-w-xs">
+          <option disabled selected>Pick your favorite Simpson</option>
+          <option>Homer</option>
+          <option>Marge</option>
+          <option>Bart</option>
+          <option>Lisa</option>
+          <option>Maggie</option>
+        </select>  
+        </li>
+      </ul>
         <div className="dropdown dropdown-end">
           <button className="btn btn-square btn-ghost">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>

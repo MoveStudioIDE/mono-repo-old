@@ -39,7 +39,7 @@ function DeployInnerSidebar(
         id="projectSelector"
         onChange={handleProjectChange}
         style={{marginTop:"5px", marginBottom:"5px"}}
-        className="select select-primary w-full select-xs max-w-xs"
+        className="select w-full select-xs max-w-xs"
       >
         <option value="default">--Select a project--</option>
         {projects}
@@ -58,7 +58,7 @@ function DeployInnerSidebar(
           props.currentProject && 
           <button 
             onClick={props.publishPackage} 
-            className="btn btn-xs btn-accent"
+            className="btn btn-xs btn-secondary"
             style={{margin:"2px 5px"}}
           >
             Publish
@@ -71,7 +71,7 @@ function DeployInnerSidebar(
         <div style={{display: "flex", justifyContent: "center"}}>
           <div className="form-control">
             <div className="input-group input-group-xs">
-              <input type="text" placeholder="0x00...000" className="input input-bordered input-xs" />
+              <input type="text" placeholder="0x00...000" className="input input-xs" />
               <button className="btn btn-xs btn-primary">
                 Add
               </button>
