@@ -61,6 +61,8 @@ function BuildPage() {
   }
 
   const compileCode = () => {
+    setCompileError('');
+    setCompiledModules([]);
     if (!currentProject) {
       return;
     }
@@ -98,7 +100,7 @@ function BuildPage() {
     }
 
     console.log('heere')
-    console.log('handling code', newCode);
+    // console.log('handling code', newCode);
     console.log('currentModule', currentModule);
     console.log('module to update', module);
     updateModuleInIndexdb(newCode).then(() => {
@@ -306,6 +308,8 @@ function BuildPage() {
           <BuildCanvas 
             currentProject={currentProject} 
             currentModule={currentModule}
+            compiledModules={compiledModules}
+            compileError={compileError}
             code={code} setCode={handleNewCode} 
             changeModule={handleModuleChange}
             deleteModule={handleModuleDelete}

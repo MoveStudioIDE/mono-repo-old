@@ -143,7 +143,7 @@ function BuildInnerSidebar(
           props.currentProject && 
           <button 
             onClick={props.compileCode} 
-            className="btn btn-xs btn-info"
+            className="btn btn-xs btn-info "
             style={{margin:"2px 5px"}}
           >
             Compile
@@ -160,11 +160,6 @@ function BuildInnerSidebar(
           </button>
         }
       </div>
-      {
-        props.compileError && <p>{props.compileError}</p>}
-        {props.compiledModules && props.compiledModules.length > 0 && <ul>{props.compiledModules.map((module: string) => {
-        return <p>{module}</p>
-      })}</ul>}
       {props.currentProject && <div>
         <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full">
           <thead>
@@ -208,31 +203,30 @@ function BuildInnerSidebar(
             </label>
           </div>
         </div>
-        {/* <select 
-          name="modules"
-          id="moduleSelector"
-          onChange={handleModuleChange}
-          style={{marginTop:"25px", marginBottom:"5px"}}
-          className="select select-primary w-full select-xs max-w-xs"
-        >
-          <option value="default">--Select a module--</option>
-          <option value="addModule">++Add Module++</option>
-          {modules}
-        </select> */}
-        {/* <div style={{display: "flex", justifyContent: "space-around"}}>
-          {
-            props.currentModule && 
-            <button 
-              onClick={handleModuleDelete} 
-              className="btn btn-xs btn-error" 
-              style={{margin:"2px 5px"}}
-            >
-              Delete Module
-            </button>
-          }
-        </div> */}
-        
       </div>}
+      {/* {
+        props.currentProject && 
+        <div style={{marginTop:"25px",  display: "flex", justifyContent: "space-around"}} >
+          {
+              props.compileError && 
+              <div className="alert alert-error shadow-lg w-full">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <span>Error! Task failed successfully.</span>
+                </div>
+              </div>
+            }
+            {
+              props.compiledModules && props.compiledModules.length > 0 && 
+              <div className="alert alert-success shadow-lg w-max">
+                <div>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                  <span>Package compiled</span>
+                </div>
+              </div>
+            }
+          </div>
+        } */}
     </div>
   );
 }

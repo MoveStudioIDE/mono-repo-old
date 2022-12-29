@@ -12,6 +12,7 @@
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
+    "strip-ansi": "^7.0.1",
     "typescript": "^4.9.3"
   },
   "devDependencies": {

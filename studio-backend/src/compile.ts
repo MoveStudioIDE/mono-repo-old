@@ -3,6 +3,7 @@ import { execSync } from 'child_process';
 import * as fs from 'fs';
 import { Project } from './schema/user-schema';
 import dotenv from 'dotenv';
+// import stripAnsi from 'strip-ansi';
 
 const TEMP_DIR = `${__dirname}/../temp-packages`;
 
@@ -83,12 +84,14 @@ export async function compile(project: Project): Promise<string | string[]> {
     return compiledModules as unknown as string[];
 
   } catch (error: any) {
+    console.log(error)
+    // console.log(stripAnsi(error.stdout))
     const errorMessage = error.stdout;
 
     // Check error message for update needed message - TODO
 
     // Remove the temporary project directory
-    // fs.rmdirSync(tempProjectPath, { recursive: true });
+    fs.rmdirSync(tempProjectPath, { recursive: true });
     
 
     return errorMessage as string;
