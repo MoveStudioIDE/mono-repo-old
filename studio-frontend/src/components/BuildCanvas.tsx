@@ -43,13 +43,15 @@ function BuildCanvas(
     theme: string,
     compiledModules: string[],
     compileError: string,
+    showError: boolean,
+    setShowError: (showError: boolean) => void,
     setCode: (code: string, module: string) => void,
     changeModule: (module: string) => void,
     deleteModule: (module: string) => void,
   }
 ) {
 
-  const [showError, setShowError] = useState(false);
+  
   const [error, setError] = useState("");
 
   const monaco = useMonaco();
@@ -275,10 +277,6 @@ function BuildCanvas(
     monaco.editor.setTheme(editorTheme[props.theme]);
   }, [props.theme]);
 
-  // useEffect(() => {
-  //   // monaco.editor.defineTheme('dracula', editorThemes.dracula);
-  //   monaco.editor.setTheme(editorTheme[props.theme]);
-  // }, [props.theme]);
 
   const handleEditorChange = (value: any) => {
     console.log('code changed', value)
@@ -293,7 +291,6 @@ function BuildCanvas(
   }
 
   const modules = props.currentProject?.modules.map((module: Module) => {
-    // return <option value={module.name}>{module.name}</option>
     return (
       <a 
         className={`tab tab-bordered ${props.currentModule === module.name ? 'tab-active' : ''}`}
@@ -339,7 +336,7 @@ function BuildCanvas(
           />
           {
             props.compileError &&
-            !showError && 
+            !props.showError && 
             <div className="alert alert-error shadow-lg -m-6" style={{position: "relative", top: "-55px", bottom: "4px", left: "80%", width: "210px", height: "50px"}}>
               <div>
                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -349,7 +346,7 @@ function BuildCanvas(
                     className="btn btn-xs btn-ghost" 
                     onClick={() => {
                       setError(props.compileError);
-                      setShowError(true);
+                      props.setShowError(true);
                     }}
                   >
                     View
@@ -368,20 +365,20 @@ function BuildCanvas(
             </div>
           }
           {
-            showError &&
-            <div className="alert shadow-lg -m-6" style={{position: "relative", top: "-250px", left: "5%", width: "95%", height: "240px"}}>
+            props.showError &&
+            <div className="alert shadow-lg -m-6" style={{position: "relative", top: "-250px", left: "5%", width: "95%", height: "240px", overflow: "auto"}}>
               <div style={{position: 'absolute', top: "0px", right: "0px", margin: "5px"}}>
                 <button 
                   className="btn btn-square btn-xs btn-outline"
                   onClick={() => {
-                    setShowError(false);
+                    props.setShowError(false);
                     setError('');
                   }}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
-              <div style={{marginTop: "0px", whiteSpace: "pre", lineHeight: "125%", overflow: "auto"}}>
+              <div style={{marginTop: "auto", whiteSpace: "pre-wrap", lineHeight: "125%", }}>
                 <Ansi>
                   {stripAnsi(error)}
                 </Ansi>

@@ -39,6 +39,7 @@ function BuildPage() {
 
   const [compiledModules, setCompiledModules] = useState<string[]>([]);
   const [compileError, setCompileError] = useState<string>('');
+  const [showError, setShowError] = useState(false);
   
 
   //---Helpers---//
@@ -63,6 +64,7 @@ function BuildPage() {
   const compileCode = () => {
     setCompileError('');
     setCompiledModules([]);
+    setShowError(false);
     if (!currentProject) {
       return;
     }
@@ -310,6 +312,8 @@ function BuildPage() {
             currentModule={currentModule}
             compiledModules={compiledModules}
             compileError={compileError}
+            showError={showError}
+            setShowError={setShowError}
             code={code} setCode={handleNewCode} 
             changeModule={handleModuleChange}
             deleteModule={handleModuleDelete}
