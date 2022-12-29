@@ -292,13 +292,18 @@ function BuildCanvas(
         className={`tab tab-bordered ${props.currentModule === module.name ? 'tab-active' : ''}`}
         id={module.name}
         onClick={() => props.changeModule(module.name)}
+        style={{display: "flex", alignItems: "center", flexWrap: "nowrap"}}
       >
         {module.name}
         {
           props.currentModule === module.name &&
-          <a onClick={handleDeleteModuleClick}>
-            <svg xmlns="http://www.w3.org/2000/svg" style={{marginLeft: "2px"}} className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
-          </a>
+          <label 
+            tabIndex={0} 
+            className="btn btn-circle btn-ghost btn-xs text-error"  onClick={handleDeleteModuleClick}
+            style={{marginLeft: "2px"}}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg"  className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+          </label>
         }
       </a>
     ) 
@@ -311,7 +316,7 @@ function BuildCanvas(
       {
         modules && modules.length > 0 &&
         <div>
-          <div className="tabs ">
+          <div className="tabs" style={{overflow: "auto", display: "flex", flexWrap: "inherit"}}>
             {/* <a className="tab tab-bordered">Tab 1</a> 
             <a className="tab tab-bordered tab-active">Tab 2</a> 
             <a className="tab tab-bordered">Tab 3</a> */}
