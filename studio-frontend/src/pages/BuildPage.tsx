@@ -262,6 +262,23 @@ function BuildPage() {
     });
   }
 
+  const handleDependencyRemove = (dependencyName: string) => {
+    const removeDependencyFromIndexdb = async (dependencyName: string) => {
+      indexedDb = new IndexedDb('test');
+      await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      if (!currentProject) {
+        return;
+      }
+      await indexedDb.deleteDependency('projects', currentProject.package, dependencyName);
+    }
+    if (!currentProject) {
+      return;
+    }
+    removeDependencyFromIndexdb(dependencyName).then(() => {
+      getProjectData(currentProject.package);
+    });
+  }
+
 
   return (
     <div>
@@ -282,6 +299,7 @@ function BuildPage() {
             changeModule={handleModuleChange}
             deleteModule={handleModuleDelete}
             addDependency={handleDependencyAdd}
+            removeDependency={handleDependencyRemove}
           />
         }
         canvas={

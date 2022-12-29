@@ -8,5 +8,6 @@
   flex-wrap: wrap;
   justify-content: center;
   align-content:space-around;
-  align-items:center
+  align-items: flex-start;
+  padding: 1rem;
 }

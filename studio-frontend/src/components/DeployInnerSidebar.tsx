@@ -60,15 +60,6 @@ function DeployInnerSidebar(
         <option value="default">--Select a project--</option>
         {projects}
       </select>
-      {/* <div className="form-control ">
-        <div className="input-group input-group-xs ">
-          <select className="select select-bordered select-xs">
-            <option disabled selected>--Select a project--</option>
-            {projects}
-          </select>
-          <button onClick={props.publishPackage} className="btn btn-xs btn-primary">Publish</button>
-        </div>
-      </div> */}
       <div style={{display: "flex", justifyContent: "space-around"}}>
         {
           props.currentProject && 

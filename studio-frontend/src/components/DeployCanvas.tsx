@@ -32,6 +32,7 @@ function DeployCanvas (
         }
 
         const objectData = res.data.details.data;
+        const shared = res.data.details.owner.hasOwnProperty('Shared')
         if (objectData.dataType == 'package') {
 
           return axios.post('http://localhost:5001/package-details', {packageId: objectId}).then((res) => {
@@ -59,6 +60,7 @@ function DeployCanvas (
             packageAddress={splitFullName[0]}
             moduleName={splitFullName[1]}
             objectName={splitFullName[2]}
+            shared={shared}
             updateHandler={updateObjectByAddress}
             dragStartHandler={handleDragStart}
             refreshHandler={updateDeployedObjects}
@@ -87,6 +89,7 @@ function DeployCanvas (
         }
 
         const objectData = res.data.details.data;
+        const shared = res.data.details.owner.hasOwnProperty('Shared')
         if (objectData.dataType == 'package') {
           return;
         } else if (objectData.dataType == 'moveObject') {
@@ -101,6 +104,7 @@ function DeployCanvas (
             packageAddress={splitFullName[0]}
             moduleName={splitFullName[1]}
             objectName={splitFullName[2]}
+            shared={shared}
             updateHandler={updateObjectByAddress}
             dragStartHandler={handleDragStart}
             refreshHandler={updateDeployedObjects}
@@ -119,10 +123,10 @@ function DeployCanvas (
 
 
   return (
-    <div className="deploy-canvas">
-      {/* <button onClick={updateDeployedObjects}>refresh</button> */}
-      {deployedObjects}
-    </div>
+      <div className="deploy-canvas">
+        {/* <button onClick={updateDeployedObjects}>refresh</button> */}
+        {deployedObjects}
+      </div>
   )
 }
 

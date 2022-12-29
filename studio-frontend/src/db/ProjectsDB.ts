@@ -105,6 +105,21 @@ export class IndexedDb {
     return requestUpdate;
   }
 
+  public async deleteDependency(tableName: string, project: string, dependencyName: string) {
+    const tx = this.db.transaction(tableName, 'readwrite');
+    const store = tx.objectStore(tableName);
+    const result = await store.get(project);
+    const dependencies = result.dependencies;
+    for (let i = 0; i < dependencies.length; i++) {
+      if (dependencies[i].name === dependencyName) {
+        dependencies.splice(i, 1);
+        break;
+      }
+    }
+    const requestUpdate = store.put(result);
+    return requestUpdate;
+  }
+
 
   public async putBulkValue(tableName: string, values: object[]) {
     const tx = this.db.transaction(tableName, 'readwrite');

@@ -13,7 +13,7 @@ function PageLayout (props: {header: JSX.Element, innerSidebar: JSX.Element, can
       <div className='inner-sidebar-section bg-base-300'>
         {props.innerSidebar}
       </div>
-      <div className="canvas-section bg-base-200">
+      <div className="canvas-section bg-base-100">
         {props.canvas}
       </div>
     </div>

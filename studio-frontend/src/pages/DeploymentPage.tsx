@@ -155,6 +155,8 @@ function DeploymentPage() {
         return;
       }
 
+      setCurrentProject(null)
+
       callPublish(res).then((res) => {
         console.log('res', res);
 
@@ -176,8 +178,6 @@ function DeploymentPage() {
         if (publishTxnCreated) {
           setDeployedObjects([...deployedObjects, ...packageInfos]);
         }
-
-        setCurrentProject(null)
         
       });
     });

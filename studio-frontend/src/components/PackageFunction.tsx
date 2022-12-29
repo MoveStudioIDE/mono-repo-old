@@ -143,23 +143,27 @@ function PackageFunction(
       style={{margin: '10px 0px'}}
     >
       <div className="card-body">
-        {/* <div style={{textAlign: 'center'}}>
-          <h1>{functionName}</h1>
-        </div> */}
+        <div className="card-actions">
+          {
+            (props.functionDetails as any).is_entry &&
+            <div className="badge badge-outline badge-secondary">Entry</div>
+          }
+          <div className="badge badge-outline badge-secondary">{(props.functionDetails as any).visibility}</div>
+        </div>
         <h1 className="card-title">{functionName}</h1>
-        {/* <div className='function-parameters'>
-          {functionParameterList}
-        </div> */}
         <div className="form-control">
           {functionParameterList}
         </div>
-        <button 
-          className="btn btn-xs glass" 
-          style={{margin:"2px 5px"}}
-          onClick={handleExecuteMoveCall}
-        >
-          Execute
-        </button>
+        {
+          (props.functionDetails as any).is_entry &&
+          <button 
+            className="btn btn-xs glass" 
+            style={{margin:"2px 5px"}}
+            onClick={handleExecuteMoveCall}
+          >
+            Execute
+          </button>
+        }
       </div>
     </div>
   )

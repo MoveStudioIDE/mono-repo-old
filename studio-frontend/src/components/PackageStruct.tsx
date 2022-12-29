@@ -53,7 +53,7 @@ function PackageStruct(
         <div className="card-actions">
           {abilities}
         </div>
-        <table style={{marginTop:"15px"}} className="table table-compact table-zebra w-full">
+        <table style={{marginTop:"15px"}} className="table table-compact table-zebra w-full shadow-xl">
           <thead>
             <tr>
               <th>Attributes</th>

@@ -81,7 +81,7 @@ export function DeployedPackage (
   }
 
   return (
-    <div className="card h-min bg-neutral text-neutral-content shadow-xl card-bordered card-compact" style={{overflow: "auto", margin: "10px"}}>
+    <div className="card h-min max-h-max bg-neutral text-neutral-content shadow-xl card-bordered card-compact" style={{overflow: "auto", margin: "10px"}}>
       <div className="card-body">
         <div className="card-actions justify-end">
           <a className="link link-hover" href={`https://explorer.sui.io/object/${props.address}`}>
@@ -162,6 +162,7 @@ export function DeployedObject (
     packageAddress: string,
     moduleName: string,
     objectName: string,
+    shared: boolean,
     updateHandler: (address: string) => void,
     dragStartHandler: (event: React.DragEvent<HTMLDivElement>) => void,
     refreshHandler: () => void,
@@ -173,18 +174,61 @@ export function DeployedObject (
     // console.log('field[0]', field[0])
     // console.log('field[1]', field[1])
 
+    console.log('field', field)
+
     if (field[0] === 'id') {
       return;
     }
 
     // TODO: hard fix - fix to be robust for nested structs
-    if (typeof field[1] == 'object') {
+    if (field[1] === null) {
       return (
         <tr>
           <td>{field[0]}</td>
-          <td>{field[1].id}</td>
+          <td>{field[1]}</td>
         </tr>
       )
+    } else if (typeof field[1] == 'object') {
+      if (field[1].id != undefined) {
+        return (
+          <tr>
+            <td>{field[0]}</td>
+            <td>{field[1].id}</td>
+          </tr>
+        )
+      } else {
+
+        const typeSplit = field[1].type.split('::')
+        const packageAddress = typeSplit[0]
+        const moduleName = typeSplit[1]
+        const structName = typeSplit[2]
+
+        return (
+          <tr>
+            <td>{field[0]}</td>
+            <td style={{display: 'flex', flexDirection: 'row', flexWrap: "wrap"}}>
+              {/* <div className="tooltip" data-tip={(field[1].fields)}>
+                {shortenAddress(packageAddress, 2)}::{moduleName}::{structName}
+              </div> */}
+              {
+                field[1].fields != undefined &&
+                Object.entries(field[1].fields).map((field: any) => {
+                  return (
+                    <div className="form-control w-min m-1 shadow-xl">
+                      <label className="input-group input-group-vertical input-group-xs">
+                        <span >{field[0]}</span>
+                        <p className="input input-bordered input-xs text-center" >{field[1]}</p>
+                      </label>
+                    </div>
+                  )
+                })
+              }
+            </td>
+          </tr>
+        )
+      }
+
+      
     }
 
     return (
@@ -202,7 +246,7 @@ export function DeployedObject (
 
   return (
     <div 
-      className="card h-min bg-neutral text-neutral-content shadow-xl card-bordered card-compact" 
+      className="card h-min max-h-90 bg-neutral text-neutral-content shadow-xl card-bordered card-compact" 
       style={{overflow: "auto", margin: "10px"}}
       draggable="true"
       onDragStart={props.dragStartHandler}
@@ -241,7 +285,7 @@ export function DeployedObject (
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
             </label>
           </p>
-          <table style={{marginTop:"15px"}} className="table table-compact table-zebra w-full">
+          <table style={{marginTop:"15px"}} className="table table-compact table-zebra w-full shadow-xl">
             <thead>
               <tr>
                 <th>Attributes</th>
@@ -255,6 +299,10 @@ export function DeployedObject (
         </div>
         <div className="card-actions justify-end">
           <div className="badge badge-outline">Object</div> 
+          {
+            props.shared &&
+            <div className="badge badge-outline">Shared</div>
+          }
         </div>
       </div>
     </div>
