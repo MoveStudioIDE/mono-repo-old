@@ -26,7 +26,11 @@ function DeploymentPage() {
   const [deployedModules, setDeployedModules] = useState<string[]>([]);
   const [deployedObjects, setDeployedObjects] = useState<DeployedPackageInfo[]>([]);
   const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
+  const [toasts, setToasts] = useState<JSX.Element[]>([]);
 
+  useEffect(() => {
+    console.log('toasts', toasts);
+  }, [toasts]);
 
   // Initialize indexedDb
   let indexedDb: IndexedDb;
@@ -68,7 +72,6 @@ function DeploymentPage() {
 
   const handleProjectChange = (projectChange: string) => {
 
-
     if (projectChange === 'default') {
       setCurrentProject(null);
       console.log('default');
@@ -106,6 +109,17 @@ function DeploymentPage() {
   }
 
   const handlePackagePublish = () => {
+    setToasts(
+      [...toasts,
+        <div className="alert alert-info">
+          <div>
+            <button className="btn btn-circle loading btn-xs"></button>
+            <span>Publishing...</span>
+          </div>
+        </div>
+      ]
+    )
+
     if (!currentProject) {
       return;
     }
@@ -132,16 +146,50 @@ function DeploymentPage() {
   
       console.log('publishData', publishData);
 
-      const publishTxn = await signAndExecuteTransaction({
-        kind: 'publish',
-        data: {
-          compiledModules: compiledModules,
-          gasBudget: GAS_BUDGET,
-        }
-      });
-
-      return publishTxn;
-
+      try {
+        const publishTxn = await signAndExecuteTransaction({
+          kind: 'publish',
+          data: {
+            compiledModules: compiledModules,
+            gasBudget: GAS_BUDGET,
+          }
+        });
+        setToasts(
+          [
+            ...toasts,
+            <div className="alert alert-success">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Successful publication</span>
+                <button className="btn btn-square btn-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
+                </button>
+                <button className="btn btn-square btn-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+            </div>
+          ]
+        );
+  
+        return publishTxn;
+      } catch (error) {
+        console.log('error', error);
+        setToasts(
+          [
+            ...toasts,
+            <div className="alert alert-error">
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Publication fail</span>
+                <button className="btn btn-square btn-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+            </div>
+          ]
+        );
+      }
     }
 
     compileCode().then((res) => {
@@ -159,6 +207,10 @@ function DeploymentPage() {
 
       callPublish(res).then((res) => {
         console.log('res', res);
+
+        if (res == undefined) {
+          return;
+        }
 
         const publishTxnDigest = res.certificate.transactionDigest;
 
@@ -216,6 +268,7 @@ function DeploymentPage() {
         canvas={
         <DeployCanvas 
           deployedObjects={deployedObjects}
+          toasts={toasts}
         />}
       />
     </div>

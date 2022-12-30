@@ -6,7 +6,8 @@ import {DeployedPackage, DeployedObject} from './DeployedObjects'
 
 function DeployCanvas (
   props: {
-    deployedObjects: DeployedPackageInfo[]
+    deployedObjects: DeployedPackageInfo[],
+    toasts: JSX.Element[],
   }
 ) {
 
@@ -123,10 +124,30 @@ function DeployCanvas (
 
 
   return (
+    <div>
       <div className="deploy-canvas">
-        {/* <button onClick={updateDeployedObjects}>refresh</button> */}
         {deployedObjects}
       </div>
+      <div className="toast toast-end">
+        {/* <div className="alert alert-info">
+          <div className=''>
+            <button className="btn btn-circle loading btn-xs"></button>
+            <span>Publishing...</span>
+          </div>
+        </div> */}
+        {/* <div className="alert alert-info">
+          <div>
+            <span>New mail arrived.</span>
+          </div>
+        </div>
+        <div className="alert alert-success">
+          <div>
+            <span>Message sent successfully.</span>
+          </div>
+        </div> */}
+        {props.toasts}
+      </div>
+    </div>
   )
 }
 
