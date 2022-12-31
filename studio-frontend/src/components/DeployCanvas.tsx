@@ -49,8 +49,8 @@ function DeployCanvas (
               packageName={deployedPackageInfo.name}
               refreshHandler={updateDeployedObjects}
               setPendingTxn={props.setPendingTxn}
-            setSuccessTxn={props.setSuccessTxn}
-            setFailTxn={props.setFailTxn}
+              setSuccessTxn={props.setSuccessTxn}
+              setFailTxn={props.setFailTxn}
             />;
 
           }); 

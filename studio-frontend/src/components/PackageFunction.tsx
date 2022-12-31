@@ -150,7 +150,7 @@ function PackageFunction(
 
   return (
     <div 
-      className="card h-min bg-neutral-focus text-neutral-content shadow-xl card-bordered card-compact" 
+      className="card h-min bg-neutral-focus  shadow-xl card-bordered card-compact" 
       style={{margin: '10px 0px'}}
     >
       <div className="card-body">
@@ -161,7 +161,7 @@ function PackageFunction(
           }
           <div className="badge badge-outline badge-secondary">{(props.functionDetails as any).visibility}</div>
         </div>
-        <h1 className="card-title">{functionName}</h1>
+        <h1 className="card-title text-neutral-content">{functionName}</h1>
         <div className="form-control">
           {functionParameterList}
         </div>

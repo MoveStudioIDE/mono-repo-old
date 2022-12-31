@@ -55,7 +55,8 @@ function DeployInnerSidebar(
         id="projectSelector"
         onChange={handleProjectChange}
         style={{marginTop:"5px", marginBottom:"5px"}}
-        className="select w-full select-xs max-w-xs"
+        className="select w-full select-xs max-w-xs text-current"
+
       >
         <option value="default">--Select a project--</option>
         {projects}

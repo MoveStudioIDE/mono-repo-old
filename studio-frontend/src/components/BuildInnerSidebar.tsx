@@ -133,6 +133,7 @@ function BuildInnerSidebar(
         onChange={handleProjectChange}
         style={{margin:"5px 0px"}}
         className="select w-full select-xs max-w-xs"
+
       >
         <option value="default">--Select a project--</option>
         <option value="addProject">++Add Project++</option>

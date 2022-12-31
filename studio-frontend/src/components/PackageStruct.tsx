@@ -44,12 +44,12 @@ function PackageStruct(
 
   return (
     <div 
-      className="card h-min bg-neutral-focus text-neutral-content shadow-xl card-bordered card-compact" 
+      className="card h-min bg-neutral-focus shadow-xl card-bordered card-compact" 
       style={{margin: '10px 0px'}}
     >
       <div className="card-body">
         
-        <h1 className="card-title">{structName}</h1>
+        <h1 className="card-title text-neutral-content">{structName}</h1>
         <div className="card-actions">
           {abilities}
         </div>

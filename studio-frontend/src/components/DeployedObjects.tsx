@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import './DeployedObjects.css';
 import PackageFunction from './PackageFunction';
 import copyIcon from "../icons/copy-24.png";
 import copyIcon2 from "../icons/copy2-24.png";
@@ -84,7 +83,7 @@ export function DeployedPackage (
   }
 
   return (
-    <div className="card h-min max-h-max bg-neutral text-neutral-content shadow-xl card-bordered card-compact" style={{overflow: "auto", margin: "10px"}}>
+    <div className="card h-min max-h-max bg-neutral shadow-xl card-bordered card-compact" style={{overflow: "auto", margin: "10px"}}>
       <div className="card-body">
         <div className="card-actions justify-end">
           <a className="link link-hover" href={`https://explorer.sui.io/object/${props.address}`}>
@@ -97,9 +96,9 @@ export function DeployedPackage (
           </button>
         </div>
         <div>
-          <h1 className="card-title text-center">{props.packageName}</h1>
+          <h1 className="card-title text-center text-neutral-content">{props.packageName}</h1>
           <div>
-            <p className="text-center">
+            <p className="text-center text-neutral-content">
               {shortenAddress(props.address, 5)}
               <label 
                 tabIndex={0} 
@@ -153,7 +152,7 @@ export function DeployedPackage (
             </div>
           }
         </div>
-        <div className="card-actions justify-end">
+        <div className="card-actions justify-end text-neutral-content">
           <div className="badge badge-outline">Module</div> 
         </div>
       </div>
@@ -252,7 +251,7 @@ export function DeployedObject (
 
   return (
     <div 
-      className="card h-min max-h-90 bg-neutral text-neutral-content shadow-xl card-bordered card-compact" 
+      className="card h-min max-h-90 bg-neutral shadow-xl card-bordered card-compact" 
       style={{overflow: "auto", margin: "10px"}}
       draggable="true"
       onDragStart={props.dragStartHandler}
@@ -273,8 +272,8 @@ export function DeployedObject (
           </button>
         </div>
         <div>
-          <h1 className="card-title text-center">{props.objectName}</h1>
-          <p className="text-center">
+          <h1 className="card-title text-center text-neutral-content">{props.objectName}</h1>
+          <p className="text-center text-neutral-content">
             {shortenAddress(props.packageAddress, 3)}
             ::
             {props.moduleName}
@@ -303,7 +302,7 @@ export function DeployedObject (
             </tbody>
           </table>
         </div>
-        <div className="card-actions justify-end">
+        <div className="card-actions justify-end text-neutral-content">
           <div className="badge badge-outline">Object</div> 
           {
             props.shared &&
