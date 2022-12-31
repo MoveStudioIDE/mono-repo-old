@@ -19,14 +19,14 @@ import axios from "axios";
 
 function DeploymentPage() {
 
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') ||'dark');
   const [projectList, setProjectList] = useState<string[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [compileError, setCompileError] = useState<string>('');
   const [deployedModules, setDeployedModules] = useState<string[]>([]);
   const [deployedObjects, setDeployedObjects] = useState<DeployedPackageInfo[]>([]);
   const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
-  const [toasts, setToasts] = useState<JSX.Element[]>([]);
+  const [toasts, setToasts] = useState<JSX.Element | undefined>();
 
   useEffect(() => {
     console.log('toasts', toasts);
@@ -46,6 +46,7 @@ function DeploymentPage() {
 
   useEffect(() => {
     document.querySelector('html')?.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
   //---Helpers---//
@@ -68,6 +69,69 @@ function DeploymentPage() {
     // return projectData;
   }
 
+  const setPendingTxn = () => {
+    setToasts(
+      <div className="alert alert-info">
+        <div>
+          <button className="btn btn-circle loading btn-xs"></button>
+          <span>Waiting for transaction...</span>
+        </div>
+      </div>
+    )
+  }
+
+  const setSuccessTxn = (digest: string) => {
+
+    const id = Math.random().toString();
+
+    setToasts(
+      // [
+        <div className="alert alert-success" id={id}>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>Successful transaction</span>
+            <a href={`https://explorer.sui.io/transaction/${digest}`}>
+              <button>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
+              </button>
+            </a>
+            <a>
+              <button onClick={() => setToasts(undefined)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </a>
+          </div>
+        </div>
+      // ]
+    )
+  }
+
+  const setFailTxn = (digest: string) => {
+
+    const id = Math.random().toString();
+
+    setToasts(
+      // [
+        <div className="alert alert-error" id={id}>
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>Transaction failed</span>
+            <a href={`https://explorer.sui.io/transaction/${digest}`}>
+              <button >
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
+              </button>
+            </a>
+            <a>
+              <button onClick={() => setToasts(undefined)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            </a>
+          </div>
+        </div>
+      // ]
+    )
+  }
+          
   //---Handlers---//
 
   const handleProjectChange = (projectChange: string) => {
@@ -109,15 +173,22 @@ function DeploymentPage() {
   }
 
   const handlePackagePublish = () => {
+
+    const id1 = Math.random().toString();
+    const id2 = Math.random().toString();
+    
     setToasts(
-      [...toasts,
-        <div className="alert alert-info">
+      // [
+        <div className="alert alert-info" id={id1}>
           <div>
             <button className="btn btn-circle loading btn-xs"></button>
             <span>Publishing...</span>
+            <button onClick={() => setToasts(undefined)}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
           </div>
         </div>
-      ]
+      // ]
     )
 
     if (!currentProject) {
@@ -155,39 +226,39 @@ function DeploymentPage() {
           }
         });
         setToasts(
-          [
-            ...toasts,
-            <div className="alert alert-success">
+          // [
+            // ...toasts,
+            <div className="alert alert-success" id={id2}>
               <div>
                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span>Successful publication</span>
-                <button className="btn btn-square btn-xs">
+                <button >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
                 </button>
-                <button className="btn btn-square btn-xs">
+                <button onClick={() => setToasts(undefined)}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
               </div>
             </div>
-          ]
+          // ]
         );
   
         return publishTxn;
       } catch (error) {
         console.log('error', error);
         setToasts(
-          [
-            ...toasts,
-            <div className="alert alert-error">
+          // [
+            // ...toasts,
+            <div className="alert alert-error" id={id2}>
               <div>
                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span>Publication fail</span>
-                <button className="btn btn-square btn-xs">
+                <button onClick={() => setToasts(undefined)}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
               </div>
             </div>
-          ]
+          // ]
         );
       }
     }
@@ -269,6 +340,9 @@ function DeploymentPage() {
         <DeployCanvas 
           deployedObjects={deployedObjects}
           toasts={toasts}
+          setPendingTxn={setPendingTxn}
+          setSuccessTxn={setSuccessTxn}
+          setFailTxn={setFailTxn}
         />}
       />
     </div>

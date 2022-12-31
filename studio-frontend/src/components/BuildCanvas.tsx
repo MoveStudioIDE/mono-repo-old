@@ -7,32 +7,58 @@ import { Module, Project } from "../types/project-types";
 import fs from 'fs';
 import Ansi from "ansi-to-react";
 import stripAnsi from 'strip-ansi';
+// import * as editorThemeJsons from "../utils/themes.json"
+const editorThemeJsons = require('../utils/themes.json')
 
-monaco.languages.register({id: 'sui-move'});
+// monaco.languages.register({id: 'move'});
 
-let keywords = [
-  'module',
-  'struct',
-  'fun'
-]
+// let keywords = [
+//   'module',
+//   'struct',
+//   'fun'
+// ]
 
-monaco.languages.setMonarchTokensProvider(
-  'sui-move', 
-  {
-    keywords,
-    tokenizer: {
+// monaco.languages.setMonarchTokensProvider(
+//   'move', 
+//   {
+//     keywords,
+//     tokenizer: {
       
-    }
-  }
-)
-
-
-
+//     }
+//   }
+// )
 
 const editorTheme = {
-  dark: 'vs-dark',
-  light: 'vs',
-  dracula: 'dracula',
+  dark: 'GitHubDark',
+  light: 'ChomeDevTools',
+  dracula: 'Dracula',
+  synthwave: 'NightOwl', 
+  cupcake: 'Tomorrow',
+  bumblebee: 'Clouds', 
+  emerald: 'Dreamweaver',
+  corporate: 'SlushandPoppies',
+  retro: 'DominionDay',
+  cyberpunk: 'Solarizeddark', 
+  valentine: 'Tomorrow', 
+  halloween: 'PastelsonDark',
+  garden: 'SlushandPoppies',
+  forest: 'Sunburst',
+  aqua: 'Cobalt2',
+  lofi: 'Dawn', 
+  pastel: 'Tomorrow', 
+  fantasy: 'SlushandPoppies',
+  wireframe: 'Katzenmilch',
+  black: 'KrTheme',
+  luxury: 'idleFingers',
+  cmyk: 'ChromeDevTools',
+  autumn: 'GitHubLight', 
+  business: 'Twilight', 
+  acid: 'GitHubLight', 
+  lemonade: 'Clouds', 
+  night: 'NightOwl',
+  coffee: 'Twilight', 
+  winter: 'Tomorrow'
+
 } as {[key: string]: string}
 
 function BuildCanvas(
@@ -53,229 +79,147 @@ function BuildCanvas(
 
   
   const [error, setError] = useState("");
+  // const [editorThemeTemp, setEditorTheme] = useState("vs-dark");
+
+  // useEffect(() => {
+  //   if (monaco === null) {
+  //     return;
+  //   }
+
+  //   console.log('theme', editorThemeTemp)
+
+  //   monaco.editor.setTheme(editorThemeTemp)
+  // }, [editorThemeTemp])
+
 
   const monaco = useMonaco();
 
   useEffect(() => {
-    const editorThemes = {
-      dracula: {
-        "base": "vs-dark",
-        "inherit": true,
-        "rules": [
-          {
-            "background": "282a36",
-            "token": ""
-          },
-          {
-            "foreground": "6272a4",
-            "token": "comment"
-          },
-          {
-            "foreground": "f1fa8c",
-            "token": "string"
-          },
-          {
-            "foreground": "bd93f9",
-            "token": "constant.numeric"
-          },
-          {
-            "foreground": "bd93f9",
-            "token": "constant.language"
-          },
-          {
-            "foreground": "bd93f9",
-            "token": "constant.character"
-          },
-          {
-            "foreground": "bd93f9",
-            "token": "constant.other"
-          },
-          {
-            "foreground": "ffb86c",
-            "token": "variable.other.readwrite.instance"
-          },
-          {
-            "foreground": "ff79c6",
-            "token": "constant.character.escaped"
-          },
-          {
-            "foreground": "ff79c6",
-            "token": "constant.character.escape"
-          },
-          {
-            "foreground": "ff79c6",
-            "token": "string source"
-          },
-          {
-            "foreground": "ff79c6",
-            "token": "string source.ruby"
-          },
-          {
-            "foreground": "ff79c6",
-            "token": "keyword"
-          },
-          {
-            "foreground": "ff79c6",
-            "token": "storage"
-          },
-          {
-            "foreground": "8be9fd",
-            "fontStyle": "italic",
-            "token": "storage.type"
-          },
-          {
-            "foreground": "50fa7b",
-            "fontStyle": "underline",
-            "token": "entity.name.class"
-          },
-          {
-            "foreground": "50fa7b",
-            "fontStyle": "italic underline",
-            "token": "entity.other.inherited-class"
-          },
-          {
-            "foreground": "50fa7b",
-            "token": "entity.name.function"
-          },
-          {
-            "foreground": "ffb86c",
-            "fontStyle": "italic",
-            "token": "variable.parameter"
-          },
-          {
-            "foreground": "ff79c6",
-            "token": "entity.name.tag"
-          },
-          {
-            "foreground": "50fa7b",
-            "token": "entity.other.attribute-name"
-          },
-          {
-            "foreground": "8be9fd",
-            "token": "support.function"
-          },
-          {
-            "foreground": "6be5fd",
-            "token": "support.constant"
-          },
-          {
-            "foreground": "66d9ef",
-            "fontStyle": " italic",
-            "token": "support.type"
-          },
-          {
-            "foreground": "66d9ef",
-            "fontStyle": " italic",
-            "token": "support.class"
-          },
-          {
-            "foreground": "f8f8f0",
-            "background": "ff79c6",
-            "token": "invalid"
-          },
-          {
-            "foreground": "f8f8f0",
-            "background": "bd93f9",
-            "token": "invalid.deprecated"
-          },
-          {
-            "foreground": "cfcfc2",
-            "token": "meta.structure.dictionary.json string.quoted.double.json"
-          },
-          {
-            "foreground": "6272a4",
-            "token": "meta.diff"
-          },
-          {
-            "foreground": "6272a4",
-            "token": "meta.diff.header"
-          },
-          {
-            "foreground": "ff79c6",
-            "token": "markup.deleted"
-          },
-          {
-            "foreground": "50fa7b",
-            "token": "markup.inserted"
-          },
-          {
-            "foreground": "e6db74",
-            "token": "markup.changed"
-          },
-          {
-            "foreground": "bd93f9",
-            "token": "constant.numeric.line-number.find-in-files - match"
-          },
-          {
-            "foreground": "e6db74",
-            "token": "entity.name.filename"
-          },
-          {
-            "foreground": "f83333",
-            "token": "message.error"
-          },
-          {
-            "foreground": "eeeeee",
-            "token": "punctuation.definition.string.begin.json - meta.structure.dictionary.value.json"
-          },
-          {
-            "foreground": "eeeeee",
-            "token": "punctuation.definition.string.end.json - meta.structure.dictionary.value.json"
-          },
-          {
-            "foreground": "8be9fd",
-            "token": "meta.structure.dictionary.json string.quoted.double.json"
-          },
-          {
-            "foreground": "f1fa8c",
-            "token": "meta.structure.dictionary.value.json string.quoted.double.json"
-          },
-          {
-            "foreground": "50fa7b",
-            "token": "meta meta meta meta meta meta meta.structure.dictionary.value string"
-          },
-          {
-            "foreground": "ffb86c",
-            "token": "meta meta meta meta meta meta.structure.dictionary.value string"
-          },
-          {
-            "foreground": "ff79c6",
-            "token": "meta meta meta meta meta.structure.dictionary.value string"
-          },
-          {
-            "foreground": "bd93f9",
-            "token": "meta meta meta meta.structure.dictionary.value string"
-          },
-          {
-            "foreground": "50fa7b",
-            "token": "meta meta meta.structure.dictionary.value string"
-          },
-          {
-            "foreground": "ffb86c",
-            "token": "meta meta.structure.dictionary.value string"
-          }
+
+    if (monaco === null) {
+      return;
+    }
+
+    let hasMoveBeenSet = false;
+
+    monaco.languages.getLanguages().forEach((language) => {
+      if (language.id === 'sui-move') {
+        hasMoveBeenSet = true; 
+      }
+    })
+
+    if (!hasMoveBeenSet) {
+      monaco.languages.register({id: 'sui-move'});
+      monaco.languages.setMonarchTokensProvider('sui-move', {
+        keywords: [
+          'module',
+          'struct',
+          'fun',
         ],
-        "colors": {
-          "editor.foreground": "#f8f8f2",
-          "editor.background": "#282a36",
-          "editor.selectionBackground": "#44475a",
-          "editor.lineHighlightBackground": "#44475a",
-          "editorCursor.foreground": "#f8f8f0",
-          "editorWhitespace.foreground": "#3B3A32",
-          "editorIndentGuide.activeBackground": "#9D550FB0",
-          "editor.selectionHighlightBorder": "#222218"
-        }
-      },
-    
-    } as {[key: string]: monaco.editor.IStandaloneThemeData}
+        typeKeywords: [
+          'boolean', 'address', 'u8', 'u64', 'u128'
+        ],
+      
+        operators: [
+          '=', '>', '<', '!', '~', '?', ':', '==', '<=', '>=', '!=',
+          '&&', '||', '++', '--', '+', '-', '*', '/', '&', '|', '^', '%',
+          '<<', '>>', '>>>', '+=', '-=', '*=', '/=', '&=', '|=', '^=',
+          '%=', '<<=', '>>=', '>>>='
+        ],
+      
+        // we include these common regular expressions
+        symbols:  /[=><!~?:&|+\-*\/\^%]+/,
+      
+        // C# style strings
+        escapes: /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
+      
+        // The main tokenizer for our languages
+        tokenizer: {
+          root: [
+            // identifiers and keywords
+            [/[a-z_$][\w$]*/, { cases: { '@typeKeywords': 'keyword',
+                                         '@keywords': 'keyword',
+                                         '@default': 'identifier' } }],
+            [/[A-Z][\w\$]*/, 'type.identifier' ],  // to show class names nicely
+      
+            // whitespace
+            { include: '@whitespace' },
+      
+            // delimiters and operators
+            [/[{}()\[\]]/, '@brackets'],
+            [/[<>](?!@symbols)/, '@brackets'],
+            [/@symbols/, { cases: { '@operators': 'operator',
+                                    '@default'  : '' } } ],
+      
+            // @ annotations.
+            // As an example, we emit a debugging log message on these tokens.
+            // Note: message are supressed during the first load -- change some lines to see them.
+            [/@\s*[a-zA-Z_\$][\w\$]*/, { token: 'annotation', log: 'annotation token: $0' }],
+      
+            // numbers
+            [/\d*\.\d+([eE][\-+]?\d+)?/, 'number.float'],
+            [/0[xX][0-9a-fA-F]+/, 'number.hex'],
+            [/\d+/, 'number'],
+      
+            // delimiter: after number because of .\d floats
+            [/[;,.]/, 'delimiter'],
+      
+            // strings
+            [/"([^"\\]|\\.)*$/, 'string.invalid' ],  // non-teminated string
+            [/"/,  { token: 'string.quote', bracket: '@open', next: '@string' } ],
+      
+            // characters
+            [/'[^\\']'/, 'string'],
+            [/(')(@escapes)(')/, ['string','string.escape','string']],
+            [/'/, 'string.invalid']
+          ],
+      
+          comment: [
+            [/[^\/*]+/, 'comment' ],
+            [/\/\*/,    'comment', '@push' ],    // nested comment
+            ["\\*/",    'comment', '@pop'  ],
+            [/[\/*]/,   'comment' ]
+          ],
+      
+          string: [
+            [/[^\\"]+/,  'string'],
+            [/@escapes/, 'string.escape'],
+            [/\\./,      'string.escape.invalid'],
+            [/"/,        { token: 'string.quote', bracket: '@close', next: '@pop' } ]
+          ],
+      
+          whitespace: [
+            [/[ \t\r\n]+/, 'white'],
+            [/\/\*/,       'comment', '@comment' ],
+            [/\/\/.*$/,    'comment'],
+          ],
+        },
+      })
+    }
+
+    console.log('monaco', monaco.languages);
+    console.log('monaco', monaco.languages.getLanguages());
+
+  })
+
+  useEffect(() => {
 
     if (monaco == null) {
       console.log('monaco is null')
       return;
     }
-    monaco.editor.defineTheme('dracula', editorThemes.dracula);
-    monaco.editor.setTheme(editorTheme[props.theme]);
-  }, [props.theme]);
+
+    Object.entries(editorThemeJsons).forEach(([key, value]) => {
+      console.log('key', key)
+      // console.log('value', value)
+      monaco.editor.defineTheme(key, value as monaco.editor.IStandaloneThemeData);
+    })
+
+    // monaco.editor.defineTheme('Dracula', editorThemeJsons['Dracula'] as monaco.editor.IStandaloneThemeData);
+    // monaco.editor.setTheme(editorTheme[props.theme]);
+    console.log('theme', props.theme)
+    console.log('editorTheme', editorTheme[props.theme])
+  }, [props.theme, monaco]);
 
 
   const handleEditorChange = (value: any) => {
@@ -317,6 +261,16 @@ function BuildCanvas(
 
   return (
     <div>
+      {/* <select
+        id="editorTheme"
+        onChange={(e) => monaco?.editor.setTheme(e.target.value)}
+      >
+        {
+          Object.entries(editorThemeJsons).map(([key, value]) => {
+            return <option value={key}>{key}</option>
+          })
+        }
+      </select> */}
       {
         modules && modules.length > 0 &&
         <div>
@@ -329,10 +283,10 @@ function BuildCanvas(
           <Editor
             height="90vh"
             width={`100%`}
-            language={"sui-move"}
+            language="sui-move"
             value={props.code}
             onChange={handleEditorChange}
-            theme='vs-dark'
+            theme={editorTheme[props.theme]}
           />
           {
             props.compileError &&

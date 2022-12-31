@@ -9,7 +9,10 @@ function PackageFunction(
     functionDetails: object,
     packageAddress: string,
     moduleName: string,
-    refreshHandler: () => void
+    refreshHandler: () => void,
+    setPendingTxn: () => void,
+    setSuccessTxn: (digest: string) => void,
+    setFailTxn: (digest: string) => void,
   }
 ) {
 
@@ -119,6 +122,8 @@ function PackageFunction(
       return;
     }
 
+    props.setPendingTxn();
+
     const moveCallTxn = await signAndExecuteTransaction({
       kind: 'moveCall',
       data: {
@@ -132,6 +137,12 @@ function PackageFunction(
     });
 
     console.log('move call txn', moveCallTxn);
+
+    if (moveCallTxn.effects.status.status == 'success') {
+      props.setSuccessTxn(moveCallTxn.certificate.transactionDigest);
+    } else {
+      props.setFailTxn(moveCallTxn.certificate.transactionDigest);
+    }
 
     props.refreshHandler();
   }

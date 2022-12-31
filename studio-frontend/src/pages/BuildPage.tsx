@@ -12,10 +12,11 @@ import Header from "../components/Header";
 
 function BuildPage() {
 
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
   useEffect(() => {
     document.querySelector('html')?.setAttribute('data-theme', theme);
+    localStorage.setItem('theme', theme);
   }, [theme]);
 
   // Initialize indexedDb
@@ -40,6 +41,8 @@ function BuildPage() {
   const [compiledModules, setCompiledModules] = useState<string[]>([]);
   const [compileError, setCompileError] = useState<string>('');
   const [showError, setShowError] = useState(false);
+
+  const [autoCompile, setAutoCompile] = useState(false);
   
 
   //---Helpers---//
@@ -105,14 +108,19 @@ function BuildPage() {
     // console.log('handling code', newCode);
     console.log('currentModule', currentModule);
     console.log('module to update', module);
+
+    setCompileError('');
+    setCompiledModules([]);
+
+
     updateModuleInIndexdb(newCode).then(() => {
       getProjectData(currentProject.package);
     }).then(() => {
-      // compileCode();
+      if(autoCompile) {
+        compileCode();
+      }
     });
     setCode(newCode);
-    setCompileError('');
-    setCompiledModules([]);
   }
 
   const handleProjectChange = (projectChange: string) => {
@@ -288,7 +296,11 @@ function BuildPage() {
     <div>
       <PageLayout
         header={
-          <Header setTheme={setTheme}/>
+          <Header 
+            setTheme={setTheme}
+            autoCompile={autoCompile}
+            setAutoCompile={setAutoCompile}
+          />
         }
         innerSidebar={
           <BuildInnerSidebar

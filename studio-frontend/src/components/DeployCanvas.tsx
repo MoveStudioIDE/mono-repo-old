@@ -7,7 +7,10 @@ import {DeployedPackage, DeployedObject} from './DeployedObjects'
 function DeployCanvas (
   props: {
     deployedObjects: DeployedPackageInfo[],
-    toasts: JSX.Element[],
+    toasts: JSX.Element | undefined,
+    setPendingTxn: () => void,
+    setSuccessTxn: (digest: string) => void,
+    setFailTxn: (digest: string) => void,
   }
 ) {
 
@@ -45,6 +48,9 @@ function DeployCanvas (
               modules={packageDetails}
               packageName={deployedPackageInfo.name}
               refreshHandler={updateDeployedObjects}
+              setPendingTxn={props.setPendingTxn}
+            setSuccessTxn={props.setSuccessTxn}
+            setFailTxn={props.setFailTxn}
             />;
 
           }); 
@@ -129,22 +135,6 @@ function DeployCanvas (
         {deployedObjects}
       </div>
       <div className="toast toast-end">
-        {/* <div className="alert alert-info">
-          <div className=''>
-            <button className="btn btn-circle loading btn-xs"></button>
-            <span>Publishing...</span>
-          </div>
-        </div> */}
-        {/* <div className="alert alert-info">
-          <div>
-            <span>New mail arrived.</span>
-          </div>
-        </div>
-        <div className="alert alert-success">
-          <div>
-            <span>Message sent successfully.</span>
-          </div>
-        </div> */}
         {props.toasts}
       </div>
     </div>

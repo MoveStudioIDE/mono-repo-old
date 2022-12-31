@@ -38,6 +38,8 @@ const daisyThemes = [
 function Header(
   props: {
     setTheme: (theme: string) => void;
+    autoCompile: boolean;
+    setAutoCompile: (autoCompile: boolean) => void;
   }
 ) {
 
@@ -76,7 +78,17 @@ function Header(
           </button>
           <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
             {/* <li><a>Link to="/">Home</Link></a></li> */}
-            <li><a>Build</a></li>
+            <li>
+              <div className="form-control">
+                <label className="label cursor-pointer">
+                  <span className="label-text mr-2">Auto compile</span> 
+                  <input type="checkbox" className="toggle toggle-info" onClick={() => {
+                    console.log("toggle");
+                    props.setAutoCompile(!props.autoCompile);
+                  }} />
+                </label>
+              </div>
+            </li>
             <li><a>Deploy</a></li>
           </ul>
         </div>

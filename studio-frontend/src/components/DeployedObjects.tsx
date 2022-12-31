@@ -14,7 +14,10 @@ export function DeployedPackage (
     address: string,
     modules: object,
     packageName: string,
-    refreshHandler: () => void
+    refreshHandler: () => void,
+    setPendingTxn: () => void,
+    setSuccessTxn: (digest: string) => void,
+    setFailTxn: (digest: string) => void,
   }
 ) {
 
@@ -133,6 +136,9 @@ export function DeployedPackage (
                 packageAddress={props.address}
                 moduleName={selectedModule || ''}
                 refreshHandler={props.refreshHandler}
+                setPendingTxn={props.setPendingTxn}
+                setSuccessTxn={props.setSuccessTxn}
+                setFailTxn={props.setFailTxn}
               />
             </div>
           }
