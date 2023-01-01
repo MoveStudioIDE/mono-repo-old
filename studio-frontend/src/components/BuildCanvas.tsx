@@ -30,7 +30,7 @@ const editorTheme = {
   pastel: 'Tomorrow', 
   fantasy: 'SlushandPoppies',
   wireframe: 'Katzenmilch',
-  black: 'KrTheme',
+  black: 'krTheme',
   luxury: 'idleFingers',
   cmyk: 'ChromeDevTools',
   autumn: 'GitHubLight', 
