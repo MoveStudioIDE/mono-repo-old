@@ -2,6 +2,7 @@ import { ConnectButton } from "@mysten/wallet-kit";
 import React from "react";
 import { Link } from "react-router-dom";
 import './DeployHeader.css'
+import studioIcon from "../icons/studio-62.png";
 
 const daisyThemes = [
   'light',
@@ -54,7 +55,10 @@ function DeployHeader(
         </div>
       </div>
       <div className="flex-1">
-        <a ><Link className="btn btn-ghost normal-case text-xl ml-1" to="/">Move Studio</Link></a>
+        <a><Link to="/" className="btn btn-ghost normal-case text-xl ml-1"> 
+          <img src={studioIcon} width="30px" style={{marginRight: "5px"}}/>
+          Move Studio
+        </Link></a>      
       </div>
       
       <div className="flex-none">

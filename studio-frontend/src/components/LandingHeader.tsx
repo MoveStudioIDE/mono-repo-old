@@ -36,11 +36,9 @@ const daisyThemes = [
   'winter'
 ];
 
-function Header(
+function LandingHeader(
   props: {
-    setTheme: (theme: string) => void;
-    autoCompile: boolean;
-    setAutoCompile: (autoCompile: boolean) => void;
+    setTheme: (theme: string) => void
   }
 ) {
 
@@ -81,19 +79,6 @@ function Header(
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
           </button>
           <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
-            {/* <li><a>Link to="/">Home</Link></a></li> */}
-            <li>
-              <div className="form-control">
-                <label className="label cursor-pointer">
-                  <span className="label-text mr-2">Auto compile</span> 
-                  <input type="checkbox" className="toggle toggle-info" onClick={() => {
-                    console.log("toggle");
-                    props.setAutoCompile(!props.autoCompile);
-                  }} />
-                </label>
-              </div>
-            </li>
-            <li><a>Deploy</a></li>
           </ul>
         </div>
       </div>
@@ -101,4 +86,4 @@ function Header(
   );
 }
 
-export default Header;
+export default LandingHeader;
