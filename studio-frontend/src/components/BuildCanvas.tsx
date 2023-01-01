@@ -10,24 +10,6 @@ import stripAnsi from 'strip-ansi';
 // import * as editorThemeJsons from "../utils/themes.json"
 const editorThemeJsons = require('../utils/themes.json')
 
-// monaco.languages.register({id: 'move'});
-
-// let keywords = [
-//   'module',
-//   'struct',
-//   'fun'
-// ]
-
-// monaco.languages.setMonarchTokensProvider(
-//   'move', 
-//   {
-//     keywords,
-//     tokenizer: {
-      
-//     }
-//   }
-// )
-
 const editorTheme = {
   dark: 'GitHubDark',
   light: 'ChomeDevTools',
@@ -115,6 +97,8 @@ function BuildCanvas(
           'module',
           'struct',
           'fun',
+          'use',
+          'has'
         ],
         typeKeywords: [
           'boolean', 'address', 'u8', 'u64', 'u128'
@@ -261,16 +245,6 @@ function BuildCanvas(
 
   return (
     <div>
-      {/* <select
-        id="editorTheme"
-        onChange={(e) => monaco?.editor.setTheme(e.target.value)}
-      >
-        {
-          Object.entries(editorThemeJsons).map(([key, value]) => {
-            return <option value={key}>{key}</option>
-          })
-        }
-      </select> */}
       {
         modules && modules.length > 0 &&
         <div>

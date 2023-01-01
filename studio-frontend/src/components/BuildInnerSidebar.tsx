@@ -56,16 +56,17 @@ function BuildInnerSidebar(
 
   const handleProjectChange = (event: any) => {
     console.log('handleProjectChange', event.target.value);
+        
     props.changeProject(event.target.value);
 
     const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
     moduleSelect.value = 'default';
 
-    // Empty the select element if addProject is selected
-    if (event.target.value === 'addProject') {
-      event.target.value = 'default';
-      // event.target.value =
-    }
+    // // Empty the select element if addProject is selected
+    // if (event.target.value === 'addProject') {
+    //   event.target.value = 'default';
+    //   // event.target.value =
+    // }
   }
 
   const handleProjectDelete = () => {
@@ -115,10 +116,26 @@ function BuildInnerSidebar(
 
   const handleNewModuleClick = () => {
     const moduleSelect = document.getElementById('newModuleInput') as HTMLInputElement;
-    if (moduleSelect.value) {
-      props.changeModule(`1${moduleSelect.value}`);
-      moduleSelect.value = '';
+
+    if (moduleSelect.value == '' || moduleSelect.value == undefined) {
+      alert('Please enter a module name');
+      return;
     }
+
+    // Make sure module name starts with a letter
+    if (!moduleSelect.value.match(/^[a-zA-Z]/)) {
+      alert('Module name must start with a letter');
+      return;
+    }
+
+    // Make sure module name is alphanumeric
+    if (!moduleSelect.value.match(/^[a-zA-Z0-9]+$/)) {
+      alert('Module name must be alphanumeric');
+      return;
+    }
+
+    props.changeModule(`1${moduleSelect.value}`);
+    moduleSelect.value = '';
   }
 
 
@@ -133,7 +150,7 @@ function BuildInnerSidebar(
         onChange={handleProjectChange}
         style={{margin:"5px 0px"}}
         className="select w-full select-xs max-w-xs"
-
+        value={props.currentProject?.package || 'default'}
       >
         <option value="default">--Select a project--</option>
         <option value="addProject">++Add Project++</option>
@@ -205,29 +222,6 @@ function BuildInnerSidebar(
           </div>
         </div>
       </div>}
-      {/* {
-        props.currentProject && 
-        <div style={{marginTop:"25px",  display: "flex", justifyContent: "space-around"}} >
-          {
-              props.compileError && 
-              <div className="alert alert-error shadow-lg w-full">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  <span>Error! Task failed successfully.</span>
-                </div>
-              </div>
-            }
-            {
-              props.compiledModules && props.compiledModules.length > 0 && 
-              <div className="alert alert-success shadow-lg w-max">
-                <div>
-                  <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                  <span>Package compiled</span>
-                </div>
-              </div>
-            }
-          </div>
-        } */}
     </div>
   );
 }

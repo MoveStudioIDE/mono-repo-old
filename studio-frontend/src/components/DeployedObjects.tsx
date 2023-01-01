@@ -10,6 +10,7 @@ import PackageStruct from './PackageStruct';
 
 export function DeployedPackage (
   props: {
+    id: string,
     address: string,
     modules: object,
     packageName: string,
@@ -17,12 +18,18 @@ export function DeployedPackage (
     setPendingTxn: () => void,
     setSuccessTxn: (digest: string) => void,
     setFailTxn: (digest: string) => void,
+    removeDeployedObject: (id: string) => void,
+    dragStartHandler: (event: React.DragEvent<HTMLDivElement>) => void,
+    dragEnterHandler: (event: React.DragEvent<HTMLDivElement>) => void,
+    dragLeaveHandler: (event: React.DragEvent<HTMLDivElement>) => void,
+    dropHandler: (event: React.DragEvent<HTMLDivElement>) => void,
   }
 ) {
 
   const [selectedFunction, setSelectedFunction] = useState<object | null>(null);
   const [selectedStruct, setSelectedStruct] = useState<object | null>(null);
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
+  
 
   const structs = Object.entries(props.modules).flatMap((module: [string, object]) => {
     return Object.entries(module[1]).flatMap((moduleDetails: [string, object]) => {
@@ -83,7 +90,15 @@ export function DeployedPackage (
   }
 
   return (
-    <div className="card h-min max-h-max bg-neutral shadow-xl card-bordered card-compact" style={{overflow: "auto", margin: "10px"}}>
+    <div 
+      id={props.id}
+      className="card h-min max-h-max w-max bg-neutral shadow-xl card-bordered card-compact grid-item" 
+      style={{overflow: "auto", margin: "10px"}}
+      draggable="true"
+      onDragStart={props.dragStartHandler}
+      onDragOver={props.dragEnterHandler}
+      onDrop={props.dropHandler}
+    >
       <div className="card-body">
         <div className="card-actions justify-end">
           <a className="link link-hover" href={`https://explorer.sui.io/object/${props.address}`}>
@@ -91,7 +106,7 @@ export function DeployedPackage (
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>            
             </button>
           </a> 
-          <button className="btn btn-square btn-sm" >
+          <button className="btn btn-square btn-sm" onClick={() => props.removeDeployedObject(props.id)}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>
@@ -162,6 +177,7 @@ export function DeployedPackage (
 
 export function DeployedObject (
   props: {
+    id: string,
     address: string,
     fields: object,
     packageAddress: string,
@@ -170,16 +186,15 @@ export function DeployedObject (
     shared: boolean,
     updateHandler: (address: string) => void,
     dragStartHandler: (event: React.DragEvent<HTMLDivElement>) => void,
+    dragEnterHandler: (event: React.DragEvent<HTMLDivElement>) => void,
+    dragLeaveHandler: (event: React.DragEvent<HTMLDivElement>) => void,
+    dropHandler: (event: React.DragEvent<HTMLDivElement>) => void,
     refreshHandler: () => void,
+    removeDeployedObject: (id: string) => void,
   }
 ) {
 
   const fieldListEntries = Object.entries(props.fields).map((field) => {
-    // console.log('field', field)
-    // console.log('field[0]', field[0])
-    // console.log('field[1]', field[1])
-
-    console.log('field', field)
 
     if (field[0] === 'id') {
       return;
@@ -212,9 +227,6 @@ export function DeployedObject (
           <tr>
             <td>{field[0]}</td>
             <td style={{display: 'flex', flexDirection: 'row', flexWrap: "wrap"}}>
-              {/* <div className="tooltip" data-tip={(field[1].fields)}>
-                {shortenAddress(packageAddress, 2)}::{moduleName}::{structName}
-              </div> */}
               {
                 field[1].fields != undefined &&
                 Object.entries(field[1].fields).map((field: any) => {
@@ -251,11 +263,13 @@ export function DeployedObject (
 
   return (
     <div 
-      className="card h-min max-h-90 bg-neutral shadow-xl card-bordered card-compact" 
+      className="card h-min max-h-90 w-max bg-neutral shadow-xl card-bordered card-compact" 
       style={{overflow: "auto", margin: "10px"}}
       draggable="true"
       onDragStart={props.dragStartHandler}
-      id={props.address}
+      onDragOver={props.dragEnterHandler}
+      onDrop={props.dropHandler}
+      id={props.id}
     >
       <div className="card-body">
         <div className="card-actions justify-end">
@@ -267,7 +281,7 @@ export function DeployedObject (
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>            
             </button>
           </a> 
-          <button className="btn btn-square btn-sm">
+          <button className="btn btn-square btn-sm" onClick={() => props.removeDeployedObject(props.id)}>
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </button>
         </div>

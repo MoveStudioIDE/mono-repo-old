@@ -130,6 +130,7 @@ function BuildPage() {
       setCode('')
       console.log('default');
     } else if (projectChange === 'addProject') {
+
       setCurrentProject(null);
       setCurrentModule(null);
       setCode('')
@@ -150,6 +151,25 @@ function BuildPage() {
       if (!newProjectName) {
         return;
       }
+
+      // Make sure project name is unique
+      if (projectList.includes(newProjectName)) {
+        alert('Project name already exists');
+        return;
+      }
+
+      // Make sure project name starts with a letter
+      if (!newProjectName.match(/^[a-zA-Z]/)) {
+        alert('Project name must start with a letter');
+        return;
+      }
+
+      // Make sure project name is alphanumeric
+      if (!newProjectName.match(/^[a-zA-Z0-9]+$/)) {
+        alert('Project name must be alphanumeric');
+        return;
+      }
+
       addToIndexdb(newProjectName).then(() => {
         getProjects();
       });
@@ -186,12 +206,18 @@ function BuildPage() {
     } else if (module.startsWith('1')) {
       console.log('addModule:', module.slice(1));
       const addModuleToIndexdb = async (newModuleName: string) => {
+        await setCurrentModule(null);
+        setCode('')
         indexedDb = new IndexedDb('test');
         await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
         if (!currentProject) {
           console.log('f')
           return;
         }
+        console.log('indexdb', indexedDb);
+        console.log('currentProject', currentProject);
+        console.log('currentModule', currentModule);
+        console.log('code', code);
         await indexedDb.addNewModule('projects', currentProject.package, newModuleName);
       }
       if (!currentProject) {
@@ -205,11 +231,12 @@ function BuildPage() {
       }
       addModuleToIndexdb(newModuleName).then(() => {
         getProjectData(currentProject.package);
+        setCurrentModule(newModuleName);
+        setCode('');
       });
-      setCurrentModule(null);
-      setCode('');
-      // setCurrentModule(newModuleName);
+      // setCurrentModule(null);
       // setCode('');
+      
     } else {
       console.log('newModule', module);
       if (!currentProject) {

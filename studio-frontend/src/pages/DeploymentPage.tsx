@@ -10,6 +10,7 @@ import DeployCanvas from "../components/DeployCanvas";
 const GAS_BUDGET = 40000;
 
 export interface DeployedPackageInfo {
+  id: string,
   name: string, 
   address: string | undefined
 }
@@ -155,9 +156,30 @@ function DeploymentPage() {
         });
       }
       const newProjectName = prompt('Enter project name');
+      console.log('newProjectName', newProjectName)
+
       if (!newProjectName) {
         return;
       }
+
+      // Make sure project name is unique
+      if (projectList.find(projectName => projectName === newProjectName)) {
+        alert('Project name already exists');
+        return;
+      }
+
+      // Make sure project name starts with a letter
+      if (!newProjectName.match(/^[a-zA-Z]/)) {
+        alert('Project name must start with a letter');
+        return;
+      }
+
+      // Make sure project name is alphanumeric
+      if (!newProjectName.match(/^[a-zA-Z0-9]+$/)) {
+        alert('Project name must be alphanumeric');
+        return;
+      }
+
       addToIndexdb(newProjectName).then(() => {
         getProjects();
       });
@@ -225,27 +247,11 @@ function DeploymentPage() {
             gasBudget: GAS_BUDGET,
           }
         });
-        setToasts(
-          // [
-            // ...toasts,
-            <div className="alert alert-success" id={id2}>
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span>Successful publication</span>
-                <button >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
-                </button>
-                <button onClick={() => setToasts(undefined)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-              </div>
-            </div>
-          // ]
-        );
   
         return publishTxn;
       } catch (error) {
         console.log('error', error);
+
         setToasts(
           // [
             // ...toasts,
@@ -291,7 +297,7 @@ function DeploymentPage() {
         console.log('publishTxnDigest', publishTxnDigest);
 
         const packageInfos = publishTxnCreated?.map((object) => {
-          return {name: currentProject.package, address: object.reference.objectId};
+          return {id: Math.random().toString(36).slice(2), name: currentProject.package, address: object.reference.objectId};
         });
 
         if (!packageInfos) {
@@ -301,20 +307,72 @@ function DeploymentPage() {
         if (publishTxnCreated) {
           setDeployedObjects([...deployedObjects, ...packageInfos]);
         }
+
+        setToasts(
+          // [
+            // ...toasts,
+            <div className="alert alert-success" id={id2}>
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Successful publication</span>
+                <a href={`https://explorer.sui.io/transaction/${publishTxnDigest}`}>
+                  <button >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
+                  </button>
+                </a>
+                <button onClick={() => setToasts(undefined)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+            </div>
+          // ]
+        );
         
       });
     });
   }
 
   const addExistingObject = (objectId: string) => {
-    const existingObject = {name: 'manual', address: objectId};
+    const existingObject = {id: Math.random().toString(36).slice(2), name: 'manual', address: objectId};
     setDeployedObjects([...deployedObjects, existingObject]);
   }
 
   // Remove the specific object from the deployedObjects array
   const removeDeployedObject = (objectId: string) => {
-    
-    
+    setDeployedObjects(
+      [
+        ...deployedObjects.filter((object) => {
+          return object.id !== objectId;
+        }) 
+      ]
+    )
+  }
+
+  const rearrangeDeployedObjects = (movedObjectId: string, targetObjectId: string) => {
+
+    for (let i = 0; i < deployedObjects.length; i++) {
+      console.log('looking for moved object', deployedObjects[i].id, movedObjectId)
+      if (deployedObjects[i].id === movedObjectId) {
+        console.log('found moved object', i, movedObjectId)
+        const movedObject = deployedObjects[i];
+        for (let j = 0; j < deployedObjects.length; j++) {
+          console.log('looking for target object', deployedObjects[j].id, targetObjectId)
+          if (deployedObjects[j].id === targetObjectId) {
+            console.log('found target object', j, targetObjectId)
+            deployedObjects.splice(i, 1);
+            setDeployedObjects(
+              [
+                ...deployedObjects.slice(0, j),
+                movedObject,
+                ...deployedObjects.slice(j)
+              ]
+            )
+            return  
+          } 
+        }
+      }
+    }
+    // console.log('uh oh')
   }
 
 
@@ -343,6 +401,8 @@ function DeploymentPage() {
           setPendingTxn={setPendingTxn}
           setSuccessTxn={setSuccessTxn}
           setFailTxn={setFailTxn}
+          removeDeployedObject={removeDeployedObject}
+          rearrangeDeployedObjects={rearrangeDeployedObjects}
         />}
       />
     </div>

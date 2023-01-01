@@ -35,6 +35,21 @@ function DeployInnerSidebar(
 
   const handleObjectAdd = (event: any) => {
     const objectId = event.target.previousSibling.value;
+
+    if (objectId == '' || objectId == undefined) {
+      return;
+    }
+
+    if (objectId.length != 42) {
+      alert('Object ID must be 64 characters long');
+      return;
+    }
+
+    if (objectId.slice(0,2) != '0x') {
+      alert('Object ID must start with 0x');
+      return;
+    }
+
     props.addExistingObject(objectId);
     event.target.previousSibling.value = '';
   }
@@ -56,7 +71,6 @@ function DeployInnerSidebar(
         onChange={handleProjectChange}
         style={{marginTop:"5px", marginBottom:"5px"}}
         className="select w-full select-xs max-w-xs text-current"
-
       >
         <option value="default">--Select a project--</option>
         {projects}
