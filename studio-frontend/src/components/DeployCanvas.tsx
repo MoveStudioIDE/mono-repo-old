@@ -198,11 +198,11 @@ function DeployCanvas (
 
   return (
     <div className="deploy-canvas">
-      <ResponsiveMasonry >
-        <Masonry >
+      {/* <ResponsiveMasonry >
+        <Masonry > */}
           {deployedObjects}
-        </Masonry>
-      </ResponsiveMasonry>
+        {/* </Masonry>
+      </ResponsiveMasonry> */}
       <div className="toast toast-end">
         {props.toasts}
       </div>
