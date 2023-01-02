@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import LandingHeader from "../components/LandingHeader";
+import hero1 from "../icons/hero1.jpeg";
+import dan from "../icons/dan.jpeg";
 
 
 function LandingPage() {
@@ -15,40 +17,98 @@ function LandingPage() {
 
   
   return (
-    <div>
+    <div className="bg-base-300">
       <div>
         <LandingHeader
           setTheme={setTheme}
         />
       </div>
-      <div className="hero min-h-screen bg-base-200">
-        <div className="hero-content text-center">
+      <div className="hero min-h-min bg-base-200">
+        <div className="hero-content flex-row">
           <div className="max-w-md">
             <h1 className="text-5xl font-bold">Move Studio</h1>
-            <p className="py-6">An online IDE built for Sui smart contract development. </p>
-            <a><Link to="/build"><button className="btn btn-primary">View IDE</button></Link></a>
+            <p className="py-6">An online IDE built for Sui smart contract development. Move Studio provides developers with a blockchain development environment equipped with all of the essential tools. We also provide resources to teach and help new developers as well. </p>
+            <a><Link to="/build"><button className="btn btn-primary">Get building</button></Link></a>
+          </div>
+          <img src={hero1} className="rounded-lg shadow-2xl" style={{height: "400px"}}/>
+
+        </div>
+      </div>
+      <div className="hero min-h-min bg-base-200 p-10">
+        <div className="hero-content flex-row ">
+          <div className="card card-side bg-base-100 shadow-xl">
+            <figure className="p-5">
+              <div>
+                <ul className="steps steps-vertical">
+                  <li className="step step-success">Basic IDE</li>
+                  <li className="step step-warning">Contract wizard + UX improvements</li>
+                  <li className="step">Package/object interaction directory</li>
+                  <li className="step">Aptos integration</li>
+                </ul>
+              </div>
+            </figure>
+          </div>
+          <div className="max-w-md">
+            <h1 className="text-5xl font-bold">Roadmap</h1>
+            <p className="py-6">An online IDE built for Sui smart contract development. Move Studio provides developers with a blockchain development environment equipped with all of the essential tools. We also provide resources to teach and help new developers as well. </p>
           </div>
         </div>
       </div>
-      <div className="carousel w-full">
-        <div id="item1" className="carousel-item w-full">
-          <img src="https://placeimg.com/800/200/arch" className="w-full" />
-        </div> 
-        <div id="item2" className="carousel-item w-full">
-          <img src="https://placeimg.com/800/200/arch" className="w-full" />
-        </div> 
-        <div id="item3" className="carousel-item w-full">
-          <img src="https://placeimg.com/800/200/arch" className="w-full" />
-        </div> 
-        <div id="item4" className="carousel-item w-full">
-          <img src="https://placeimg.com/800/200/arch" className="w-full" />
-        </div>
-      </div> 
-      <div className="flex justify-center w-full py-2 gap-2">
-        <a href="#item1" className="btn btn-xs">1</a> 
-        <a href="#item2" className="btn btn-xs">2</a> 
-        <a href="#item3" className="btn btn-xs">3</a> 
-        <a href="#item4" className="btn btn-xs">4</a>
+      <div className="flex justify-center m-10">
+        <div>
+          <div className="carousel w-64 rounded-box">
+            <div id="item1" className="carousel-item w-full">
+              <div className="card card-compact bg-base-100 shadow-xl" >
+                <figure className="px-10 pt-10">
+                  <img src={dan} alt="dan" className="mask mask-squircle" />
+                </figure>
+                <div className="card-body items-center text-center">
+                  <h2 className="card-title">Daniel</h2>
+                  <p>Developer</p>
+                </div>
+              </div>  
+            </div> 
+            {/* <div id="item2" className="carousel-item w-full">
+              <div className="card w-96 bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <h2 className="card-title">Card title!</h2>
+                  <p>If a dog chews shoes whose shoes does he choose?</p>
+                  <div className="card-actions justify-end">
+                    <button className="btn btn-primary">Buy Now</button>
+                  </div>
+                </div>
+              </div>
+            </div>  */}
+            {/* <div id="item3" className="carousel-item w-full">
+              <div className="card w-96 bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <h2 className="card-title">Card title!</h2>
+                  <p>If a dog chews shoes whose shoes does he choose?</p>
+                  <div className="card-actions justify-end">
+                    <button className="btn btn-primary">Buy Now</button>
+                  </div>
+                </div>
+              </div>
+            </div>  */}
+            {/* <div id="item4" className="carousel-item w-full">
+              <div className="card w-96 bg-base-100 shadow-xl">
+                <div className="card-body">
+                  <h2 className="card-title">Card title!</h2>
+                  <p>If a dog chews shoes whose shoes does he choose?</p>
+                  <div className="card-actions justify-end">
+                    <button className="btn btn-primary">Buy Now</button>
+                  </div>
+                </div>
+              </div>
+            </div> */}
+          </div>  
+          <div className="flex justify-center w-64 py-2 gap-2">
+            <a href="#item1" className="btn btn-xs">1</a> 
+            {/* <a href="#item2" className="btn btn-xs">2</a>  */}
+            {/* <a href="#item3" className="btn btn-xs">3</a>  */}
+            {/* <a href="#item4" className="btn btn-xs">4</a> */}
+          </div>
+        </div>   
       </div>
       <footer className="footer items-center p-4 bg-neutral text-neutral-content">
         <div className="items-center grid-flow-col">
