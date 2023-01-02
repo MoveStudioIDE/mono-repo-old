@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LandingHeader from "../components/LandingHeader";
 import hero1 from "../icons/hero1.jpeg";
 import dan from "../icons/dan.jpeg";
+import buildPage from "../icons/build-page.png";
 
 
 function LandingPage() {
@@ -34,6 +35,51 @@ function LandingPage() {
 
         </div>
       </div>
+      <div className="flex justify-center m-10">
+        <div style={{width: "70%"}}>
+          <div className="carousel" >
+            <div id="item1" className="carousel-item w-full">
+              <div className="card card-compact bg-base-100 shadow-xl">
+                <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl" style={{}} /></figure>
+                <div className="card-body text-center items-center">
+                  <h2 className="card-title">Build</h2>
+                  <p>Our build page provides an environment to create and work on Sui Move packages. We use the monaco editor and provide Sui Move package compilation. </p>
+                </div>
+              </div>
+            </div> 
+            <div id="item2" className="carousel-item w-full">
+              <div className="card card-compact bg-base-100 shadow-xl">
+                <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl" style={{}} /></figure>
+                <div className="card-body text-center items-center">
+                  <h2 className="card-title">Deploy</h2>
+                  <p>Our deploy page provides an environment to deploy and interact with Sui Move packages and objects. We visualize the Sui objects as well as provide an interface to call Sui Move entry functions. . </p>
+                </div>
+              </div>            </div> 
+            <div id="item3" className="carousel-item w-full">
+              <div className="card card-compact bg-base-100 shadow-xl">
+                <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl" style={{}} /></figure>
+                <div className="card-body text-center items-center">
+                  <h2 className="card-title">Build</h2>
+                  <p>Our build page provides an environment to create and work on Sui Move packages. We use the monaco editor and provide Sui Move package compilation. </p>
+                </div>
+              </div>            </div> 
+            <div id="item4" className="carousel-item w-full">
+              <div className="card card-compact bg-base-100 shadow-xl">
+                <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl" style={{}} /></figure>
+                <div className="card-body text-center items-center">
+                  <h2 className="card-title">Build</h2>
+                  <p>Our build page provides an environment to create and work on Sui Move packages. We use the monaco editor and provide Sui Move package compilation. </p>
+                </div>
+              </div>            </div>
+          </div> 
+          <div className="flex justify-center w-full py-2 gap-2">
+            <a href="#item1" className="btn btn-xs">1</a> 
+            <a href="#item2" className="btn btn-xs">2</a> 
+            <a href="#item3" className="btn btn-xs">3</a> 
+            <a href="#item4" className="btn btn-xs">4</a>
+          </div>
+        </div>
+      </div>
       <div className="hero min-h-min bg-base-200 p-10">
         <div className="hero-content flex-row ">
           <div className="card card-side bg-base-100 shadow-xl">
@@ -57,7 +103,7 @@ function LandingPage() {
       <div className="flex justify-center m-10">
         <div>
           <div className="carousel w-64 rounded-box">
-            <div id="item1" className="carousel-item w-full">
+            <div id="item1" className="carousel-item w-full ">
               <div className="card card-compact bg-base-100 shadow-xl" >
                 <figure className="px-10 pt-10">
                   <img src={dan} alt="dan" className="mask mask-squircle" />
