@@ -106,7 +106,7 @@ function LandingPage() {
             <div id="item1" className="carousel-item w-full ">
               <div className="card card-compact bg-base-100 shadow-xl" >
                 <figure className="px-10 pt-10">
-                  <img src={dan} alt="dan" className="mask mask-squircle" />
+                  <img src={dan} alt="dan" className="rounded-2xl" />
                 </figure>
                 <div className="card-body items-center text-center">
                   <h2 className="card-title">Daniel</h2>
