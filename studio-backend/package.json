@@ -20,6 +20,7 @@
     "ts-node": "^10.9.1"
   },
   "scripts": {
-    "dev": "nodemon src/api.ts"
+    "dev": "nodemon src/api.ts",
+    "prod": "ts-node src/api.ts"
   }
 }
