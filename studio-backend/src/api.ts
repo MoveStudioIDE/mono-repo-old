@@ -4,7 +4,7 @@ import { compile, publish } from './compile';
 import { getObjectDetails, getPackageDetails } from './object-details';
 
 const app = express();
-const port = 5001;
+const port = 5000;
 
 app.use(cors());
 app.use(express.json());
