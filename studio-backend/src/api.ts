@@ -1,11 +1,7 @@
 import cors from 'cors';
 import express from 'express';
-import { appendFileSync } from 'fs';
-import { resetLevel } from 'loglevel';
 import { compile, publish } from './compile';
-import { getProjectsOfAddress } from './gets';
 import { getObjectDetails, getPackageDetails } from './object-details';
-import { Project } from './schema/user-schema';
 
 const app = express();
 const port = 5001;
