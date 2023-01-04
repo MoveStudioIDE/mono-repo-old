@@ -21,6 +21,7 @@ function LandingPage() {
     <div className="bg-base-300">
       <div>
         <LandingHeader
+          theme={theme}
           setTheme={setTheme}
         />
       </div>

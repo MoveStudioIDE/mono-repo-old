@@ -324,6 +324,7 @@ function BuildPage() {
       <PageLayout
         header={
           <Header 
+            theme={theme}
             setTheme={setTheme}
             autoCompile={autoCompile}
             setAutoCompile={setAutoCompile}

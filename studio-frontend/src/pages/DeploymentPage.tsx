@@ -411,6 +411,7 @@ function DeploymentPage() {
       <PageLayout
         header={
           <DeployHeader
+            theme={theme}
             setTheme={setTheme}
           />
         }
