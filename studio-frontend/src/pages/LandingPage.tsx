@@ -54,29 +54,32 @@ function LandingPage() {
                   <h2 className="card-title">Deploy</h2>
                   <p>Our deploy page provides an environment to deploy and interact with Sui Move packages and objects. We visualize the Sui objects as well as provide an interface to call Sui Move entry functions. . </p>
                 </div>
-              </div>            </div> 
-            <div id="item3" className="carousel-item w-full">
+              </div>            
+            </div> 
+            {/* <div id="item3" className="carousel-item w-full">
               <div className="card card-compact bg-base-100 shadow-xl">
                 <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl" style={{}} /></figure>
                 <div className="card-body text-center items-center">
                   <h2 className="card-title">Build</h2>
                   <p>Our build page provides an environment to create and work on Sui Move packages. We use the monaco editor and provide Sui Move package compilation. </p>
                 </div>
-              </div>            </div> 
-            <div id="item4" className="carousel-item w-full">
+              </div>            
+            </div>  */}
+            {/* <div id="item4" className="carousel-item w-full">
               <div className="card card-compact bg-base-100 shadow-xl">
                 <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl" style={{}} /></figure>
                 <div className="card-body text-center items-center">
                   <h2 className="card-title">Build</h2>
                   <p>Our build page provides an environment to create and work on Sui Move packages. We use the monaco editor and provide Sui Move package compilation. </p>
                 </div>
-              </div>            </div>
+              </div>            
+            </div> */}
           </div> 
           <div className="flex justify-center w-full py-2 gap-2">
             <a href="#item1" className="btn btn-xs">1</a> 
             <a href="#item2" className="btn btn-xs">2</a> 
-            <a href="#item3" className="btn btn-xs">3</a> 
-            <a href="#item4" className="btn btn-xs">4</a>
+            {/* <a href="#item3" className="btn btn-xs">3</a>  */}
+            {/* <a href="#item4" className="btn btn-xs">4</a> */}
           </div>
         </div>
       </div>
@@ -87,16 +90,16 @@ function LandingPage() {
               <div>
                 <ul className="steps steps-vertical">
                   <li className="step step-success">Basic IDE</li>
-                  <li className="step step-warning">Contract wizard + UX improvements</li>
+                  <li className="step step-warning">Contract wizard + UI improvements</li>
+                  <li className="step">Mainnet integration</li>
                   <li className="step">Package/object interaction directory</li>
-                  <li className="step">Aptos integration</li>
                 </ul>
               </div>
             </figure>
           </div>
           <div className="max-w-md">
             <h1 className="text-5xl font-bold">Roadmap</h1>
-            <p className="py-6">An online IDE built for Sui smart contract development. Move Studio provides developers with a blockchain development environment equipped with all of the essential tools. We also provide resources to teach and help new developers as well. </p>
+            <p className="py-6">Now that we have the basic IDE setup, we will be working on looking at feedback from the community, improving the UI, and working on new tools to improve the development experience. </p>
           </div>
         </div>
       </div>
