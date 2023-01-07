@@ -25,7 +25,7 @@ function LandingPage() {
           setTheme={setTheme}
         />
       </div>
-      <div className="hero min-h-min bg-base-200">
+      <div className="hero min-h-min bg-base-200 w-full">
         <div className="hero-content flex-row">
           <div className="max-w-md">
             <h1 className="text-5xl font-bold">Move Studio</h1>
@@ -36,7 +36,7 @@ function LandingPage() {
 
         </div>
       </div>
-      <div className="flex justify-center m-10">
+      <div className="flex justify-center m-10 w-full">
         <div style={{width: "70%"}}>
           <div className="carousel" >
             <div id="item1" className="carousel-item w-full">
@@ -114,7 +114,7 @@ function LandingPage() {
                 </figure>
                 <div className="card-body items-center text-center">
                   <h2 className="card-title">Daniel</h2>
-                  <p>Developer</p>
+                  <p>Founder & Developer</p>
                 </div>
               </div>  
             </div> 
