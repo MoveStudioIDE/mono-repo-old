@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react';
 import { DeployedPackageInfo } from '../pages/DeploymentPage';
 import './DeployCanvas.css'
 import {DeployedPackage, DeployedObject} from './DeployedObjects'
-import Masonry, {ResponsiveMasonry} from "react-responsive-masonry"
-import { DndProvider, useDrag } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
-import { Draggable } from "react-drag-reorder";
+
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001/';
 
 function DeployCanvas (
   props: {
@@ -38,7 +37,7 @@ function DeployCanvas (
         return;
       }
 
-      return axios.post('http://localhost:5001/object-details', {objectId: objectId}).then((res) => {
+      return axios.post(`${BACKEND_URL}object-details`, {objectId: objectId}).then((res) => {
         console.log('res', res);
         if (res == undefined || res.data.status != 'Exists') {
           return;
@@ -48,7 +47,7 @@ function DeployCanvas (
         const shared = res.data.details.owner.hasOwnProperty('Shared')
         if (objectData.dataType == 'package') {
 
-          return axios.post('http://localhost:5001/package-details', {packageId: objectId}).then((res) => {
+          return axios.post(`${BACKEND_URL}package-details`, {packageId: objectId}).then((res) => {
 
             const packageDetails = res.data;
 
@@ -108,7 +107,7 @@ function DeployCanvas (
     for (let object of deployedObjects) {
       console.log(object)
       if (object?.props.address == address) {
-        axios.post('http://localhost:5001/object-details', {objectId: address}).then((res) => {
+        axios.post(`${BACKEND_URL}object-details`, {objectId: address}).then((res) => {
         console.log('res', res);
         if (res == undefined || res.data.status != 'Exists') {
           return;

@@ -7,6 +7,9 @@ import { Project } from "../types/project-types";
 import DeployHeader from "../components/DeployHeader";
 import DeployCanvas from "../components/DeployCanvas";
 
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001/';
+
 const GAS_BUDGET = 40000;
 
 export interface DeployedPackageInfo {
@@ -222,7 +225,7 @@ function DeploymentPage() {
       if (!currentProject) {
         return;
       }
-      return axios.post('http://localhost:5001/compile', currentProject).then((res) => {
+      return axios.post(`${BACKEND_URL}compile`, currentProject).then((res) => {
         const compileResults = res.data as string | string[];
         console.log('res', compileResults);
         return compileResults;

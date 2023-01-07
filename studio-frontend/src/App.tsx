@@ -16,6 +16,8 @@ import axios from 'axios';
 
 const GAS_BUDGET = 40000;
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001/';
+
 import { ConnectButton, useWallet } from "@mysten/wallet-kit";
 
 function App() {
@@ -295,7 +297,7 @@ function App() {
     if (!currentProject) {
       return;
     }
-    axios.post('http://localhost:5001/compile', currentProject).then((res) => {
+    axios.post(`${BACKEND_URL}compile`, currentProject).then((res) => {
       const compileResults = res.data as string | string[];
       console.log('res', compileResults);
       if (typeof compileResults === 'string') {
