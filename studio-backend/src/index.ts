@@ -29,12 +29,13 @@ app.get('/projects', (req, res) => {
 app.post('/compile', async (req, res) => {
   const project = req.body;
 
-  console.log(project);
+  // console.log(project);
+  console.log('compiling project...')
 
   // Call compile function
   const compileResult = await compile(project);
 
-  console.log(compileResult)
+  // console.log(compileResult)
 
   res.send(compileResult);
 
@@ -43,7 +44,8 @@ app.post('/compile', async (req, res) => {
 app.post('/publish', async (req, res) => {
   const compiledModules = req.body.compiledModules;
 
-  console.log(compiledModules);
+  // console.log(compiledModules);
+  console.log('publishing modules...')
 
   // Call compile function
   const compileResult = await publish(compiledModules);
@@ -55,11 +57,13 @@ app.post('/publish', async (req, res) => {
 app.post('/object-details', async (req, res) => {
   const objectId = req.body.objectId as string;
 
-  console.log(objectId);
+  console.log('Retrieving object details for: ' + objectId)
+
+  // console.log(objectId);
 
   const objectDetails = await getObjectDetails(objectId);
 
-  console.log(objectDetails);
+  // console.log(objectDetails);
 
   res.send(objectDetails);
 });
@@ -67,11 +71,12 @@ app.post('/object-details', async (req, res) => {
 app.post('/package-details', async (req, res) => {
   const packageId = req.body.packageId as string;
 
-  console.log(packageId);
+  // console.log(packageId);
+  console.log('Retrieving package details for: ' + packageId)
 
   const packageDetails = await getPackageDetails(packageId);
 
-  console.log(packageDetails);
+  // console.log(packageDetails);
 
   res.send(packageDetails);
 });

@@ -72,6 +72,9 @@ function BuildPage() {
     if (!currentProject) {
       return;
     }
+
+    console.log('compiling with backend: ', BACKEND_URL);
+
     axios.post(`${BACKEND_URL}compile`, currentProject).then((res) => {
       const compileResults = res.data as string | string[];
       console.log('res', compileResults);
