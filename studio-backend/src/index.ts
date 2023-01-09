@@ -4,23 +4,29 @@ import { compile, publish } from './compile';
 import { getObjectDetails, getPackageDetails } from './object-details';
 
 const app = express();
-const portHttp = 5002;
-const portHttps = 5001;
+const portHttp = 80;
+const portHttps = 443;
 
 // PRODUCTION
 import https from 'https';
 import fs from 'fs';
+const CERT_PATH = "/etc/letsencrypt/live/api.movestudio.dev/fullchain.pem"
+const KEY_PATH = "/etc/letsencrypt/live/api.movestudio.dev/privkey.pem"
 const options = {
-  key: fs.readFileSync('key.pem'),
-  cert: fs.readFileSync('cert.pem')
+  key: fs.readFileSync(KEY_PATH),
+  cert: fs.readFileSync(CERT_PATH)
 };
 const httpsServer = https.createServer(options, app);
 httpsServer.listen(portHttps, () => {
-	console.log('HTTP Server running on port ', portHttps);
+	console.log('HTTPs Server running on port ', portHttps);
 });
 
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+  })
+);
 app.use(express.json());
 
 app.get('/', (req, res) => {
