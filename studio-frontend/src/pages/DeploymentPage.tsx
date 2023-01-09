@@ -8,7 +8,7 @@ import DeployHeader from "../components/DeployHeader";
 import DeployCanvas from "../components/DeployCanvas";
 
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001/';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
 
 const GAS_BUDGET = 40000;
 

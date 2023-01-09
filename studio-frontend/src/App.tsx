@@ -16,7 +16,7 @@ import axios from 'axios';
 
 const GAS_BUDGET = 40000;
 
-const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:5001/';
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
 
 import { ConnectButton, useWallet } from "@mysten/wallet-kit";
 

@@ -7,19 +7,19 @@ const app = express();
 const portHttp = 80;
 const portHttps = 443;
 
-// PRODUCTION
-import https from 'https';
-import fs from 'fs';
-const CERT_PATH = "/etc/letsencrypt/live/api.movestudio.dev/fullchain.pem"
-const KEY_PATH = "/etc/letsencrypt/live/api.movestudio.dev/privkey.pem"
-const options = {
-  key: fs.readFileSync(KEY_PATH),
-  cert: fs.readFileSync(CERT_PATH)
-};
-const httpsServer = https.createServer(options, app);
-httpsServer.listen(portHttps, () => {
-	console.log('HTTPs Server running on port ', portHttps);
-});
+// // PRODUCTION
+// import https from 'https';
+// import fs from 'fs';
+// const CERT_PATH = "/etc/letsencrypt/live/api.movestudio.dev/fullchain.pem"
+// const KEY_PATH = "/etc/letsencrypt/live/api.movestudio.dev/privkey.pem"
+// const options = {
+//   key: fs.readFileSync(KEY_PATH),
+//   cert: fs.readFileSync(CERT_PATH)
+// };
+// const httpsServer = https.createServer(options, app);
+// httpsServer.listen(portHttps, () => {
+// 	console.log('HTTPs Server running on port ', portHttps);
+// });
 
 
 app.use(
