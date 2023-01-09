@@ -4,7 +4,21 @@ import { compile, publish } from './compile';
 import { getObjectDetails, getPackageDetails } from './object-details';
 
 const app = express();
-const port = 5001;
+const portHttp = 5002;
+const portHttps = 5001;
+
+// PRODUCTION
+import https from 'https';
+import fs from 'fs';
+const options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
+const httpsServer = https.createServer(options, app);
+httpsServer.listen(443, () => {
+	console.log('HTTP Server running on port 443');
+});
+
 
 app.use(cors());
 app.use(express.json());
@@ -81,6 +95,6 @@ app.post('/package-details', async (req, res) => {
   res.send(packageDetails);
 });
 
-app.listen(process.env.PORT || port, () => {
-  console.log(`REST API is listening on port: ${process.env.PORT || port}.`);
+app.listen(process.env.PORT || portHttp, () => {
+  console.log(`REST API is listening on port: ${process.env.PORT || portHttp}.`);
 });
