@@ -31,6 +31,7 @@ function DeploymentPage() {
   const [deployedObjects, setDeployedObjects] = useState<DeployedPackageInfo[]>([]);
   const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
   const [toasts, setToasts] = useState<JSX.Element | undefined>();
+  const [isOverlayActive, setIsOverlayActive] = useState<boolean>(false);
 
   useEffect(() => {
     console.log('toasts', toasts);
@@ -198,6 +199,8 @@ function DeploymentPage() {
   }
 
   const handlePackagePublish = () => {
+
+    setIsOverlayActive(true);
 
     const id1 = Math.random().toString();
     const id2 = Math.random().toString();
@@ -383,6 +386,7 @@ function DeploymentPage() {
         
       });
     });
+    setIsOverlayActive(false);
   }
 
   const addExistingObject = (objectId: string) => {
@@ -391,17 +395,20 @@ function DeploymentPage() {
   }
 
   // Remove the specific object from the deployedObjects array
-  const removeDeployedObject = (objectId: string) => {
+  const removeDeployedObject = async (objectId: string) => {
+    await setIsOverlayActive(true);
     setDeployedObjects(
       [
         ...deployedObjects.filter((object) => {
           return object.id !== objectId;
         }) 
       ]
-    )
+    );
+    setIsOverlayActive(false);
   }
 
-  const rearrangeDeployedObjects = (movedObjectId: string, targetObjectId: string) => {
+  const rearrangeDeployedObjects = async (movedObjectId: string, targetObjectId: string) => {
+    await setIsOverlayActive(true);
 
     for (let i = 0; i < deployedObjects.length; i++) {
       console.log('looking for moved object', deployedObjects[i].id, movedObjectId)
@@ -420,11 +427,13 @@ function DeploymentPage() {
                 ...deployedObjects.slice(j)
               ]
             )
-            return  
+            return 
+
           } 
         }
       }
     }
+
     // console.log('uh oh')
   }
 
@@ -451,6 +460,8 @@ function DeploymentPage() {
         }
         canvas={
         <DeployCanvas 
+          theme={theme}
+          isOverlayActive={isOverlayActive}
           deployedObjects={deployedObjects}
           toasts={toasts}
           setPendingTxn={setPendingTxn}
@@ -458,6 +469,7 @@ function DeploymentPage() {
           setFailTxn={setFailTxn}
           removeDeployedObject={removeDeployedObject}
           rearrangeDeployedObjects={rearrangeDeployedObjects}
+          setIsOverlayActive={setIsOverlayActive}
         />}
       />
     </div>
