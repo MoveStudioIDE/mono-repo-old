@@ -161,7 +161,7 @@ function BuildInnerSidebar(
           props.currentProject && 
           <button 
             onClick={props.compileCode} 
-            className="btn btn-xs btn-info "
+            className={`btn btn-xs btn-info ${modules?.length === 0 ? 'btn-disabled' : ''}`}
             style={{margin:"2px 5px"}}
           >
             Compile
