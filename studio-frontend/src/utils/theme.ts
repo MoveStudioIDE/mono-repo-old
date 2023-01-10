@@ -104,7 +104,7 @@ export const SPINNER_COLORS = {
     primaryAndSecondary: ["#519903", "#E9E92E"]
   },
   night: {
-    infoContent: "#cdf0ff",
+    infoContent: "#003e4d",
     primaryAndSecondary: ["#38bdf8", "#818CF8"]
   },
   coffee: {
