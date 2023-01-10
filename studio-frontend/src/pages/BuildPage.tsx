@@ -241,6 +241,9 @@ function BuildPage() {
       setCurrentProject(null);
       setCurrentModule(null);
       setCode('');
+      setShowError(false);
+      setCompileError('');
+      setCompiledModules([]);
       console.log('newProject', projectChange);
       getProjectData(projectChange);
       console.log('currentProject', currentProject);
@@ -296,6 +299,9 @@ function BuildPage() {
         getProjectData(currentProject.package);
         setCurrentModule(newModuleName);
         setCode('');
+        setShowError(false);
+        setCompileError('');
+        setCompiledModules([]);
       });
       // setCurrentModule(null);
       // setCode('');
@@ -345,6 +351,9 @@ function BuildPage() {
     });
     setCurrentModule(null);
     setCode('')
+    setShowError(false);
+    setCompileError('');
+    setCompiledModules([]);
   }
 
   const handleDependencyAdd = (dependencyName: string, dependencyAddress: string) => {
