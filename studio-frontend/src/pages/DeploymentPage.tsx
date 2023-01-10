@@ -402,7 +402,8 @@ function DeploymentPage() {
   }
 
   const addExistingObject = (objectId: string) => {
-    const existingObject = {id: Math.random().toString(36).slice(2), name: 'manual', address: objectId};
+    const manualPackageName = prompt('Enter name of existing package. (Leave blank if object)')
+    const existingObject = {id: Math.random().toString(36).slice(2), name: manualPackageName || 'manual', address: objectId};
     setDeployedObjects([...deployedObjects, existingObject]);
   }
 
