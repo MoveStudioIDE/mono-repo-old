@@ -33,12 +33,10 @@ function LandingPage() {
   
   return (
     <div className="bg-base-300">
-      <div>
-        <LandingHeader
-          theme={theme}
-          setTheme={setTheme}
-        />
-      </div>
+      <LandingHeader
+        theme={theme}
+        setTheme={setTheme}
+      />
       <div className="hero min-h-min bg-base-200 w-full shadow-2xl">
         <div className="hero-content flex-row">
           <div className="max-w-md">
