@@ -100,7 +100,7 @@ function DeployInnerSidebar(
         </div>
       } */}
       <div style={{marginTop:"25px", marginBottom:"5px"}}>
-        <h2 style={{textAlign: "center"}}>Add existing package or object</h2>
+        <h2 style={{textAlign: "center", marginBottom: "5px"}}>Add existing package or object</h2>
         <div style={{display: "flex", justifyContent: "center"}}>
           <div className="form-control">
             <div className="input-group input-group-xs">

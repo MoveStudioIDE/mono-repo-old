@@ -19,7 +19,7 @@
 
 .page-deploy {
   display: grid;
-  grid-template-columns: fit-content(140px) auto;
+  grid-template-columns: fit-content(200px) auto;
   grid-template-rows: 65px auto;
 
   overflow: hidden;
