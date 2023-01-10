@@ -26,7 +26,83 @@ function BuildPage() {
     const startIndexDb = async () => {
       indexedDb = new IndexedDb('test');
       await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      
+      const existingUser = localStorage.getItem('user');
+      console.log('existingUser', existingUser);
+      if (!existingUser) {
+        console.log('setting user');
+        localStorage.setItem('user', 'true');
+        await indexedDb.putValue('projects', {
+          package: 'demoPackage',
+          dependencies: [
+            {name: 'demoPackage', address: '0x0'},
+            {name: 'Sui', address: '0x02'}
+          ],
+          modules: [
+            {
+              name: 'party', 
+              code: `module demoPackage::party {
+
+    // Libraries being used
+    use sui::object::{Self, ID, UID};
+    use sui::transfer;
+    use sui::tx_context::TxContext;
+
+    // Object that can be deployed
+    struct Balloon has key {
+      id: UID,
+      popped: bool
     }
+
+    // Deploy a new balloon
+    fun init(ctx: &mut TxContext) {
+      new_balloon(ctx);
+    }
+
+    public entry fun pop_balloon(balloon: &mut Balloon) {
+      balloon.popped = true;
+    }
+
+    public entry fun fill_up_balloon(ctx: &mut TxContext) {
+      new_balloon(ctx);
+    }
+
+    // Create a new balloon object and make it available to anyone
+    fun new_balloon(ctx: &mut TxContext) {
+      let balloon = Balloon{
+        id: object::new(ctx), 
+        popped: false
+      };
+      transfer::share_object(balloon);
+    }
+            
+  }`
+            }
+          ]
+        }); 
+      }
+         
+    }
+    // const addDefaultProject = async () => {
+    //   setCurrentProject(null);
+    //   setCurrentModule(null);
+    //   setCode('');
+
+    //   console.log('adding default project');
+
+    //   indexedDb = new IndexedDb('test');
+    //   await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+    //   await indexedDb.putValue('projects', {
+    //     package: 'default',
+    //     dependencies: [
+    //       {name: 'default', address: '0x0'},
+    //       {name: 'Sui', address: '0x02'}
+    //     ],
+    //     modules: [
+    //       {name: 'party', code: ''}
+    //     ]
+    //   });
+    // }
     startIndexDb().then(() => {
       getProjects();
     });
@@ -128,16 +204,16 @@ function BuildPage() {
   }
 
   const handleProjectChange = (projectChange: string) => {
-    if (projectChange === 'default') {
+    if (projectChange === '**default') {
       setCurrentProject(null);
       setCurrentModule(null);
       setCode('')
       console.log('default');
-    } else if (projectChange === 'addProject') {
+    } else if (projectChange === '**addProject') {
 
       setCurrentProject(null);
       setCurrentModule(null);
-      setCode('')
+      setCode('');
       console.log('addProject');
       const addToIndexdb = async (newProjectName: string) => {
         indexedDb = new IndexedDb('test');
@@ -180,6 +256,8 @@ function BuildPage() {
       
       // getProjectData(newProjectName || 'project1');
     } else {
+      console.log('projectChange', projectChange);
+
       setCurrentModule(null);
       setCode('')
       console.log('newProject', projectChange);

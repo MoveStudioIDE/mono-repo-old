@@ -4,11 +4,25 @@ import LandingHeader from "../components/LandingHeader";
 import hero1 from "../icons/hero1.jpeg";
 import dan from "../icons/dan.jpeg";
 import buildPage from "../icons/build-page.png";
+import deployPage from "../icons/deploy-page.png";
+import studioIcon from "../icons/studio-62.png"
+
+const quotes = [
+  "Coding, like poetry, should be short and concise",
+  "It’s not a bug; it’s an undocumented feature",
+  "Code is like humor. When you have to explain it, it’s bad",
+  "Clean code always looks like it was written by someone who cares",
+  "If, at first, you do not succeed, call it version 1.0",
+  "Talk is cheap. Show me the code", 
+  // "Confusion is part of programming",
+]
 
 
 function LandingPage() {
 
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+
+  const quote = 
 
 
   useEffect(() => {
@@ -25,11 +39,11 @@ function LandingPage() {
           setTheme={setTheme}
         />
       </div>
-      <div className="hero min-h-min bg-base-200 w-full">
+      <div className="hero min-h-min bg-base-200 w-full shadow-2xl">
         <div className="hero-content flex-row">
           <div className="max-w-md">
             <h1 className="text-5xl font-bold">Move Studio</h1>
-            <p className="py-6">An online IDE built for Sui smart contract development. Move Studio provides developers with a blockchain development environment equipped with all of the essential tools. We also provide resources to teach and help new developers as well. </p>
+            <p className="py-6">An online IDE built for Sui smart contract development. Built for developers of all experience levels, Move Studio provides developers with essential building tools and resources.</p>
             <a><Link to="/build"><button className="btn btn-primary">Get building</button></Link></a>
           </div>
           <img src={hero1} className="rounded-lg shadow-2xl" style={{height: "400px"}}/>
@@ -41,19 +55,19 @@ function LandingPage() {
           <div className="carousel" >
             <div id="item1" className="carousel-item w-full">
               <div className="card card-compact bg-base-100 shadow-xl">
-                <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl" style={{}} /></figure>
+                <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl shadow-2xl" style={{}} /></figure>
                 <div className="card-body text-center items-center">
                   <h2 className="card-title">Build</h2>
-                  <p>Our build page provides an environment to create and work on Sui Move packages. We use the monaco editor and provide Sui Move package compilation. </p>
+                  <p>The build page provides an environment to create and work on Sui Move packages. We use the monaco editor and provide Sui Move package compilation. </p>
                 </div>
               </div>
             </div> 
             <div id="item2" className="carousel-item w-full">
               <div className="card card-compact bg-base-100 shadow-xl">
-                <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl" style={{}} /></figure>
+                <figure className="px-10 pt-10 "><img src={deployPage} className="w-full rounded-2xl shadow-2xl" style={{}} /></figure>
                 <div className="card-body text-center items-center">
                   <h2 className="card-title">Deploy</h2>
-                  <p>Our deploy page provides an environment to deploy and interact with Sui Move packages and objects. We visualize the Sui objects as well as provide an interface to call Sui Move entry functions. . </p>
+                  <p>The deploy page provides an environment to deploy and interact with Sui Move packages and objects. We visualize the Sui objects as well as provide an interface to call Sui Move entry functions. . </p>
                 </div>
               </div>            
             </div> 
@@ -84,7 +98,7 @@ function LandingPage() {
           </div>
         </div>
       </div>
-      <div className="hero min-h-min bg-base-200 p-10">
+      <div className="hero min-h-min bg-base-200 p-10 ">
         <div className="hero-content flex-row ">
           <div className="card card-side bg-base-100 shadow-xl">
             <figure className="p-5">
@@ -110,7 +124,7 @@ function LandingPage() {
             <div id="item1" className="carousel-item w-full ">
               <div className="card card-compact bg-base-100 shadow-xl" >
                 <figure className="px-10 pt-10">
-                  <img src={dan} alt="dan" className="rounded-2xl" />
+                  <img src={dan} alt="dan" className="rounded-2xl shadow-2xl" />
                 </figure>
                 <div className="card-body items-center text-center">
                   <h2 className="card-title">Daniel</h2>
@@ -162,8 +176,8 @@ function LandingPage() {
       </div>
       <footer className="footer items-center p-4 bg-neutral text-neutral-content">
         <div className="items-center grid-flow-col">
-          <svg width="36" height="36" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fillRule="evenodd" clipRule="evenodd" className="fill-current"><path d="M22.672 15.226l-2.432.811.841 2.515c.33 1.019-.209 2.127-1.23 2.456-1.15.325-2.148-.321-2.463-1.226l-.84-2.518-5.013 1.677.84 2.517c.391 1.203-.434 2.542-1.831 2.542-.88 0-1.601-.564-1.86-1.314l-.842-2.516-2.431.809c-1.135.328-2.145-.317-2.463-1.229-.329-1.018.211-2.127 1.231-2.456l2.432-.809-1.621-4.823-2.432.808c-1.355.384-2.558-.59-2.558-1.839 0-.817.509-1.582 1.327-1.846l2.433-.809-.842-2.515c-.33-1.02.211-2.129 1.232-2.458 1.02-.329 2.13.209 2.461 1.229l.842 2.515 5.011-1.677-.839-2.517c-.403-1.238.484-2.553 1.843-2.553.819 0 1.585.509 1.85 1.326l.841 2.517 2.431-.81c1.02-.33 2.131.211 2.461 1.229.332 1.018-.21 2.126-1.23 2.456l-2.433.809 1.622 4.823 2.433-.809c1.242-.401 2.557.484 2.557 1.838 0 .819-.51 1.583-1.328 1.847m-8.992-6.428l-5.01 1.675 1.619 4.828 5.011-1.674-1.62-4.829z"></path></svg> 
-          <p>Copyright © 2023 - All right reserved</p>
+          <img src={studioIcon} width="30px" style={{marginRight: "5px"}}/>
+          {quotes[Math.floor(Math.random() * quotes.length)]}
         </div> 
         <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
           <a href="https://github.com/MoveStudioIDE/mono-repo">
