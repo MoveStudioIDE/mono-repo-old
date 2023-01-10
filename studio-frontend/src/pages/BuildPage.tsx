@@ -83,26 +83,6 @@ function BuildPage() {
       }
          
     }
-    // const addDefaultProject = async () => {
-    //   setCurrentProject(null);
-    //   setCurrentModule(null);
-    //   setCode('');
-
-    //   console.log('adding default project');
-
-    //   indexedDb = new IndexedDb('test');
-    //   await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
-    //   await indexedDb.putValue('projects', {
-    //     package: 'default',
-    //     dependencies: [
-    //       {name: 'default', address: '0x0'},
-    //       {name: 'Sui', address: '0x02'}
-    //     ],
-    //     modules: [
-    //       {name: 'party', code: ''}
-    //     ]
-    //   });
-    // }
     startIndexDb().then(() => {
       getProjects();
     });
@@ -258,8 +238,9 @@ function BuildPage() {
     } else {
       console.log('projectChange', projectChange);
 
+      setCurrentProject(null);
       setCurrentModule(null);
-      setCode('')
+      setCode('');
       console.log('newProject', projectChange);
       getProjectData(projectChange);
       console.log('currentProject', currentProject);
