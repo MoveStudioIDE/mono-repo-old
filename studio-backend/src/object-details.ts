@@ -9,7 +9,10 @@ export async function getObjectDetails(objectId: string) {
 }
 
 export async function getPackageDetails(packageId: string) {
+  console.log('1')
   const provider = new JsonRpcProvider();
+  console.log('2')
   const packageDetails = await provider.getNormalizedMoveModulesByPackage(packageId);
+  console.log('3')
   return packageDetails;
 }

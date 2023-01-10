@@ -75,7 +75,7 @@ export async function compile(project: Project): Promise<string | string[]> {
       { encoding: 'utf-8'}
     );
 
-    console.log(compiledModules);
+    console.log("compiledModules", compiledModules);
 
     // Remove the temporary project directory
     fs.rmdirSync(tempProjectPath, { recursive: true });
@@ -84,8 +84,7 @@ export async function compile(project: Project): Promise<string | string[]> {
     return compiledModules as unknown as string[];
 
   } catch (error: any) {
-    console.log(error)
-    // console.log(stripAnsi(error.stdout))
+    console.log('error', error)
     const errorMessage = error.stdout;
 
     // Check error message for update needed message - TODO
