@@ -5,41 +5,12 @@ import './DeployCanvas.css'
 import {DeployedPackage, DeployedObject} from './DeployedObjects'
 import LoadingOverlay from 'react-loading-overlay-ts';
 import ScaleLoader from "react-spinners/ScaleLoader";
+import { SPINNER_COLORS } from '../utils/theme';
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
 
-const SPINNER_COLORS = {
-  aqua: ["#09ecf3", "#09ecf3"],
-  black: ["#343232", "#09ecf3"],
-  bumblebee: ["#e0a82e", "#09ecf3"],
-  cmyk: ["#45AEEE", "#09ecf3"],
-  corporate: ["#4b6bfb", "#09ecf3"],
-  cupcake: ["#65c3c8", "#09ecf3"],
-  cyberpunk: ["#ff7598", "#09ecf3"],
-  dark: ["#661AE6", "#D926AA", "#09ecf3"],
-  dracula: ["#ff79c6", "#09ecf3"],
-  emerald: ["#66cc8a", "#09ecf3"],
-  fantasy: ["#6e0b75", "#09ecf3"],
-  forest: ["#1eb854", "#09ecf3"],
-  garden: ["#5c7f67", "#09ecf3"],
-  halloween: ["#f28c18", "#09ecf3"],
-  light: ["#570df8", "#09ecf3"],
-  lofi: ["#0D0D0D", "#09ecf3"],
-  luxury: ["#ffffff", "#09ecf3"],
-  pastel: ["#d1c1d7", "#09ecf3"],
-  retro: ["#ef9995", "#09ecf3"],
-  synthwave: ["#e779c1", "#09ecf3"],
-  valentine: ["#e96d7b", "#09ecf3"],
-  wireframe: ["#b8b8b8", "#09ecf3"],
-  autumn: ["#8C0327", "#09ecf3"],
-  business: ["#1C4E80", "#09ecf3"],
-  acid: ["#FF00F4", "#09ecf3"],
-  lemonade: ["#519903", "#09ecf3"],
-  night: ["#38bdf8", "#09ecf3"],
-  coffee: ["#DB924B", "#263E3F"],
-  winter: ["#047AFF", "#463AA2"],
-} as { [key: string]: string[] };
+
 
 function DeployCanvas (
   props: {
@@ -252,7 +223,7 @@ function DeployCanvas (
         active={props.isOverlayActive}
         spinner={
           <ScaleLoader
-            color={SPINNER_COLORS[props.theme][Math.floor(Math.random() * SPINNER_COLORS[props.theme].length)]}
+            color={SPINNER_COLORS[props.theme].primaryAndSecondary[Math.floor(Math.random() * SPINNER_COLORS[props.theme].primaryAndSecondary.length)]}
           />
         }
         // text='Loading objects...'

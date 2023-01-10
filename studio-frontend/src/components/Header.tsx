@@ -70,9 +70,10 @@ function Header(
         <div className="dropdown dropdown-end ">
           <label tabIndex={0} className="btn btn-ghost rounded-btn">Theme</label>
           <ul tabIndex={0} className="menu dropdown-content menu-compact p-2 shadow bg-base-100 rounded-box w-52 mt-4 h-40" style={{display: "inline", overflow: "auto"}}>
-            {
+          {
               daisyThemes.map((theme) => {
-                return <li><a className={`btn m-1 btn-secondary ${props.theme === 'winter' ? 'text-slate-400' : ''}`} onClick={() => {props.setTheme(theme)}}>{theme}</a></li> 
+                // return <li><a className={`btn m-1 btn-secondary ${props.theme === 'winter' ? 'text-slate-400' : ''}`} onClick={() => {props.setTheme(theme)}}>{theme}</a></li> 
+                return <li><a className={`btn m-1 btn-accent`} style={{color: "hsl(var(--ac))"}} onClick={() => {props.setTheme(theme)}}>{theme}</a></li> 
               })
             }
           </ul>

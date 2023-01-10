@@ -6,6 +6,8 @@ import DeployInnerSidebar from "../components/DeployInnerSidebar";
 import { Project } from "../types/project-types";
 import DeployHeader from "../components/DeployHeader";
 import DeployCanvas from "../components/DeployCanvas";
+import ScaleLoader from "react-spinners/ScaleLoader";
+import { SPINNER_COLORS } from '../utils/theme';
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
@@ -23,7 +25,7 @@ import axios from "axios";
 
 function DeploymentPage() {
 
-  const [theme, setTheme] = useState(localStorage.getItem('theme') ||'dark');
+  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [projectList, setProjectList] = useState<string[]>([]);
   const [currentProject, setCurrentProject] = useState<Project | null>(null);
   const [compileError, setCompileError] = useState<string>('');
@@ -78,8 +80,12 @@ function DeploymentPage() {
     setToasts(
       <div className="alert alert-info">
         <div>
-          <button className="btn btn-circle loading btn-xs"></button>
-          <span>Waiting for transaction...</span>
+          <ScaleLoader
+            color={SPINNER_COLORS[theme].infoContent}
+            height={20}
+            // width={15}
+          />
+          <span className="normal-case" style={{color: 'hsl(var(--inc))'}} >Waiting for transaction...</span>
         </div>
       </div>
     )
@@ -209,8 +215,14 @@ function DeploymentPage() {
       // [
         <div className="alert alert-info" id={id1}>
           <div>
-            <button className="btn btn-circle loading btn-xs"></button>
-            <span>Publishing...</span>
+            {/* <button className="btn  btn-xs"> */}
+            <ScaleLoader
+              color={SPINNER_COLORS[theme].infoContent}
+              height={20}
+              // width={15}
+            />
+            {/* </button> */}
+            <span className="normal-case" style={{color: 'hsl(var(--inc))'}}>Publishing...</span>
             <button onClick={() => setToasts(undefined)}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
             </button>
