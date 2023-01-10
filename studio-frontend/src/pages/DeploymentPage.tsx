@@ -412,6 +412,7 @@ function DeploymentPage() {
   return (
     <div>
       <PageLayout
+        page="deploy"
         header={
           <DeployHeader
             theme={theme}

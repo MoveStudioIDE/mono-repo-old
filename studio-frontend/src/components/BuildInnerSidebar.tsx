@@ -142,7 +142,7 @@ function BuildInnerSidebar(
   //---Render---//
 
   return (
-    <div style={{padding:"5px", overflow: "clip", display: "flex", justifyContent: "center", flexDirection: "column"}} >
+    <div style={{padding:"5px", overflow: "auto", display: "flex", justifyContent: "center", flexDirection: "column"}} >
       {/* <h1 style={{textAlign:"center"}}>Packages</h1> */}
       <select 
         name="project" 
@@ -182,7 +182,7 @@ function BuildInnerSidebar(
         <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full">
           <thead>
             <tr>
-              <th>Dependency</th>
+              <th style={{position: "relative"}}>Dependency</th>
               <th>Address</th>
             </tr>
           </thead>

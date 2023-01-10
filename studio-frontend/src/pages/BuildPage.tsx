@@ -385,6 +385,7 @@ function BuildPage() {
   return (
     <div>
       <PageLayout
+        page="build"
         header={
           <Header 
             theme={theme}

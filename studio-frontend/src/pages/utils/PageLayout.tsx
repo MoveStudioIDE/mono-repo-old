@@ -2,11 +2,13 @@ import React from 'react';
 import './pageLayout.css';
 
 
-function PageLayout (props: {header: JSX.Element, innerSidebar: JSX.Element, canvas: JSX.Element}) {
+function PageLayout (props: {header: JSX.Element, innerSidebar: JSX.Element, canvas: JSX.Element, page: string}) {
 
+
+  const pageClassName = props.page === 'build' ? 'page-build' : 'page-deploy';
 
   return (
-    <div className="page" style={{height: '100vh'}}> 
+    <div className={pageClassName} style={{height: '100vh'}}> 
       <div className='header '>
         {props.header}
       </div>

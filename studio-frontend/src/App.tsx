@@ -440,6 +440,7 @@ function App() {
         {/* <button onClick={addProject} id="addProject">Add project</button>
         <button onClick={removeProject} id="removeProject">Remove project</button> */}
         <PageLayout
+          page="build"
           header={<Header />}
           innerSidebar={<p></p>}
           // outerSidebar={
