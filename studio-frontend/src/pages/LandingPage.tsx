@@ -40,7 +40,7 @@ function LandingPage() {
       <div className="hero min-h-min bg-base-200 w-full shadow-2xl">
         <div className="hero-content flex-row">
           <div className="max-w-md">
-            <h1 className="text-5xl font-bold">Move Studio</h1>
+            <h1 className="text-5xl font-bold">Move Studio IDE</h1>
             <p className="py-6">An online IDE built for Sui smart contract development. Built for developers of all experience levels, Move Studio provides developers with essential building tools and resources.</p>
             <a><Link to="/build"><button className="btn btn-primary">Get building</button></Link></a>
           </div>
