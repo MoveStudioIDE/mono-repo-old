@@ -60,7 +60,7 @@ function BuildInnerSidebar(
     props.changeProject(event.target.value);
 
     const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
-    moduleSelect.value = 'default';
+    moduleSelect.value = '**default';
 
     // // Empty the select element if addProject is selected
     // if (event.target.value === 'addProject') {
@@ -77,31 +77,31 @@ function BuildInnerSidebar(
     if (props.currentProject) {
       props.deleteProject(props.currentProject.package);
       const projectSelect = document.getElementById('projectSelector') as HTMLSelectElement;
-      projectSelect.value = 'default';
+      projectSelect.value = '**default';
     }
   }
 
-  const handleModuleChange = (event: any) => {
-    console.log('handleModuleChange', event.target.value);
-    props.changeModule(event.target.value);
+  // const handleModuleChange = (event: any) => {
+  //   console.log('handleModuleChange', event.target.value);
+  //   props.changeModule(event.target.value);
 
-    if (event.target.value === 'addModule') {
-      event.target.value = 'default';
-    }
-  }
+  //   if (event.target.value === '**addModule') {
+  //     event.target.value = '**default';
+  //   }
+  // }
 
-  const handleModuleDelete = () => {
-    // confirm delete with user
-    if (prompt('Type "delete" to confirm deletion of module') !== 'delete') return;
+  // const handleModuleDelete = () => {
+  //   // confirm delete with user
+  //   if (prompt('Type "delete" to confirm deletion of module') !== 'delete') return;
 
-    console.log('handleModuleDelete', props.currentProject);
-    const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
+  //   console.log('handleModuleDelete', props.currentProject);
+  //   const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
 
-    if (moduleSelect.value !== 'default' && moduleSelect.value !== 'addModule' && props.currentProject) {
-      props.deleteModule(moduleSelect.value);
-      moduleSelect.value = 'default';
-    }
-  }
+  //   if (moduleSelect.value !== '**default' && moduleSelect.value !== '**addModule' && props.currentProject) {
+  //     props.deleteModule(moduleSelect.value);
+  //     moduleSelect.value = '**default';
+  //   }
+  // }
 
   const addDepencies = () => {
     const dependency = document.getElementById('dependency') as HTMLInputElement;
@@ -150,10 +150,10 @@ function BuildInnerSidebar(
         onChange={handleProjectChange}
         style={{margin:"5px 0px"}}
         className="select w-full select-xs max-w-xs"
-        value={props.currentProject?.package || 'default'}
+        value={props.currentProject?.package || '**default'}
       >
-        <option value="default">--Select a project--</option>
-        <option value="addProject">++Add Project++</option>
+        <option value="**default">--Select a project--</option>
+        <option value="**addProject">++Add Project++</option>
         {projects}
       </select>
       <div style={{display: "flex", justifyContent: "space-around"}}>
