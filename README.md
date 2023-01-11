@@ -11,3 +11,9 @@ The [Move Studio IDE discord](https://discord.gg/ep2MXBf9wy) is the place to kee
 
 ## Team
 Currently the team is small but we are looking to grow so we can grow the Move Studio IDE at a faster rate. 
+
+## Notes
+- Safari is currently not supported
+- The supported Sui blockchain wallets are: 
+  - Sui wallet
+  - Martian wallet
