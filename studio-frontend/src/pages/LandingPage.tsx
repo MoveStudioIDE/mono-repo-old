@@ -51,7 +51,7 @@ function LandingPage() {
       <div className="flex justify-center m-10 w-full">
         <div style={{width: "70%"}}>
           <div className="carousel" >
-            <div id="item1" className="carousel-item w-full">
+            <div id="feature-item1" className="carousel-item w-full">
               <div className="card card-compact bg-base-100 shadow-xl">
                 <figure className="px-10 pt-10"><img src={buildPage} className="w-full rounded-2xl shadow-2xl" style={{}} /></figure>
                 <div className="card-body text-center items-center">
@@ -60,7 +60,7 @@ function LandingPage() {
                 </div>
               </div>
             </div> 
-            <div id="item2" className="carousel-item w-full">
+            <div id="feature-item2" className="carousel-item w-full">
               <div className="card card-compact bg-base-100 shadow-xl">
                 <figure className="px-10 pt-10 "><img src={deployPage} className="w-full rounded-2xl shadow-2xl" style={{}} /></figure>
                 <div className="card-body text-center items-center">
@@ -89,8 +89,8 @@ function LandingPage() {
             </div> */}
           </div> 
           <div className="flex justify-center w-full py-2 gap-2">
-            <a href="#item1" className="btn btn-xs">1</a> 
-            <a href="#item2" className="btn btn-xs">2</a> 
+            <a href="#feature-item1" className="btn btn-xs">1</a> 
+            <a href="#feature-item2" className="btn btn-xs">2</a> 
             {/* <a href="#item3" className="btn btn-xs">3</a>  */}
             {/* <a href="#item4" className="btn btn-xs">4</a> */}
           </div>
@@ -119,7 +119,7 @@ function LandingPage() {
       <div className="flex justify-center m-10">
         <div>
           <div className="carousel w-64 rounded-box">
-            <div id="item1" className="carousel-item w-full ">
+            <div id="team-item1" className="carousel-item w-full ">
               <div className="card card-compact bg-base-100 shadow-xl" >
                 <figure className="px-10 pt-10">
                   <img src={dan} alt="dan" className="rounded-2xl shadow-2xl" />
@@ -165,7 +165,7 @@ function LandingPage() {
             </div> */}
           </div>  
           <div className="flex justify-center w-64 py-2 gap-2">
-            <a href="#item1" className="btn btn-xs">1</a> 
+            <a href="#team-item1" className="btn btn-xs">1</a> 
             {/* <a href="#item2" className="btn btn-xs">2</a>  */}
             {/* <a href="#item3" className="btn btn-xs">3</a>  */}
             {/* <a href="#item4" className="btn btn-xs">4</a> */}
