@@ -206,6 +206,12 @@ function DeploymentPage() {
 
   const handlePackagePublish = () => {
 
+    console.log(localStorage.getItem('preferredSuiWallet'));
+    if (localStorage.getItem('preferredSuiWallet') === 'Suiet') {
+      alert('Suiet wallet is curently not supported in this version of Move Studio IDE, please use Sui (recommended) or Martian wallet');
+      return;
+    }
+
     setIsOverlayActive(true);
 
     const id1 = Math.random().toString();
