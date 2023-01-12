@@ -105,3 +105,6 @@ dist
 
 # SSL stuff
 *.pem
+
+# MacOS stuff
+.DS_Store
