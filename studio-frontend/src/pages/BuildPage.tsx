@@ -22,16 +22,62 @@ function BuildPage() {
 
   const steps =  [
     {
-      target: '.my-first-step',
-      content: 'This is my awesome feature!',
+      target: '.step1',
+      content: 'project select',
       disableBeacon: true,
       event: 'hover',
       hideCloseButton: true,
     },
     {
-      target: '.my-other-step',
-      content: 'This another awesome feature!',
-
+      target: '.step2',
+      content: 'Dependency table',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+    },
+    {
+      target: '.step3',
+      content: 'Adding modules',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+    },
+    {
+      target: '.step4',
+      content: 'Removing modules',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+    },
+    {
+      target: '.step5',
+      content: 'Text editor',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+      placement: 'auto'
+    },
+    {
+      target: '.step6',
+      content: 'compile button',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+    },
+    {
+      target: '.step7',
+      content: 'compile toast',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+      offset: 25
+    },
+    {
+      target: '.step8',
+      content: 'delete button',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
     },
   ]
 
@@ -162,6 +208,13 @@ function BuildPage() {
       setCompiledModules(compileResults);
       setCompileError('');
     });
+
+
+    // console.log('herhererere')
+    // if (runTutorial && stepIndex === 5) {
+    //   console.log('setting step 6')
+    //   setStepIndex(6);
+    // }
   }
   
 
@@ -374,6 +427,10 @@ function BuildPage() {
     setShowError(false);
     setCompileError('');
     setCompiledModules([]);
+
+    if (runTutorial && stepIndex === 3) {
+      setStepIndex(4);
+    }
   }
 
   const handleDependencyAdd = (dependencyName: string, dependencyAddress: string) => {
@@ -415,17 +472,30 @@ function BuildPage() {
     console.log('tutorialCallback', data);
     if (action === 'close') {
       setRunTutorial(false);
+      setStepIndex(0); 
+      return;
+    }
+    if (action === 'next' && type === 'step:after') {
+      setStepIndex(index + 1);
+    }
+    if (status === 'finished') {
+      setRunTutorial(false);
       setStepIndex(0);
     }
   }
+
+  useEffect(() => {
+    console.log('runTutorial', runTutorial);
+    console.log('stepIndex', stepIndex);
+  }, [runTutorial, stepIndex])
 
 
   return (
     <div>
       <Joyride
         run={runTutorial}
-        steps={steps}
-        // continuous={true}
+        steps={steps as any[]}
+        continuous={true}
         // showProgress={true}
         // showSkipButton={true}
         debug={true}
@@ -452,8 +522,8 @@ function BuildPage() {
             compileCode={compileCode} 
             compiledModules={compiledModules}
             compileError={compileError}
-            tutorialSteps={steps}
-            tutorialCallback={tutorialCallback}
+            // tutorialSteps={steps}
+            // tutorialCallback={tutorialCallback}
             runTutorial={runTutorial}
             setRunTutorial={setRunTutorial}
             stepIndex={stepIndex}
@@ -474,6 +544,12 @@ function BuildPage() {
             compileError={compileError}
             showError={showError}
             setShowError={setShowError}
+            // tutorialSteps={steps}
+            // tutorialCallback={tutorialCallback}
+            runTutorial={runTutorial}
+            setRunTutorial={setRunTutorial}
+            stepIndex={stepIndex}
+            setStepIndex={setStepIndex}
             code={code} setCode={handleNewCode} 
             changeModule={handleModuleChange}
             deleteModule={handleModuleDelete}

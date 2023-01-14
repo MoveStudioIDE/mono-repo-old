@@ -52,12 +52,24 @@ function BuildCanvas(
     compiledModules: string[],
     compileError: string,
     showError: boolean,
+    // tutorialSteps:  any[],
+    runTutorial: boolean,
+    setRunTutorial: (runTutorial: boolean) => void,
+    stepIndex: number,
+    setStepIndex: (stepIndex: number) => void,
+    // tutorialCallback: (data: any) => void,
     setShowError: (showError: boolean) => void,
     setCode: (code: string, module: string) => void,
     changeModule: (module: string) => void,
     deleteModule: (module: string) => void,
   }
 ) {
+
+  useEffect(() => {
+    if (props.runTutorial && props.stepIndex === 5) {
+      props.setStepIndex(6)
+    }
+  }, [props.compiledModules, props.compileError])
 
   
   const [error, setError] = useState("");
@@ -248,7 +260,7 @@ function BuildCanvas(
       {
         modules && modules.length > 0 &&
         <div>
-          <div className="tabs" style={{overflow: "auto", display: "flex", flexWrap: "inherit"}}>
+          <div className="tabs step4" style={{overflow: "auto", display: "flex", flexWrap: "inherit"}}>
             {/* <a className="tab tab-bordered">Tab 1</a> 
             <a className="tab tab-bordered tab-active">Tab 2</a> 
             <a className="tab tab-bordered">Tab 3</a> */}
@@ -261,8 +273,9 @@ function BuildCanvas(
             value={props.code}
             onChange={handleEditorChange}
             theme={editorTheme[props.theme]}
+            className="step5"
           />
-          <div className="toast toast-end">
+          <div className="toast toast-end step7">
             {
               props.compileError &&
               !props.showError && 

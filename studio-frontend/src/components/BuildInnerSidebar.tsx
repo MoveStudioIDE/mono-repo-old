@@ -11,12 +11,12 @@ function BuildInnerSidebar(
     compileCode: () => void,
     compiledModules: string[],
     compileError: string,
-    tutorialSteps:  any[],
+    // tutorialSteps:  any[],
     runTutorial: boolean,
     setRunTutorial: (runTutorial: boolean) => void,
     stepIndex: number,
     setStepIndex: (stepIndex: number) => void,
-    tutorialCallback: (data: any) => void,
+    // tutorialCallback: (data: any) => void,
     changeProject: (project: string) => void,
     deleteProject: (project: string) => void,
     changeModule: (module: string) => void,
@@ -25,6 +25,22 @@ function BuildInnerSidebar(
     removeDependency: (dependency: string) => void,
   }
 ) {
+
+  useEffect(() => {
+    console.log('props.runTutorial', props.runTutorial)
+    console.log('props.stepIndex', props.stepIndex)
+    if (props.runTutorial && props.stepIndex == 0 && props.currentProject?.package === 'demoPackage') {
+      console.log('progressing tutorial')
+      props.setRunTutorial(false);
+      props.setStepIndex(1);
+      props.setRunTutorial(true);
+    } else if (props.runTutorial && props.stepIndex == 2 && props.currentProject?.package === 'demoPackage') 
+    {
+      props.setRunTutorial(false);
+      props.setStepIndex(3);
+      props.setRunTutorial(true);
+    } 
+  }, [props.currentProject])
 
   //---Helper---//
 
@@ -66,17 +82,9 @@ function BuildInnerSidebar(
   const handleProjectChange = (event: any) => {
     console.log('handleProjectChange', event.target.value);
 
-    // console.log('props.runTutorial', props.runTutorial)
-    // console.log('props.stepIndex', props.stepIndex)
-    if (props.runTutorial && props.stepIndex == 0 && event.target.value === 'demoPackage') {
-      console.log('progressing tutorial')
-      props.setRunTutorial(false);
-      props.setStepIndex(1);
-      props.setRunTutorial(true);
-    }
         
     props.changeProject(event.target.value);
-
+    
     const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
     moduleSelect.value = '**default';
 
@@ -144,13 +152,25 @@ function BuildInnerSidebar(
   return (
     <div style={{padding:"5px", overflow: "auto", display: "flex", justifyContent: "center", flexDirection: "column"}} >
       {/* <h1 style={{textAlign:"center"}}>Packages</h1> */}
+      {/* <Joyride
+        run={props.runTutorial}
+        steps={props.tutorialSteps}
+        // continuous={true}
+        // showProgress={true}
+        // showSkipButton={true}
+        debug={true}
+        disableOverlayClose={true}
+        stepIndex={props.stepIndex}
+        spotlightClicks={true}
+        callback={props.tutorialCallback}
+      /> */}
       <button onClick={() => props.setRunTutorial(true)}>Tutorial</button>
       <select 
         name="project" 
         id="projectSelector"
         onChange={handleProjectChange}
         style={{margin:"5px 0px"}}
-        className="select w-full select-xs max-w-xs my-first-step"
+        className="select w-full select-xs max-w-xs step1"
         value={props.currentProject?.package || '**default'}
       >
         <option value="**default">--Select a project--</option>
@@ -162,7 +182,7 @@ function BuildInnerSidebar(
           props.currentProject && 
           <button 
             onClick={props.compileCode} 
-            className={`btn btn-xs btn-info ${modules?.length === 0 ? 'btn-disabled' : ''} my-other-step`}
+            className={`btn btn-xs btn-info ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
             style={{margin:"2px 5px"}}
           >
             Compile
@@ -172,7 +192,7 @@ function BuildInnerSidebar(
           props.currentProject && 
           <button 
             onClick={handleProjectDelete} 
-            className="btn btn-xs btn-error"
+            className="btn btn-xs btn-error step8"
             style={{margin:"2px 5px"}}
           >
             Delete
@@ -180,40 +200,42 @@ function BuildInnerSidebar(
         }
       </div>
       {props.currentProject && <div>
-        <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full">
-          <thead>
-            <tr>
-              <th style={{position: "relative"}}>Dependency</th>
-              <th>Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dependencies}
-            <tr>
-              <td>
-                <input
-                  type="text" 
-                  id="dependency"
-                  placeholder="Dependency"
-                  className="input input-bordered input-warning w-full max-w-xs input-xs"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  id="address"
-                  placeholder="Address"
-                  className="input input-bordered input-warning w-full max-w-xs input-xs"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div style={{display: "flex", justifyContent: "space-around"}}>
-          <button style={{marginTop:"5px"}} onClick={addDepencies} className="btn btn-xs btn-warning">Add Dependency</button>
+        <div className="step2">
+          <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full">
+            <thead>
+              <tr>
+                <th style={{position: "relative"}}>Dependency</th>
+                <th>Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dependencies}
+              <tr>
+                <td>
+                  <input
+                    type="text" 
+                    id="dependency"
+                    placeholder="Dependency"
+                    className="input input-bordered input-warning w-full max-w-xs input-xs"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="address"
+                    placeholder="Address"
+                    className="input input-bordered input-warning w-full max-w-xs input-xs"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style={{display: "flex", justifyContent: "space-around"}}>
+            <button style={{marginTop:"5px"}} onClick={addDepencies} className="btn btn-xs btn-warning">Add Dependency</button>
+          </div>
         </div>
-        <div style={{display: "flex", justifyContent: "space-around"}}>
-          <div className="form-control" style={{marginTop:"25px"}}>
+        <div style={{display: "flex", justifyContent: "space-around"}} >
+          <div className="form-control step3" style={{marginTop:"25px"}}>
             <label className="input-group input-group-xs ">
               <input type="text" placeholder="new module" className="input input-xs" id="newModuleInput"/>
               <button className="btn btn-xs bg-secondary" onClick={handleNewModuleClick}>
