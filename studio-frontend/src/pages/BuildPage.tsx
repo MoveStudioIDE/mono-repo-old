@@ -9,11 +9,31 @@ import OuterSidebar from "../components/OuterSidebar";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
+import Joyride from 'react-joyride';
+
+
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
 
 function BuildPage() {
 
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
+  const [runTutorial, setRunTutorial] = useState(false);
+  const [stepIndex, setStepIndex] = useState(0);
+
+  const steps =  [
+    {
+      target: '.my-first-step',
+      content: 'This is my awesome feature!',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+    },
+    {
+      target: '.my-other-step',
+      content: 'This another awesome feature!',
+
+    },
+  ]
 
   useEffect(() => {
     document.querySelector('html')?.setAttribute('data-theme', theme);
@@ -390,9 +410,30 @@ function BuildPage() {
     });
   }
 
+  const tutorialCallback = (data: any) => {
+    const { action, index, type, status } = data;
+    console.log('tutorialCallback', data);
+    if (action === 'close') {
+      setRunTutorial(false);
+      setStepIndex(0);
+    }
+  }
+
 
   return (
     <div>
+      <Joyride
+        run={runTutorial}
+        steps={steps}
+        // continuous={true}
+        // showProgress={true}
+        // showSkipButton={true}
+        debug={true}
+        disableOverlayClose={true}
+        stepIndex={stepIndex}
+        spotlightClicks={true}
+        callback={tutorialCallback}
+      />
       <PageLayout
         page="build"
         header={
@@ -411,6 +452,12 @@ function BuildPage() {
             compileCode={compileCode} 
             compiledModules={compiledModules}
             compileError={compileError}
+            tutorialSteps={steps}
+            tutorialCallback={tutorialCallback}
+            runTutorial={runTutorial}
+            setRunTutorial={setRunTutorial}
+            stepIndex={stepIndex}
+            setStepIndex={setStepIndex}
             changeProject={handleProjectChange}
             deleteProject={handleProjectDelete}
             changeModule={handleModuleChange}

@@ -9,6 +9,7 @@ import reportWebVitals from './reportWebVitals';
 // import {WalletProvider} from '@suiet/wallet-kit';
 // import '@suiet/wallet-kit/style.css';
 
+
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { WalletKitProvider } from "@mysten/wallet-kit";
@@ -17,26 +18,7 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-  // <div>
-  //   <p>hello</p>
-  //   <App/>
-  // </div>
-  
-  // <React.StrictMode>
-  //   <WalletKitProvider>
-  //   <App />
-  //   </WalletKitProvider>
-  // </React.StrictMode>
-
-  <WalletKitProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/build" element={<BuildPage />} />
-        <Route path="/deployment" element={<DeploymentPage />} />
-      </Routes>
-    </BrowserRouter>
-  </WalletKitProvider>
+  <App/>
 );
 
 

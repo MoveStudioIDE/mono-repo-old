@@ -1,4 +1,7 @@
 import { Dependency, Module, Project } from "../types/project-types";
+import Joyride from 'react-joyride';
+import { useEffect, useState } from "react";
+
 
 function BuildInnerSidebar(
   props: {
@@ -7,7 +10,13 @@ function BuildInnerSidebar(
     currentModule: string | null,
     compileCode: () => void,
     compiledModules: string[],
-    compileError: string
+    compileError: string,
+    tutorialSteps:  any[],
+    runTutorial: boolean,
+    setRunTutorial: (runTutorial: boolean) => void,
+    stepIndex: number,
+    setStepIndex: (stepIndex: number) => void,
+    tutorialCallback: (data: any) => void,
     changeProject: (project: string) => void,
     deleteProject: (project: string) => void,
     changeModule: (module: string) => void,
@@ -56,11 +65,22 @@ function BuildInnerSidebar(
 
   const handleProjectChange = (event: any) => {
     console.log('handleProjectChange', event.target.value);
+
+    // console.log('props.runTutorial', props.runTutorial)
+    // console.log('props.stepIndex', props.stepIndex)
+    if (props.runTutorial && props.stepIndex == 0 && event.target.value === 'demoPackage') {
+      console.log('progressing tutorial')
+      props.setRunTutorial(false);
+      props.setStepIndex(1);
+      props.setRunTutorial(true);
+    }
         
     props.changeProject(event.target.value);
 
     const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
     moduleSelect.value = '**default';
+
+    
 
     // // Empty the select element if addProject is selected
     // if (event.target.value === 'addProject') {
@@ -80,28 +100,6 @@ function BuildInnerSidebar(
       projectSelect.value = '**default';
     }
   }
-
-  // const handleModuleChange = (event: any) => {
-  //   console.log('handleModuleChange', event.target.value);
-  //   props.changeModule(event.target.value);
-
-  //   if (event.target.value === '**addModule') {
-  //     event.target.value = '**default';
-  //   }
-  // }
-
-  // const handleModuleDelete = () => {
-  //   // confirm delete with user
-  //   if (prompt('Type "delete" to confirm deletion of module') !== 'delete') return;
-
-  //   console.log('handleModuleDelete', props.currentProject);
-  //   const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
-
-  //   if (moduleSelect.value !== '**default' && moduleSelect.value !== '**addModule' && props.currentProject) {
-  //     props.deleteModule(moduleSelect.value);
-  //     moduleSelect.value = '**default';
-  //   }
-  // }
 
   const addDepencies = () => {
     const dependency = document.getElementById('dependency') as HTMLInputElement;
@@ -138,18 +136,21 @@ function BuildInnerSidebar(
     moduleSelect.value = '';
   }
 
+  
+      
 
   //---Render---//
 
   return (
     <div style={{padding:"5px", overflow: "auto", display: "flex", justifyContent: "center", flexDirection: "column"}} >
       {/* <h1 style={{textAlign:"center"}}>Packages</h1> */}
+      <button onClick={() => props.setRunTutorial(true)}>Tutorial</button>
       <select 
         name="project" 
         id="projectSelector"
         onChange={handleProjectChange}
         style={{margin:"5px 0px"}}
-        className="select w-full select-xs max-w-xs"
+        className="select w-full select-xs max-w-xs my-first-step"
         value={props.currentProject?.package || '**default'}
       >
         <option value="**default">--Select a project--</option>
@@ -161,7 +162,7 @@ function BuildInnerSidebar(
           props.currentProject && 
           <button 
             onClick={props.compileCode} 
-            className={`btn btn-xs btn-info ${modules?.length === 0 ? 'btn-disabled' : ''}`}
+            className={`btn btn-xs btn-info ${modules?.length === 0 ? 'btn-disabled' : ''} my-other-step`}
             style={{margin:"2px 5px"}}
           >
             Compile

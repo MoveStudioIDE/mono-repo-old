@@ -181,28 +181,28 @@ function BuildCanvas(
       })
     }
 
-    console.log('monaco', monaco.languages);
-    console.log('monaco', monaco.languages.getLanguages());
+    // console.log('monaco', monaco.languages);
+    // console.log('monaco', monaco.languages.getLanguages());
 
   })
 
   useEffect(() => {
 
     if (monaco == null) {
-      console.log('monaco is null')
+      // console.log('monaco is null')
       return;
     }
 
     Object.entries(editorThemeJsons).forEach(([key, value]) => {
-      console.log('key', key)
+      // console.log('key', key)
       // console.log('value', value)
       monaco.editor.defineTheme(key, value as monaco.editor.IStandaloneThemeData);
     })
 
     // monaco.editor.defineTheme('Dracula', editorThemeJsons['Dracula'] as monaco.editor.IStandaloneThemeData);
     // monaco.editor.setTheme(editorTheme[props.theme]);
-    console.log('theme', props.theme)
-    console.log('editorTheme', editorTheme[props.theme])
+    // console.log('theme', props.theme)
+    // console.log('editorTheme', editorTheme[props.theme])
   }, [props.theme, monaco]);
 
 
