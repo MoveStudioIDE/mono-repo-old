@@ -144,6 +144,14 @@ function BuildInnerSidebar(
     moduleSelect.value = '';
   }
 
+  const startTutorial = () => {
+
+    props.changeProject('**default');
+
+    props.setRunTutorial(true);
+    props.setStepIndex(0);
+  }
+
   
       
 
@@ -164,7 +172,7 @@ function BuildInnerSidebar(
         spotlightClicks={true}
         callback={props.tutorialCallback}
       /> */}
-      <button onClick={() => props.setRunTutorial(true)}>Tutorial</button>
+      <button onClick={startTutorial}>Tutorial</button>
       <select 
         name="project" 
         id="projectSelector"
