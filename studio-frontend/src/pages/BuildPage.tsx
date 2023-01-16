@@ -548,6 +548,11 @@ function BuildPage() {
       setStepIndex(index - 1);
       return;
     }
+    if (status === 'skipped') {
+      setRunTutorial(false);
+      setStepIndex(0);
+      return
+    }
     if (status === 'finished') {
       setRunTutorial(false);
       setStepIndex(0);
@@ -563,9 +568,10 @@ function BuildPage() {
   const startTutorial = () => {
 
     handleProjectChange('**default');
-
-    setRunTutorial(true);
+    
     setStepIndex(0);
+    setRunTutorial(true);
+    
   }
 
   const resetCache = async () => {
