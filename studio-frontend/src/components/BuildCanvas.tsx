@@ -66,8 +66,8 @@ function BuildCanvas(
 ) {
 
   useEffect(() => {
-    if (props.runTutorial && props.stepIndex === 5) {
-      props.setStepIndex(6)
+    if (props.runTutorial && props.stepIndex === 9) {
+      props.setStepIndex(10)
     }
   }, [props.compiledModules, props.compileError])
 
@@ -256,7 +256,7 @@ function BuildCanvas(
   //---Render---//
 
   return (
-    <div>
+    <div className="step7">
       {
         modules && modules.length > 0 &&
         <div>
@@ -275,7 +275,7 @@ function BuildCanvas(
             theme={editorTheme[props.theme]}
             className="step5"
           />
-          <div className="toast toast-end step7">
+          <div className="toast toast-end">
             {
               props.compileError &&
               !props.showError && 

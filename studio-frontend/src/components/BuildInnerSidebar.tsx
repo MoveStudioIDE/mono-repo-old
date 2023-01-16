@@ -29,18 +29,28 @@ function BuildInnerSidebar(
   useEffect(() => {
     console.log('props.runTutorial', props.runTutorial)
     console.log('props.stepIndex', props.stepIndex)
-    if (props.runTutorial && props.stepIndex == 0 && props.currentProject?.package === 'demoPackage') {
+    if (props.runTutorial && props.stepIndex == 1 && props.currentProject?.package === 'demoPackage') {
       console.log('progressing tutorial')
       props.setRunTutorial(false);
-      props.setStepIndex(1);
+      props.setStepIndex(2);
       props.setRunTutorial(true);
-    } else if (props.runTutorial && props.stepIndex == 2 && props.currentProject?.package === 'demoPackage') 
-    {
+    } else if (props.runTutorial && props.stepIndex == 4 && props.currentProject?.package === 'demoPackage') { // Adding module -> tabs
       props.setRunTutorial(false);
-      props.setStepIndex(3);
+      props.setStepIndex(5);
       props.setRunTutorial(true);
     } 
   }, [props.currentProject])
+
+  useEffect(() => {
+    console.log('props.runTutorial', props.runTutorial)
+    console.log('props.stepIndex', props.stepIndex)
+    if (props.runTutorial && props.stepIndex == 6 && props.currentProject?.package === 'demoPackage') {
+      console.log('progressing tutorial')
+      props.setRunTutorial(false);
+      props.setStepIndex(7);
+      props.setRunTutorial(true);
+    }
+  }, [props.currentModule])
 
   //---Helper---//
 
@@ -144,13 +154,6 @@ function BuildInnerSidebar(
     moduleSelect.value = '';
   }
 
-  const startTutorial = () => {
-
-    props.changeProject('**default');
-
-    props.setRunTutorial(true);
-    props.setStepIndex(0);
-  }
 
   
       
@@ -158,7 +161,7 @@ function BuildInnerSidebar(
   //---Render---//
 
   return (
-    <div style={{padding:"5px", overflow: "auto", display: "flex", justifyContent: "center", flexDirection: "column"}} >
+    <div style={{padding:"5px", overflow: "auto", display: "flex", justifyContent: "center", flexDirection: "column"}} className="tutorial-sidebar">
       {/* <h1 style={{textAlign:"center"}}>Packages</h1> */}
       {/* <Joyride
         run={props.runTutorial}
@@ -172,7 +175,6 @@ function BuildInnerSidebar(
         spotlightClicks={true}
         callback={props.tutorialCallback}
       /> */}
-      <button onClick={startTutorial}>Tutorial</button>
       <select 
         name="project" 
         id="projectSelector"

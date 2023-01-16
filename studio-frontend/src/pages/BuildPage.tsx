@@ -10,6 +10,7 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Joyride from 'react-joyride';
+import {SPINNER_COLORS} from "../utils/theme";
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
@@ -22,62 +23,106 @@ function BuildPage() {
 
   const steps =  [
     {
-      target: '.step1',
-      content: 'project select',
+      target: '.tutorial-header',
+      title: 'Welcome to the Build page!',
+      content: 'This is where you can build your project. We will go over the different components of the page in the next steps. For now, move to the next step to see the project selection.',
       disableBeacon: true,
       event: 'hover',
       hideCloseButton: true,
+      placement: 'center'
+    },
+    {
+      target: '.step1',
+      title: 'Project selection',
+      content: 'This is where you can select a project to work on. You can also create a new project here. For now, we will check out the demo project. Click on the dropdown and select demoPackage to move on.',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+    },
+    {
+      target: '.tutorial-sidebar',
+      title: 'Build sidebar',
+      content: 'This is where you can manage the project, including adding dependencies, modules, and more. We will go over each of these in the next steps. For now, move to the next step to see the dependency table.',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+      placement: 'right'
     },
     {
       target: '.step2',
-      content: 'Dependency table',
+      title: 'Dependency table',
+      content: 'This is where you can manage and edit your package depdencies. You can insert the name and address to add a new dependency and use the trashcan icons to remove a dependency. Move on to the next step.',
       disableBeacon: true,
       event: 'hover',
       hideCloseButton: true,
+      placement: 'right'
     },
     {
       target: '.step3',
-      content: 'Adding modules',
+      title: 'Adding modules',
+      content: 'You can add modules to your project by entering the name and clicking the "ADD" button. Try adding a new module now!',
       disableBeacon: true,
       event: 'hover',
       hideCloseButton: true,
     },
     {
       target: '.step4',
-      content: 'Removing modules',
+      title: 'Module tabs',
+      content: 'This is where you can switch between modules as well as delete modules. Try deleting the module you just added.',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
+    },
+    {
+      target: '.step4',
+      title: 'Module tabs',
+      content: 'Now switch to the party module, by clicking on the tab.',
       disableBeacon: true,
       event: 'hover',
       hideCloseButton: true,
     },
     {
       target: '.step5',
-      content: 'Text editor',
+      title: 'Text editor',
+      content: 'This is where you can edit the code for your modules. We will keep this code the same for now. Move on to the next step.',
       disableBeacon: true,
       event: 'hover',
       hideCloseButton: true,
-      placement: 'auto'
+      placement: 'left'
+    },
+    {
+      target: '.step8',
+      title: 'Delete',
+      content: 'This button will delete the current project. Lets not do that right now, since we want to compile the project. Move on to the next step.',
+      disableBeacon: true,
+      event: 'hover',
+      hideCloseButton: true,
     },
     {
       target: '.step6',
-      content: 'compile button',
+      title: 'Compile',
+      content: 'Hit this button to compile your Sui package.',
       disableBeacon: true,
       event: 'hover',
       hideCloseButton: true,
     },
     {
       target: '.step7',
-      content: 'compile toast',
+      title: 'Compile results',
+      content: 'Check out the bottom right of the page where the IDE will show you the compile results. If there was an error, you would be able view it there as well. Move on to the next step.',
       disableBeacon: true,
       event: 'hover',
       hideCloseButton: true,
       offset: 25
     },
     {
-      target: '.step8',
-      content: 'delete button',
+      target: '.step9',
+      title: 'Deploying',
+      content: 'Now that we have verified that our package compiles, we can deploy it. Exit this walkthrough and navigate to the deploy page to check out deployment!',
       disableBeacon: true,
       event: 'hover',
       hideCloseButton: true,
+      offset: 25
     },
   ]
 
@@ -146,6 +191,7 @@ function BuildPage() {
             }
           ]
         }); 
+        startTutorial();
       }
          
     }
@@ -428,8 +474,8 @@ function BuildPage() {
     setCompileError('');
     setCompiledModules([]);
 
-    if (runTutorial && stepIndex === 3) {
-      setStepIndex(4);
+    if (runTutorial && stepIndex === 5) {
+      setStepIndex(6);
     }
   }
 
@@ -489,10 +535,129 @@ function BuildPage() {
     console.log('stepIndex', stepIndex);
   }, [runTutorial, stepIndex])
 
+  const Tooltip = ({
+    continuous,
+    index,
+    step,
+    backProps,
+    closeProps,
+    primaryProps,
+    tooltipProps,
+  }: any) => (
+    <div {...tooltipProps}>
+      {step.title && <div>{step.title}</div>}
+      <div>{step.content}</div>
+      <div>
+        {index > 0 && (
+          <button {...backProps}>
+            <p id="back" />
+          </button>
+        )}
+        {continuous && (
+          <button {...primaryProps}>
+            <p id="next" />
+          </button>
+        )}
+        {!continuous && (
+          <button {...closeProps}>
+            <p id="close" />
+          </button>
+        )}
+      </div>
+    </div>
+  );
+
+  const startTutorial = () => {
+
+    handleProjectChange('**default');
+
+    setRunTutorial(true);
+    setStepIndex(0);
+  }
+
+  const resetCache = async () => {
+    const confirm = prompt("This will clear all of your projects and reset the demo project. Press OK to continue.")
+
+    if (confirm !== 'OK') {
+      alert('Reset cancelled."')
+      return;
+    }
+
+    handleProjectChange('**default');
+
+    indexedDb = new IndexedDb('test');
+    await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+
+    await indexedDb.deleteObjectStore('projects');
+
+    localStorage.clear();
+    window.location.reload();
+  }
+
+  const resetDemo = async () => {
+    handleProjectChange('**default');
+
+    indexedDb = new IndexedDb('test');
+    await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+    await indexedDb.deleteValue('projects', 'demoPackage');
+
+    await indexedDb.putValue('projects', {
+          package: 'demoPackage',
+          dependencies: [
+            {name: 'demoPackage', address: '0x0'},
+            {name: 'Sui', address: '0x02'}
+          ],
+          modules: [
+            {
+              name: 'party', 
+              code: `module demoPackage::party {
+
+    // Libraries being used
+    use sui::object::{Self, ID, UID};
+    use sui::transfer;
+    use sui::tx_context::TxContext;
+
+    // Object that can be deployed
+    struct Balloon has key {
+      id: UID,
+      popped: bool
+    }
+
+    // Deploy a new balloon
+    fun init(ctx: &mut TxContext) {
+      new_balloon(ctx);
+    }
+
+    public entry fun pop_balloon(balloon: &mut Balloon) {
+      balloon.popped = true;
+    }
+
+    public entry fun fill_up_balloon(ctx: &mut TxContext) {
+      new_balloon(ctx);
+    }
+
+    // Create a new balloon object and make it available to anyone
+    fun new_balloon(ctx: &mut TxContext) {
+      let balloon = Balloon{
+        id: object::new(ctx), 
+        popped: false
+      };
+      transfer::share_object(balloon);
+    }
+            
+  }`
+            }
+          ]
+        }); 
+  }
+
+
+
 
   return (
-    <div>
+    <div className="tutorial-header">
       <Joyride
+        // tooltipComponent={Tooltip}
         run={runTutorial}
         steps={steps as any[]}
         continuous={true}
@@ -503,6 +668,46 @@ function BuildPage() {
         stepIndex={stepIndex}
         spotlightClicks={true}
         callback={tutorialCallback}
+        showSkipButton={true}
+        styles={{
+            options: {
+              arrowColor: 'hsl(var(--b2))',
+              backgroundColor: 'hsl(var(--b2))',
+              overlayColor: 'hsl(var(--b3))',
+              // primaryColor: 'hsl(var(--inc))',
+              textColor: `hsl(var(--n${SPINNER_COLORS[theme].scheme === 'light' ? '' : 'c'}))`,
+              // width: 900,
+              zIndex: 1000,
+            }, 
+            tooltip: {
+              borderRadius: "25px"
+            },
+            buttonNext: {
+              backgroundColor: 'hsl(var(--su))',
+              color: 'hsl(var(--suc))',
+              borderRadius: "15px",
+              fontSize: "1rem"
+            },
+            buttonBack: {
+              backgroundColor: 'hsl(var(--wa))',
+              color: 'hsl(var(--wac))',
+              borderRadius: "15px",
+              fontSize: "1rem"
+            },
+            buttonClose: {
+              backgroundColor: 'hsl(var(--er))',
+              color: 'hsl(var(--erc))',
+              borderRadius: "15px",
+              fontSize: "1rem"
+            },
+            buttonSkip: {
+              backgroundColor: 'hsl(var(--er))',
+              color: 'hsl(var(--erc))',
+              borderRadius: "15px",
+              fontSize: "1rem"
+            },
+            
+          }}
       />
       <PageLayout
         page="build"
@@ -512,6 +717,9 @@ function BuildPage() {
             setTheme={setTheme}
             autoCompile={autoCompile}
             setAutoCompile={setAutoCompile}
+            startTutorial={startTutorial}
+            resetDemo={resetDemo}
+            resetCache={resetCache}
           />
         }
         innerSidebar={
