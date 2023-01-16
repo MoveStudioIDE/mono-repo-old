@@ -52,12 +52,24 @@ function BuildCanvas(
     compiledModules: string[],
     compileError: string,
     showError: boolean,
+    // tutorialSteps:  any[],
+    runTutorial: boolean,
+    setRunTutorial: (runTutorial: boolean) => void,
+    stepIndex: number,
+    setStepIndex: (stepIndex: number) => void,
+    // tutorialCallback: (data: any) => void,
     setShowError: (showError: boolean) => void,
     setCode: (code: string, module: string) => void,
     changeModule: (module: string) => void,
     deleteModule: (module: string) => void,
   }
 ) {
+
+  useEffect(() => {
+    if (props.runTutorial && props.stepIndex === 9) {
+      props.setStepIndex(10)
+    }
+  }, [props.compiledModules, props.compileError])
 
   
   const [error, setError] = useState("");
@@ -181,28 +193,28 @@ function BuildCanvas(
       })
     }
 
-    console.log('monaco', monaco.languages);
-    console.log('monaco', monaco.languages.getLanguages());
+    // console.log('monaco', monaco.languages);
+    // console.log('monaco', monaco.languages.getLanguages());
 
   })
 
   useEffect(() => {
 
     if (monaco == null) {
-      console.log('monaco is null')
+      // console.log('monaco is null')
       return;
     }
 
     Object.entries(editorThemeJsons).forEach(([key, value]) => {
-      console.log('key', key)
+      // console.log('key', key)
       // console.log('value', value)
       monaco.editor.defineTheme(key, value as monaco.editor.IStandaloneThemeData);
     })
 
     // monaco.editor.defineTheme('Dracula', editorThemeJsons['Dracula'] as monaco.editor.IStandaloneThemeData);
     // monaco.editor.setTheme(editorTheme[props.theme]);
-    console.log('theme', props.theme)
-    console.log('editorTheme', editorTheme[props.theme])
+    // console.log('theme', props.theme)
+    // console.log('editorTheme', editorTheme[props.theme])
   }, [props.theme, monaco]);
 
 
@@ -244,11 +256,11 @@ function BuildCanvas(
   //---Render---//
 
   return (
-    <div>
+    <div className="step7">
       {
         modules && modules.length > 0 &&
         <div>
-          <div className="tabs" style={{overflow: "auto", display: "flex", flexWrap: "inherit"}}>
+          <div className="tabs step4" style={{overflow: "auto", display: "flex", flexWrap: "inherit"}}>
             {/* <a className="tab tab-bordered">Tab 1</a> 
             <a className="tab tab-bordered tab-active">Tab 2</a> 
             <a className="tab tab-bordered">Tab 3</a> */}
@@ -261,6 +273,7 @@ function BuildCanvas(
             value={props.code}
             onChange={handleEditorChange}
             theme={editorTheme[props.theme]}
+            className="step5"
           />
           <div className="toast toast-end">
             {

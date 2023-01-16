@@ -1,4 +1,7 @@
 import { Dependency, Module, Project } from "../types/project-types";
+import Joyride from 'react-joyride';
+import { useEffect, useState } from "react";
+
 
 function BuildInnerSidebar(
   props: {
@@ -7,7 +10,13 @@ function BuildInnerSidebar(
     currentModule: string | null,
     compileCode: () => void,
     compiledModules: string[],
-    compileError: string
+    compileError: string,
+    // tutorialSteps:  any[],
+    runTutorial: boolean,
+    setRunTutorial: (runTutorial: boolean) => void,
+    stepIndex: number,
+    setStepIndex: (stepIndex: number) => void,
+    // tutorialCallback: (data: any) => void,
     changeProject: (project: string) => void,
     deleteProject: (project: string) => void,
     changeModule: (module: string) => void,
@@ -16,6 +25,32 @@ function BuildInnerSidebar(
     removeDependency: (dependency: string) => void,
   }
 ) {
+
+  useEffect(() => {
+    console.log('props.runTutorial', props.runTutorial)
+    console.log('props.stepIndex', props.stepIndex)
+    if (props.runTutorial && props.stepIndex == 1 && props.currentProject?.package === 'demoPackage') {
+      console.log('progressing tutorial')
+      props.setRunTutorial(false);
+      props.setStepIndex(2);
+      props.setRunTutorial(true);
+    } else if (props.runTutorial && props.stepIndex == 4 && props.currentProject?.package === 'demoPackage') { // Adding module -> tabs
+      props.setRunTutorial(false);
+      props.setStepIndex(5);
+      props.setRunTutorial(true);
+    } 
+  }, [props.currentProject])
+
+  useEffect(() => {
+    console.log('props.runTutorial', props.runTutorial)
+    console.log('props.stepIndex', props.stepIndex)
+    if (props.runTutorial && props.stepIndex == 6 && props.currentProject?.package === 'demoPackage') {
+      console.log('progressing tutorial')
+      props.setRunTutorial(false);
+      props.setStepIndex(7);
+      props.setRunTutorial(true);
+    }
+  }, [props.currentModule])
 
   //---Helper---//
 
@@ -56,11 +91,14 @@ function BuildInnerSidebar(
 
   const handleProjectChange = (event: any) => {
     console.log('handleProjectChange', event.target.value);
+
         
     props.changeProject(event.target.value);
-
+    
     const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
     moduleSelect.value = '**default';
+
+    
 
     // // Empty the select element if addProject is selected
     // if (event.target.value === 'addProject') {
@@ -80,28 +118,6 @@ function BuildInnerSidebar(
       projectSelect.value = '**default';
     }
   }
-
-  // const handleModuleChange = (event: any) => {
-  //   console.log('handleModuleChange', event.target.value);
-  //   props.changeModule(event.target.value);
-
-  //   if (event.target.value === '**addModule') {
-  //     event.target.value = '**default';
-  //   }
-  // }
-
-  // const handleModuleDelete = () => {
-  //   // confirm delete with user
-  //   if (prompt('Type "delete" to confirm deletion of module') !== 'delete') return;
-
-  //   console.log('handleModuleDelete', props.currentProject);
-  //   const moduleSelect = document.getElementById('moduleSelector') as HTMLSelectElement;
-
-  //   if (moduleSelect.value !== '**default' && moduleSelect.value !== '**addModule' && props.currentProject) {
-  //     props.deleteModule(moduleSelect.value);
-  //     moduleSelect.value = '**default';
-  //   }
-  // }
 
   const addDepencies = () => {
     const dependency = document.getElementById('dependency') as HTMLInputElement;
@@ -139,17 +155,32 @@ function BuildInnerSidebar(
   }
 
 
+  
+      
+
   //---Render---//
 
   return (
-    <div style={{padding:"5px", overflow: "auto", display: "flex", justifyContent: "center", flexDirection: "column"}} >
+    <div style={{padding:"5px", overflow: "auto", display: "flex", justifyContent: "center", flexDirection: "column"}} className="tutorial-sidebar">
       {/* <h1 style={{textAlign:"center"}}>Packages</h1> */}
+      {/* <Joyride
+        run={props.runTutorial}
+        steps={props.tutorialSteps}
+        // continuous={true}
+        // showProgress={true}
+        // showSkipButton={true}
+        debug={true}
+        disableOverlayClose={true}
+        stepIndex={props.stepIndex}
+        spotlightClicks={true}
+        callback={props.tutorialCallback}
+      /> */}
       <select 
         name="project" 
         id="projectSelector"
         onChange={handleProjectChange}
         style={{margin:"5px 0px"}}
-        className="select w-full select-xs max-w-xs"
+        className="select w-full select-xs max-w-xs step1"
         value={props.currentProject?.package || '**default'}
       >
         <option value="**default">--Select a project--</option>
@@ -161,7 +192,7 @@ function BuildInnerSidebar(
           props.currentProject && 
           <button 
             onClick={props.compileCode} 
-            className={`btn btn-xs btn-info ${modules?.length === 0 ? 'btn-disabled' : ''}`}
+            className={`btn btn-xs btn-info ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
             style={{margin:"2px 5px"}}
           >
             Compile
@@ -171,7 +202,7 @@ function BuildInnerSidebar(
           props.currentProject && 
           <button 
             onClick={handleProjectDelete} 
-            className="btn btn-xs btn-error"
+            className="btn btn-xs btn-error step8"
             style={{margin:"2px 5px"}}
           >
             Delete
@@ -179,40 +210,42 @@ function BuildInnerSidebar(
         }
       </div>
       {props.currentProject && <div>
-        <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full">
-          <thead>
-            <tr>
-              <th style={{position: "relative"}}>Dependency</th>
-              <th>Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            {dependencies}
-            <tr>
-              <td>
-                <input
-                  type="text" 
-                  id="dependency"
-                  placeholder="Dependency"
-                  className="input input-bordered input-warning w-full max-w-xs input-xs"
-                />
-              </td>
-              <td>
-                <input
-                  type="text"
-                  id="address"
-                  placeholder="Address"
-                  className="input input-bordered input-warning w-full max-w-xs input-xs"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div style={{display: "flex", justifyContent: "space-around"}}>
-          <button style={{marginTop:"5px"}} onClick={addDepencies} className="btn btn-xs btn-warning">Add Dependency</button>
+        <div className="step2">
+          <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full">
+            <thead>
+              <tr>
+                <th style={{position: "relative"}}>Dependency</th>
+                <th>Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              {dependencies}
+              <tr>
+                <td>
+                  <input
+                    type="text" 
+                    id="dependency"
+                    placeholder="Dependency"
+                    className="input input-bordered input-warning w-full max-w-xs input-xs"
+                  />
+                </td>
+                <td>
+                  <input
+                    type="text"
+                    id="address"
+                    placeholder="Address"
+                    className="input input-bordered input-warning w-full max-w-xs input-xs"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style={{display: "flex", justifyContent: "space-around"}}>
+            <button style={{marginTop:"5px"}} onClick={addDepencies} className="btn btn-xs btn-warning">Add Dependency</button>
+          </div>
         </div>
-        <div style={{display: "flex", justifyContent: "space-around"}}>
-          <div className="form-control" style={{marginTop:"25px"}}>
+        <div style={{display: "flex", justifyContent: "space-around"}} >
+          <div className="form-control step3" style={{marginTop:"25px"}}>
             <label className="input-group input-group-xs ">
               <input type="text" placeholder="new module" className="input input-xs" id="newModuleInput"/>
               <button className="btn btn-xs bg-secondary" onClick={handleNewModuleClick}>

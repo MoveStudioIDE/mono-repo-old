@@ -278,3 +278,13 @@ export function removeModule(db: IDBDatabase, projectName: string, module: strin
     console.log("error getting project", event);
   };
 }
+
+export function removeDatabase() {
+  const request = indexedDB.deleteDatabase('projects');
+  request.onsuccess = function(event) {
+    console.log("success deleting database", event);
+  };
+  request.onerror = function(event) {
+    console.log("error deleting database", event);
+  };
+}

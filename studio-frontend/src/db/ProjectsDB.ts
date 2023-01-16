@@ -22,6 +22,14 @@ export class IndexedDb {
     }
   }
 
+  public async deleteObjectStore(tableName: string) {
+    const tx = this.db.transaction(tableName, 'readwrite');
+    const store = tx.objectStore(tableName);
+    const result = await store.clear();
+    console.log('delete result:', result);
+    return result;
+  }
+
   public async getValue(tableName: string, key: string) {
     const tx = this.db.transaction(tableName, 'readonly');
     const store = tx.objectStore(tableName);

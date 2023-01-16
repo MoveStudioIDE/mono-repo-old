@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Project } from "../types/project-types"
 
 
@@ -59,7 +60,7 @@ function DeployInnerSidebar(
 
     // set select back to default
     const select = document.getElementById('projectSelector') as HTMLSelectElement;
-    select.value = 'default';
+    select.value = '**default';
   }
 
   return (
@@ -70,9 +71,9 @@ function DeployInnerSidebar(
         id="projectSelector"
         onChange={handleProjectChange}
         style={{marginTop:"5px", marginBottom:"5px"}}
-        className="select w-full select-xs max-w-xs text-current"
+        className="select w-full select-xs max-w-xs text-current tutorial-deploy-publish-select"
       >
-        <option value="default">--Select a project--</option>
+        <option value="**default">--Select a project--</option>
         {projects}
       </select>
       <div style={{display: "flex", justifyContent: "space-around"}}>
@@ -81,7 +82,7 @@ function DeployInnerSidebar(
           !props.compileError &&
           <button 
             onClick={handlePackagePublish} 
-            className="btn btn-xs btn-secondary"
+            className="btn btn-xs btn-secondary tutorial-deploy-publish-button"
             style={{margin:"2px 5px"}}
           >
             Publish
@@ -99,7 +100,7 @@ function DeployInnerSidebar(
           </div>
         </div>
       } */}
-      <div style={{marginTop:"25px", marginBottom:"5px"}}>
+      <div style={{marginTop:"25px", marginBottom:"5px"}} className="tutorial-deploy-add-object">
         <h2 style={{textAlign: "center", marginBottom: "5px"}}>Add existing package or object</h2>
         <div style={{display: "flex", justifyContent: "center"}}>
           <div className="form-control">
