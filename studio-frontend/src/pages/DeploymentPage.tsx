@@ -264,6 +264,13 @@ function DeploymentPage() {
   }
 
   const resetCache = () => {
+    const confirm = prompt("This will clear all of your projects and reset the demo project. Press OK to continue.")
+
+    if (confirm !== 'OK') {
+      alert('Reset cancelled.')
+      return;
+    }
+
     localStorage.clear();
     window.location.reload();
   }

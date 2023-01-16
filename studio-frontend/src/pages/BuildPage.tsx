@@ -572,7 +572,7 @@ function BuildPage() {
     const confirm = prompt("This will clear all of your projects and reset the demo project. Press OK to continue.")
 
     if (confirm !== 'OK') {
-      alert('Reset cancelled."')
+      alert('Reset cancelled.')
       return;
     }
 
