@@ -522,11 +522,36 @@ function BuildPage() {
       return;
     }
     if (action === 'next' && type === 'step:after') {
+      if (index === 1 && currentProject?.package !== 'demoPackage') {
+        alert('Please select the demoPackage project to continue the tutorial.')
+        return;
+      }
+      if (index === 4 && currentProject?.modules.length !== 2) {
+        alert('Please add a new module to continue the tutorial.')
+        return;
+      }
+      // if (index === 5 && currentProject?.modules.length !== 1) {
+      //   alert('Please delete the new module to continue the tutorial.')
+      //   return;
+      // }
+      // if (index === 6 && currentModule !== 'party') {
+      //   alert('Please select the party module to continue the tutorial.')
+      //   return;
+      // }
+      // if (index === 9 && (compiledModules.length !== 1 || compiledModules[0] == '')) {
+      //   alert('Please compile the party module to continue the tutorial.')
+      //   return;
+      // }
       setStepIndex(index + 1);
+    }
+    if (action === 'prev' && type === 'step:after') {
+      setStepIndex(index - 1);
+      return;
     }
     if (status === 'finished') {
       setRunTutorial(false);
       setStepIndex(0);
+      return
     }
   }
 
@@ -534,38 +559,6 @@ function BuildPage() {
     console.log('runTutorial', runTutorial);
     console.log('stepIndex', stepIndex);
   }, [runTutorial, stepIndex])
-
-  const Tooltip = ({
-    continuous,
-    index,
-    step,
-    backProps,
-    closeProps,
-    primaryProps,
-    tooltipProps,
-  }: any) => (
-    <div {...tooltipProps}>
-      {step.title && <div>{step.title}</div>}
-      <div>{step.content}</div>
-      <div>
-        {index > 0 && (
-          <button {...backProps}>
-            <p id="back" />
-          </button>
-        )}
-        {continuous && (
-          <button {...primaryProps}>
-            <p id="next" />
-          </button>
-        )}
-        {!continuous && (
-          <button {...closeProps}>
-            <p id="close" />
-          </button>
-        )}
-      </div>
-    </div>
-  );
 
   const startTutorial = () => {
 
