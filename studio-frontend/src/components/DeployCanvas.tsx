@@ -219,7 +219,7 @@ function DeployCanvas (
 
   return (
     <LoadingOverlay 
-        className="deploy-canvas"
+        className="deploy-canvas tutorial-deploy-canvas"
         active={props.isOverlayActive}
         spinner={
           <ScaleLoader
