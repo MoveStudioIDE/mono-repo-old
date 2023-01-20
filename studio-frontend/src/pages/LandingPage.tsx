@@ -10,6 +10,7 @@ import studioIcon2 from "../icons/moveIcon1.png"
 import studioIcon2Transparent from "../icons/moveIconTransparent1.png"
 import moveVert1 from "../icons/MoveVert1.png"
 import moveVert2 from "../icons/moveVert2.png"
+import moveVert3 from "../icons/moveVert3.png"
 
 const quotes = [
   "Coding, like poetry, should be short and concise",
@@ -48,7 +49,7 @@ function LandingPage() {
             <p className="py-6">An online IDE built for Sui smart contract development. Built for developers of all experience levels, Move Studio provides developers with essential building tools and resources.</p>
             <a><Link to="/build"><button className="btn btn-primary">Get building</button></Link></a>
           </div>
-          <img src={moveVert2} className="rounded-lg shadow-2xl" style={{height: "400px"}}/>
+          <img src={moveVert3} className="rounded-lg shadow-2xl" style={{height: "400px"}}/>
 
         </div>
       </div>
