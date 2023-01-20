@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import './DeployHeader.css'
 import studioIcon from "../icons/studio-62.png";
+import studioIcon2Transparent from "../icons/moveIconTransparent1.png"
 
 const daisyThemes = [
   'light',
@@ -57,7 +58,7 @@ function DeployHeader(
       </div>
       <div className="flex-1">
         <a><Link to="/" className="btn btn-ghost normal-case text-xl ml-1"> 
-          <img src={studioIcon} width="30px" style={{marginRight: "5px"}}/>
+          <img src={studioIcon2Transparent} width="37px" style={{marginRight: "5px"}}/>
           Move Studio
         </Link></a>      
       </div>
