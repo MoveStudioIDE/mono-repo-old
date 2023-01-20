@@ -6,6 +6,11 @@ import dan from "../icons/dan.jpeg";
 import buildPage from "../icons/build-page.png";
 import deployPage from "../icons/deploy-page.png";
 import studioIcon from "../icons/studio-62.png"
+import studioIcon2 from "../icons/moveIcon1.png"
+import studioIcon2Transparent from "../icons/moveIconTransparent1.png"
+import moveVert1 from "../icons/MoveVert1.png"
+import moveVert2 from "../icons/moveVert2.png"
+import moveVert3 from "../icons/moveVert3.png"
 
 const quotes = [
   "Coding, like poetry, should be short and concise",
@@ -22,7 +27,7 @@ function LandingPage() {
 
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
 
-  const quote = 
+  // const quote = 
 
 
   useEffect(() => {
@@ -44,7 +49,7 @@ function LandingPage() {
             <p className="py-6">An online IDE built for Sui smart contract development. Built for developers of all experience levels, Move Studio provides developers with essential building tools and resources.</p>
             <a><Link to="/build"><button className="btn btn-primary">Get building</button></Link></a>
           </div>
-          <img src={hero1} className="rounded-lg shadow-2xl" style={{height: "400px"}}/>
+          <img src={moveVert3} className="rounded-lg shadow-2xl" style={{height: "400px"}}/>
 
         </div>
       </div>
@@ -174,7 +179,7 @@ function LandingPage() {
       </div>
       <footer className="footer items-center p-4 bg-neutral text-neutral-content">
         <div className="items-center grid-flow-col">
-          <img src={studioIcon} width="30px" style={{marginRight: "5px"}}/>
+          <img src={studioIcon2Transparent} width="50px" style={{marginRight: "5px"}}/>
           {quotes[Math.floor(Math.random() * quotes.length)]}
         </div> 
         <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
