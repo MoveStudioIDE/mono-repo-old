@@ -1,4 +1,4 @@
-import { compile } from "../compile"
+import { compileSui } from "../compile"
 import { Project } from '../schema/user-schema'
 import * as fs from 'fs';
 
@@ -24,6 +24,6 @@ test("Tests Sui compile", async () => {
         },
     ],
     };
-    const byteCode = await compile(project);
+    const byteCode = await compileSui(project);
     console.log(byteCode)
 })
