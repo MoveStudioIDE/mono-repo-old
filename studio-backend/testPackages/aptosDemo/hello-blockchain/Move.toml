@@ -1,0 +1,9 @@
+[package]
+name = "Examples"
+version = "0.0.0"
+
+[dependencies]
+AptosFramework = { git = "https://github.com/aptos-labs/aptos-core.git", subdir = "aptos-move/framework/aptos-framework", rev = "main"  }
+
+[addresses]
+hello_blockchain = "0x54f87920d93bc215c7b70d42a480438cfe01d7b4db259a8184faa8f8e2899be1"
