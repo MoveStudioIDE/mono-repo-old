@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express from 'express';
-import { compileSui, compileAptos, publish } from './compile';
+import { compile, publish } from './compile';
 import { getObjectDetails, getPackageDetails } from './object-details';
 
 const app = express();
@@ -46,29 +46,14 @@ app.get('/projects', (req, res) => {
 //   res.send(projects);
 // });
 
-app.post('/compileSui', async (req, res) => {
+app.post('/compile', async (req, res) => {
   const project = req.body;
 
   // console.log(project);
-  console.log('compiling Sui project...')
+  console.log('compiling project...')
 
   // Call compile function
-  const compileResult = await compileSui(project);
-
-  // console.log(compileResult)
-
-  res.send(compileResult);
-
-});
-
-app.post('/compileAptos', async (req, res) => {
-  const project = req.body;
-
-  // console.log(project);
-  console.log('compiling Aptos project...')
-
-  // Call compile function
-  const compileResult = await compileAptos(project);
+  const compileResult = await compile(project);
 
   // console.log(compileResult)
 

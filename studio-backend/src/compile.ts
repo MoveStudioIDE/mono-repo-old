@@ -102,7 +102,7 @@ export async function compileAptos(project: Project): Promise<string | string[]>
   }
 }
 
-export async function compileSui(project: Project): Promise<string | string[]> {
+export async function compile(project: Project): Promise<string | string[]> {
 
   // Created temporary project in user directory
   const tempProjectPath = `${TEMP_DIR}/${project.package}`;
