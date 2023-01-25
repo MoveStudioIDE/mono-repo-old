@@ -108,9 +108,10 @@ function BuildInnerSidebar(
   }
 
   const handleProjectDelete = () => {
-    // confirm delete with user
-    if (prompt('Type "delete" to confirm deletion of project') !== 'delete') return;
-
+    // Get confirmation from user
+    if (!confirm(`Are you sure you want to delete project ${props.currentProject?.package}?`)) {
+      return;
+    }
     console.log('handleProjectDelete', props.currentProject);
     if (props.currentProject) {
       props.deleteProject(props.currentProject.package);
