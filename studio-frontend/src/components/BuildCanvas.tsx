@@ -52,6 +52,8 @@ function BuildCanvas(
     compiledModules: string[],
     compileError: string,
     showError: boolean,
+    activeModules: string[],
+    removeActiveModule: (module: string) => void,
     // tutorialSteps:  any[],
     runTutorial: boolean,
     setRunTutorial: (runTutorial: boolean) => void,
@@ -224,26 +226,22 @@ function BuildCanvas(
     props.setCode(value, props.currentModule ? props.currentModule : '');
   };
 
-  const handleDeleteModuleClick = () => {
-    console.log('delete module')
-    if (props.currentModule === null) return;
-    props.deleteModule(props.currentModule)
-  }
+  
 
-  const modules = props.currentProject?.modules.map((module: Module) => {
+  const modules = props.activeModules.map((moduleName: string) => {
     return (
       <a 
-        className={`tab tab-bordered ${props.currentModule === module.name ? 'tab-active' : ''}`}
-        id={module.name}
-        onClick={() => props.changeModule(module.name)}
+        className={`tab tab-bordered ${props.currentModule === moduleName ? 'tab-active' : ''}`}
+        id={moduleName}
+        onClick={() => props.changeModule(moduleName)}
         style={{display: "flex", alignItems: "center", flexWrap: "nowrap"}}
       >
-        {module.name}
+        {moduleName}
         {
-          props.currentModule === module.name &&
+          props.currentModule === moduleName &&
           <label 
             tabIndex={0} 
-            className="btn btn-circle btn-ghost btn-xs text-error"  onClick={handleDeleteModuleClick}
+            className="btn btn-circle btn-ghost btn-xs text-error"  onClick={() => props.removeActiveModule(moduleName)}
             style={{marginLeft: "2px"}}
           >
             <svg xmlns="http://www.w3.org/2000/svg"  className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>

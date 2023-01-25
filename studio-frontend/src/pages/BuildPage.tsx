@@ -212,6 +212,7 @@ function BuildPage() {
   const [showError, setShowError] = useState(false);
 
   const [autoCompile, setAutoCompile] = useState(false);
+  const [activeModules, setActiveModules] = useState<string[]>([]);
   
 
   //---Helpers---//
@@ -467,6 +468,7 @@ function BuildPage() {
     }
     removeModuleFromIndexdb(moduleName).then(() => {
       getProjectData(currentProject.package);
+      removeActiveModuleHandler(moduleName);
     });
     setCurrentModule(null);
     setCode('')
@@ -650,6 +652,29 @@ function BuildPage() {
         }); 
   }
 
+  const addActiveModulesHandler = (moduleName: string) => {
+    if (!currentProject) {
+      return;
+    }
+
+    // Check if module already exists
+    if (activeModules.includes(moduleName)) {
+      return;
+    }
+
+    setActiveModules([...activeModules, moduleName]);
+
+  }
+
+  const removeActiveModuleHandler = (moduleName: string) => {
+    if (!currentProject) {
+      return;
+    }
+
+    const newActiveModules = activeModules.filter((module) => module !== moduleName);
+    setActiveModules(newActiveModules);
+  }
+
 
 
 
@@ -729,6 +754,7 @@ function BuildPage() {
             compileCode={compileCode} 
             compiledModules={compiledModules}
             compileError={compileError}
+            addActiveModules={addActiveModulesHandler}
             // tutorialSteps={steps}
             // tutorialCallback={tutorialCallback}
             runTutorial={runTutorial}
@@ -751,6 +777,8 @@ function BuildPage() {
             compileError={compileError}
             showError={showError}
             setShowError={setShowError}
+            activeModules={activeModules}
+            removeActiveModule={removeActiveModuleHandler}
             // tutorialSteps={steps}
             // tutorialCallback={tutorialCallback}
             runTutorial={runTutorial}
