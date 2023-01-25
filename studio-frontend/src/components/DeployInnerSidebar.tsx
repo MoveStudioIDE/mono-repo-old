@@ -73,7 +73,7 @@ function DeployInnerSidebar(
         style={{marginTop:"5px", marginBottom:"5px"}}
         className="select w-full select-xs max-w-xs text-current tutorial-deploy-publish-select"
       >
-        <option value="**default">--Select a project--</option>
+        <option value="**default">--Select a package--</option>
         {projects}
       </select>
       <div style={{display: "flex", justifyContent: "space-around"}}>

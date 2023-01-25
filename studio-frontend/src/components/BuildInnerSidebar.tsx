@@ -183,8 +183,8 @@ function BuildInnerSidebar(
         className="select w-full select-xs max-w-xs step1"
         value={props.currentProject?.package || '**default'}
       >
-        <option value="**default">--Select a project--</option>
-        <option value="**addProject">++Add Project++</option>
+        <option value="**default">--Select a package--</option>
+        <option value="**addProject">++Create new package++</option>
         {projects}
       </select>
       <div style={{display: "flex", justifyContent: "space-around"}}>
