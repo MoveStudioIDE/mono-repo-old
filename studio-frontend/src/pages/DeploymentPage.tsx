@@ -264,9 +264,9 @@ function DeploymentPage() {
   }
 
   const resetCache = () => {
-    const confirm = prompt("This will clear all of your projects and reset the demo project. Press OK to continue.")
+    const confirmReset = confirm("This will clear all of your projects and reset the demo project. Press OK to continue.")
 
-    if (confirm !== 'OK') {
+    if (confirmReset === false) {
       alert('Reset cancelled.')
       return;
     }
