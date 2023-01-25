@@ -506,6 +506,12 @@ function BuildPage() {
 
 
   const handleModuleDelete = (moduleName: string) => {
+
+    // Get confirmation from user
+    if (confirm(`Are you sure you want to delete ${moduleName}?`) == false) {
+      return;
+    }
+
     const removeModuleFromIndexdb = async (moduleName: string) => {
       indexedDb = new IndexedDb('test');
       await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
@@ -549,6 +555,12 @@ function BuildPage() {
   }
 
   const handleDependencyRemove = (dependencyName: string) => {
+
+    // Get confirmation from user
+    if (confirm(`Are you sure you want to delete the ${dependencyName} dependency?`) == false) {
+      return;
+    }
+
     const removeDependencyFromIndexdb = async (dependencyName: string) => {
       indexedDb = new IndexedDb('test');
       await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
