@@ -11,6 +11,7 @@ import { useLocation } from "react-router-dom";
 import Header from "../components/Header";
 import Joyride from 'react-joyride';
 import {SPINNER_COLORS} from "../utils/theme";
+import ScaleLoader from "react-spinners/ScaleLoader";
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
@@ -20,6 +21,7 @@ function BuildPage() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
   const [runTutorial, setRunTutorial] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
+  const [toast, setToast] = useState<JSX.Element | undefined>();
 
   const steps =  [
     {
@@ -234,6 +236,20 @@ function BuildPage() {
   }
 
   const compileCode = () => {
+    
+    setToast(
+      <div className="alert alert-info">
+        <div>
+          <ScaleLoader
+            color={SPINNER_COLORS[theme].infoContent}
+            height={20}
+            // width={15}
+          />
+          <span className="normal-case" style={{color: 'hsl(var(--inc))'}} >Compiling...</span>
+        </div>
+      </div>
+    )
+
     setCompileError('');
     setCompiledModules([]);
     setShowError(false);
@@ -249,8 +265,42 @@ function BuildPage() {
       if (typeof compileResults === 'string') {
         setCompiledModules([]);
         setCompileError(compileResults);
+
+        setToast(
+          <div className="alert alert-error">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>Compile failed</span>
+              <button
+                className="btn btn-xs btn-ghost"
+                onClick={() => {
+                  setShowError(true);
+                }}
+              >
+                View
+              </button>
+              <button onClick={() => setToast(undefined)}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+          </div>
+        </div>
+        )
+
         return;
       }
+
+      setToast(
+        <div className="alert alert-success">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>Package compiled</span>
+          <button onClick={() => setToast(undefined)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+      )
+
       setCompiledModules(compileResults);
       setCompileError('');
     });
@@ -288,8 +338,9 @@ function BuildPage() {
     console.log('currentModule', currentModule);
     console.log('module to update', module);
 
-    setCompileError('');
-    setCompiledModules([]);
+    // setCompileError('');
+    // setToast(undefined);
+    // setCompiledModules([]);
 
 
     updateModuleInIndexdb(newCode).then(() => {
@@ -419,8 +470,9 @@ function BuildPage() {
         setCurrentModule(newModuleName);
         setCode('');
         setShowError(false);
-        setCompileError('');
-        setCompiledModules([]);
+        setToast(undefined)
+        // setCompileError('');
+        // setCompiledModules([]);
       });
       // setCurrentModule(null);
       // setCode('');
@@ -454,6 +506,12 @@ function BuildPage() {
 
 
   const handleModuleDelete = (moduleName: string) => {
+
+    // Get confirmation from user
+    if (confirm(`Are you sure you want to delete ${moduleName}?`) == false) {
+      return;
+    }
+
     const removeModuleFromIndexdb = async (moduleName: string) => {
       indexedDb = new IndexedDb('test');
       await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
@@ -497,6 +555,12 @@ function BuildPage() {
   }
 
   const handleDependencyRemove = (dependencyName: string) => {
+
+    // Get confirmation from user
+    if (confirm(`Are you sure you want to delete the ${dependencyName} dependency?`) == false) {
+      return;
+    }
+
     const removeDependencyFromIndexdb = async (dependencyName: string) => {
       indexedDb = new IndexedDb('test');
       await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
@@ -575,9 +639,9 @@ function BuildPage() {
   }
 
   const resetCache = async () => {
-    const confirm = prompt("This will clear all of your projects and reset the demo project. Press OK to continue.")
+    const confirmReset = confirm("This will clear all of your projects and reset the demo project. Press OK to continue.")
 
-    if (confirm !== 'OK') {
+    if (confirmReset === false) {
       alert('Reset cancelled.')
       return;
     }
@@ -751,6 +815,7 @@ function BuildPage() {
             compileError={compileError}
             showError={showError}
             setShowError={setShowError}
+            toast={toast}
             // tutorialSteps={steps}
             // tutorialCallback={tutorialCallback}
             runTutorial={runTutorial}
