@@ -304,6 +304,7 @@ function BuildPage() {
   }
 
   const handleProjectChange = (projectChange: string) => {
+    setActiveModules([]);
     if (projectChange === '**default') {
       setCurrentProject(null);
       setCurrentModule(null);
@@ -417,11 +418,13 @@ function BuildPage() {
       }
       addModuleToIndexdb(newModuleName).then(() => {
         getProjectData(currentProject.package);
+        setActiveModules([...activeModules, newModuleName])
         setCurrentModule(newModuleName);
         setCode('');
         setShowError(false);
         setCompileError('');
         setCompiledModules([]);
+        // setActiveModules([...activeModules, newModuleName])
       });
       // setCurrentModule(null);
       // setCode('');
@@ -470,11 +473,14 @@ function BuildPage() {
       getProjectData(currentProject.package);
       removeActiveModuleHandler(moduleName);
     });
-    setCurrentModule(null);
-    setCode('')
+    // setCurrentModule(null);
+    // setCode('')
     setShowError(false);
     setCompileError('');
     setCompiledModules([]);
+    // Remove form active modules
+    // setActiveModules(activeModules.filter((m) => m !== moduleName));
+
 
     if (runTutorial && stepIndex === 5) {
       setStepIndex(6);
@@ -659,10 +665,13 @@ function BuildPage() {
 
     // Check if module already exists
     if (activeModules.includes(moduleName)) {
+      handleModuleChange(moduleName);
       return;
     }
 
     setActiveModules([...activeModules, moduleName]);
+
+    handleModuleChange(moduleName);
 
   }
 
@@ -754,6 +763,7 @@ function BuildPage() {
             compileCode={compileCode} 
             compiledModules={compiledModules}
             compileError={compileError}
+            activeModules={activeModules}
             addActiveModules={addActiveModulesHandler}
             // tutorialSteps={steps}
             // tutorialCallback={tutorialCallback}
