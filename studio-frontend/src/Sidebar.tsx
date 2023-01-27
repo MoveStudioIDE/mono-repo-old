@@ -125,8 +125,8 @@ function Sidebar (
         id="projectSelector"
         onChange={handleProjectChange}
       >
-        <option value="default">--Select a project--</option>
-        <option value="addProject">++Add Project++</option>
+        <option value="default">--Select a package--</option>
+        <option value="addProject">++Create new package++</option>
         {projects}
       </select>
       <button onClick={handleProjectDelete}>Delete Project</button>
