@@ -7,6 +7,7 @@ import { Module, Project } from "../types/project-types";
 import fs from 'fs';
 import Ansi from "ansi-to-react";
 import stripAnsi from 'strip-ansi';
+import { shortenWord } from "../utils/address-shortener";
 // import * as editorThemeJsons from "../utils/themes.json"
 const editorThemeJsons = require('../utils/themes.json')
 
@@ -236,13 +237,13 @@ function BuildCanvas(
         onClick={() => props.changeModule(moduleName)}
         style={{display: "flex", alignItems: "center", flexWrap: "nowrap"}}
       >
-        {moduleName}
+        {shortenWord(moduleName, 15)}
         {
           props.currentModule === moduleName &&
           <label 
             tabIndex={0} 
-            className="btn btn-circle btn-ghost btn-xs text-error"  onClick={() => props.removeActiveModule(moduleName)}
-            style={{marginLeft: "2px"}}
+            className="btn btn-square btn-ghost btn-xs text-error"  onClick={() => props.removeActiveModule(moduleName)}
+            style={{marginLeft: "2px", marginRight: "-10px"}}
           >
             <svg xmlns="http://www.w3.org/2000/svg"  className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
           </label>
