@@ -1,7 +1,7 @@
 import { Dependency, Module, Project } from "../types/project-types";
 import Joyride from 'react-joyride';
 import { useEffect, useState } from "react";
-
+import { shortenWord } from "../utils/address-shortener";
 
 function BuildInnerSidebar(
   props: {
@@ -11,6 +11,8 @@ function BuildInnerSidebar(
     compileCode: () => void,
     compiledModules: string[],
     compileError: string,
+    activeModules: string[],
+    addActiveModules: (module: string) => void,
     // tutorialSteps:  any[],
     runTutorial: boolean,
     setRunTutorial: (runTutorial: boolean) => void,
@@ -25,6 +27,24 @@ function BuildInnerSidebar(
     removeDependency: (dependency: string) => void,
   }
 ) {
+
+  const [moduleCarousel, setModuleCarousel] = useState(false);
+
+  useEffect(() => {
+    if (props.currentProject == null) {
+      setModuleCarousel(false);
+    }
+  }, [props.currentProject])
+
+  useEffect(() => {
+    console.log('activeModules11', props.activeModules)
+    console.log('currentModule11', props.currentModule)
+
+    if (props.currentModule != null && props.activeModules.length > 0 && !(props.currentModule in props.activeModules)) {
+      console.log('activeModules22', props.activeModules)
+      props.changeModule(props.activeModules[0])
+    }
+  }, [props.activeModules])
 
   useEffect(() => {
     console.log('props.runTutorial', props.runTutorial)
@@ -52,14 +72,57 @@ function BuildInnerSidebar(
     }
   }, [props.currentModule])
 
+  const handleDeleteModuleClick = (moduleName: string) => {
+    console.log('delete module')
+    if (props.currentModule === null) return;
+    props.deleteModule(moduleName)
+  }
+
   //---Helper---//
 
   const projects = props.projectList.map((project: string) => {
     return <option value={project}>{project}</option>
   });
+  
 
   const modules = props.currentProject?.modules.map((module: Module) => {
-    return <option value={module.name}>{module.name}</option>
+    return (
+      <div style={{display: "flex", justifyContent: "space-around",}}>
+        <div 
+          className={`text-center border card-compact border-base-content card ${ moduleCarousel ? "hover:w-9/12 hover:h-28 w-8/12" : "w-8/12"} h-24 bg-base-100 image-full cursor-pointer`}
+          onClick={() => {
+            if (!moduleCarousel) {
+              return
+            }
+            props.addActiveModules(module.name)
+          }}
+          style={{marginTop: moduleCarousel ? "3px" : "0px", marginBottom: moduleCarousel ? "3px" : "0px", overflow: "hidden"}}
+        >
+          <figure>
+            <div className="mockup-code">
+              <pre><code>{module.code}</code></pre>
+            </div>
+          </figure>
+          <div className="card-body text-center">
+            {moduleCarousel &&
+              <div className="card-actions justify-end">
+                <label 
+                  tabIndex={0} 
+                  className="btn btn-circle btn-ghost btn-xs text-error" 
+                  onClick={() => handleDeleteModuleClick(module.name)}
+                  style={{marginTop: "-10px", marginRight: "-10px"}}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+                </label>
+              </div>
+            }
+            {/* <div > */}
+              <h2 className="font-mono font-semibold">{ moduleCarousel ? `Module: "${shortenWord(module.name)}"` : "Modules"}</h2>
+            {/* </div> */}
+          </div>
+        </div>
+      </div>
+    )
   });
 
   const dependencies = props.currentProject?.dependencies.map((dependency: Dependency) => {
@@ -247,7 +310,7 @@ function BuildInnerSidebar(
         </div>
         <div style={{display: "flex", justifyContent: "space-around"}} >
           <div className="form-control step3" style={{marginTop:"25px"}}>
-            <label className="input-group input-group-xs ">
+            <label className="input-group input-group-xs">
               <input type="text" placeholder="new module" className="input input-xs" id="newModuleInput"/>
               <button className="btn btn-xs bg-secondary" onClick={handleNewModuleClick}>
                 Add
@@ -255,6 +318,50 @@ function BuildInnerSidebar(
             </label>
           </div>
         </div>
+        {modules && modules.length > 0 && <div style={{display: "flex", justifyContent: "space-around", marginTop: "10px"}} >
+          { !moduleCarousel &&
+            <div className="stack" onClick={() => setModuleCarousel(true)}>
+              {modules}
+              <div className="border border-base-content card w-8/12 bg-base-100">
+                <div className="card-body">A</div>
+              </div> 
+              <div className="text-center border border-base-content card w-8/12 bg-base-100">
+                <div className="card-body">B</div>
+              </div> 
+              <div className="text-center border border-base-content card w-8/12 bg-base-100">
+                <div className="card-body">C</div>
+              </div>
+            </div>
+          }
+          { moduleCarousel &&
+            <div >
+              <div className="max-h-56 carousel carousel-vertical" style={{overflow: "auto"}}>
+                {modules}
+                {/* <div style={{display: "flex", justifyContent: "space-around",}}>
+                  <div className="border border-base-content card w-36 bg-base-100">
+                    <div className="card-body">A</div>
+                  </div> 
+                </div> */}
+                {/* <div style={{display: "flex", justifyContent: "space-around"}}>
+                <div className="text-center border border-base-content card w-36 bg-base-100">
+                  <div className="card-body">B</div>
+                </div> 
+                </div> */}
+                {/* <div style={{display: "flex", justifyContent: "space-around",}}>
+                <div className="text-center border border-base-content card w-36 bg-base-100">
+                  <div className="card-body">C</div>
+                </div>
+                </div> */}
+              </div>
+              <div style={{display: "flex", justifyContent: "space-around", marginTop: "10px"}} >
+                <button className="btn btn-xs" onClick={() => setModuleCarousel(false)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M18 15l-6-6-6 6"/></svg>              
+                  {/* <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M17 11l-5-5-5 5M17 18l-5-5-5 5"/></svg> */}
+                </button>
+              </div>
+            </div>
+          }
+        </div>}
       </div>}
     </div>
   );

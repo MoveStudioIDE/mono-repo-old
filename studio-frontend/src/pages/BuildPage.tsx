@@ -214,6 +214,7 @@ function BuildPage() {
   const [showError, setShowError] = useState(false);
 
   const [autoCompile, setAutoCompile] = useState(false);
+  const [activeModules, setActiveModules] = useState<string[]>([]);
   
 
   //---Helpers---//
@@ -354,6 +355,7 @@ function BuildPage() {
   }
 
   const handleProjectChange = (projectChange: string) => {
+    setActiveModules([]);
     if (projectChange === '**default') {
       setCurrentProject(null);
       setCurrentModule(null);
@@ -467,9 +469,13 @@ function BuildPage() {
       }
       addModuleToIndexdb(newModuleName).then(() => {
         getProjectData(currentProject.package);
+        setActiveModules([...activeModules, newModuleName])
         setCurrentModule(newModuleName);
         setCode('');
         setShowError(false);
+        setCompileError('');
+        setCompiledModules([]);
+        // setActiveModules([...activeModules, newModuleName])
         setToast(undefined)
         // setCompileError('');
         // setCompiledModules([]);
@@ -525,12 +531,16 @@ function BuildPage() {
     }
     removeModuleFromIndexdb(moduleName).then(() => {
       getProjectData(currentProject.package);
+      removeActiveModuleHandler(moduleName);
     });
-    setCurrentModule(null);
-    setCode('')
+    // setCurrentModule(null);
+    // setCode('')
     setShowError(false);
     setCompileError('');
     setCompiledModules([]);
+    // Remove form active modules
+    // setActiveModules(activeModules.filter((m) => m !== moduleName));
+
 
     if (runTutorial && stepIndex === 5) {
       setStepIndex(6);
@@ -714,6 +724,32 @@ function BuildPage() {
         }); 
   }
 
+  const addActiveModulesHandler = (moduleName: string) => {
+    if (!currentProject) {
+      return;
+    }
+
+    // Check if module already exists
+    if (activeModules.includes(moduleName)) {
+      handleModuleChange(moduleName);
+      return;
+    }
+
+    setActiveModules([...activeModules, moduleName]);
+
+    handleModuleChange(moduleName);
+
+  }
+
+  const removeActiveModuleHandler = (moduleName: string) => {
+    if (!currentProject) {
+      return;
+    }
+
+    const newActiveModules = activeModules.filter((module) => module !== moduleName);
+    setActiveModules(newActiveModules);
+  }
+
 
 
 
@@ -793,6 +829,8 @@ function BuildPage() {
             compileCode={compileCode} 
             compiledModules={compiledModules}
             compileError={compileError}
+            activeModules={activeModules}
+            addActiveModules={addActiveModulesHandler}
             // tutorialSteps={steps}
             // tutorialCallback={tutorialCallback}
             runTutorial={runTutorial}
@@ -815,6 +853,8 @@ function BuildPage() {
             compileError={compileError}
             showError={showError}
             setShowError={setShowError}
+            activeModules={activeModules}
+            removeActiveModule={removeActiveModuleHandler}
             toast={toast}
             // tutorialSteps={steps}
             // tutorialCallback={tutorialCallback}
