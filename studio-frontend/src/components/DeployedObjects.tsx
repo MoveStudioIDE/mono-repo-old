@@ -55,6 +55,20 @@ export function DeployedPackage (
     });
   });
 
+  const entryFunctions = Object.entries(props.modules).flatMap((module: [string, object]) => {
+    return Object.entries(module[1]).flatMap((moduleDetails: [string, object]) => {
+      if (moduleDetails[0] == 'exposed_functions') {
+        return Object.entries(moduleDetails[1]).map((func: [string, object]) => {
+          if ((func[1] as any).is_entry) {
+            return (
+              <option value={`${module[0]}::${func[0]}`}>{`${module[0]}::${func[0]}`}</option>
+            )
+          }
+        });
+      }
+    });
+  });
+
 
   const handleDetailChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
 
@@ -79,7 +93,7 @@ export function DeployedPackage (
       setSelectedStruct(selectedStructDetails);
       setSelectedFunction(null);
       console.log('selectedStructDetails', selectedStructDetails)
-    } else if (optgroupLabel == 'Package functions') {
+    } else if (optgroupLabel == 'Package all functions' || optgroupLabel == 'Package entry functions') {
       const selectedFunctionDetails = (props.modules as any)[selectedModule].exposed_functions[selectedDetail];
       selectedFunctionDetails.name = selectedDetail;
       setSelectedFunction(selectedFunctionDetails);
@@ -138,7 +152,10 @@ export function DeployedPackage (
             <optgroup label="Package structs">
               {structs}
             </optgroup>
-            <optgroup label="Package functions">
+            <optgroup label="Package entry functions">
+              {entryFunctions}
+            </optgroup>
+            <optgroup label="Package all functions">
               {functions}
             </optgroup>
           </select>
