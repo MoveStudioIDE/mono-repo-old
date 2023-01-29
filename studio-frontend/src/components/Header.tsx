@@ -3,6 +3,9 @@ import {ConnectButton} from '@suiet/wallet-kit';
 import { Link } from "react-router-dom";
 import studioIcon from "../icons/studio-62.png"
 import studioIcon2Transparent from "../icons/moveIconTransparent1.png"
+import studioIcon3Transparent from "../icons/studio10Transparent.png"
+import studioIconGifTransparent from "../icons/studioTransparent.gif"
+
 import bugIcon from "../icons/insect-30.png"
 
 
@@ -67,7 +70,7 @@ function Header(
       </div>
       <div className="flex-1">
         <a><Link to="/" className="btn btn-ghost normal-case text-xl ml-1"> 
-          <img src={studioIcon2Transparent} width="37px" style={{marginRight: "5px"}}/>
+          <img src={studioIconGifTransparent} width="40px" style={{marginRight: "5px"}}/>
           Move Studio
         </Link></a>
       </div>
