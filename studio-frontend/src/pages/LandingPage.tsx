@@ -11,6 +11,10 @@ import studioIcon2Transparent from "../icons/moveIconTransparent1.png"
 import moveVert1 from "../icons/MoveVert1.png"
 import moveVert2 from "../icons/moveVert2.png"
 import moveVert3 from "../icons/moveVert3.png"
+import studioIcon3Transparent from "../icons/studio10Transparent.png"
+import studioIconGif from "../icons/studio.gif"
+import studioIconGifTransparent from "../icons/studioTransparent.gif"
+
 
 const quotes = [
   "Coding, like poetry, should be short and concise",
@@ -179,7 +183,7 @@ function LandingPage() {
       </div>
       <footer className="footer items-center p-4 bg-neutral text-neutral-content">
         <div className="items-center grid-flow-col">
-          <img src={studioIcon2Transparent} width="50px" style={{marginRight: "5px"}}/>
+          <img src={studioIconGifTransparent} width="50px" style={{marginRight: "5px"}}/>
           {quotes[Math.floor(Math.random() * quotes.length)]}
         </div> 
         <div className="grid-flow-col gap-4 md:place-self-center md:justify-self-end">
