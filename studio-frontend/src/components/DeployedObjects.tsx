@@ -185,7 +185,7 @@ export function DeployedPackage (
           }
         </div>
         <div className="card-actions justify-end text-neutral-content">
-          <div className="badge badge-outline">Module</div> 
+          <div className="badge badge-outline">Package</div> 
         </div>
       </div>
     </div>
