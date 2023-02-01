@@ -284,6 +284,14 @@ function BuildPage() {
               <button
                 className="btn btn-xs btn-ghost"
                 onClick={() => {
+                  console.log()
+                  if (currentProject == null || currentProject.modules == null) {
+                    return;
+                  }
+                  if (activeModules.length == 0) {
+                    console.log('no active modules')
+                    addActiveModulesHandler(currentProject.modules[0].name);
+                  }
                   setShowError(true);
                 }}
               >
@@ -442,6 +450,10 @@ function BuildPage() {
       setCurrentModule(null);
       setCode('')
       getProjects();
+      setActiveModules([]);
+      setShowError(false);
+      setCompileError('');
+      setCompiledModules([]);
     });
   }
 
@@ -878,6 +890,9 @@ function BuildPage() {
           />
         }
       />
+      <div className="toast toast-end">
+        {!showError && toast}
+      </div>
     </div>
   );
 }

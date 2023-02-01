@@ -36,7 +36,7 @@ export function DeployedPackage (
       if (moduleDetails[0] == 'structs') {
         return Object.entries(moduleDetails[1]).map((struct: [string, object]) => {
           return (
-            <option value={`${module[0]}::${struct[0]}`}>{`${module[0]}::${struct[0]}`}</option>
+            <option className='font-mono' value={`${module[0]}::${struct[0]}`}>{`${module[0]}::${struct[0]}`}</option>
           )
         });
       }
@@ -48,7 +48,7 @@ export function DeployedPackage (
       if (moduleDetails[0] == 'exposed_functions') {
         return Object.entries(moduleDetails[1]).map((func: [string, object]) => {
           return (
-            <option value={`${module[0]}::${func[0]}`}>{`${module[0]}::${func[0]}`}</option>
+            <option className='font-mono' value={`${module[0]}::${func[0]}`}>{`${module[0]}::${func[0]}`}</option>
           )
         });
       }
@@ -61,7 +61,7 @@ export function DeployedPackage (
         return Object.entries(moduleDetails[1]).map((func: [string, object]) => {
           if ((func[1] as any).is_entry) {
             return (
-              <option value={`${module[0]}::${func[0]}`}>{`${module[0]}::${func[0]}`}</option>
+              <option className='font-mono' value={`${module[0]}::${func[0]}`}>{`${module[0]}::${func[0]}`}</option>
             )
           }
         });
@@ -127,7 +127,8 @@ export function DeployedPackage (
         <div>
           <h1 className="card-title text-center text-neutral-content">{props.packageName}</h1>
           <div>
-            <p className="text-center text-neutral-content">
+            <h2 className='font-semibold'>Address:</h2>
+            <p className="text-center text-neutral-content font-mono text-opacity-90">
               {shortenAddress(props.address, 5)}
               <label 
                 tabIndex={0} 
@@ -185,7 +186,7 @@ export function DeployedPackage (
           }
         </div>
         <div className="card-actions justify-end text-neutral-content">
-          <div className="badge badge-outline">Module</div> 
+          <div className="badge badge-outline">Package</div> 
         </div>
       </div>
     </div>
@@ -201,6 +202,7 @@ export function DeployedObject (
     moduleName: string,
     objectName: string,
     shared: boolean,
+    typeParameter: string | undefined,
     updateHandler: (address: string) => void,
     dragStartHandler: (event: React.DragEvent<HTMLDivElement>) => void,
     dragEnterHandler: (event: React.DragEvent<HTMLDivElement>) => void,
@@ -221,16 +223,16 @@ export function DeployedObject (
     if (field[1] === null) {
       return (
         <tr>
-          <td>{field[0]}</td>
-          <td>{field[1]}</td>
+          <td className='font-mono'>{field[0]}</td>
+          <td className='font-mono'>{field[1]}</td>
         </tr>
       )
     } else if (typeof field[1] == 'object') {
       if (field[1].id != undefined) {
         return (
           <tr>
-            <td>{field[0]}</td>
-            <td>{field[1].id}</td>
+            <td className='font-mono'>{field[0]}</td>
+            <td className='font-mono'>{field[1].id}</td>
           </tr>
         )
       } else {
@@ -242,7 +244,7 @@ export function DeployedObject (
 
         return (
           <tr>
-            <td>{field[0]}</td>
+            <td className='font-mono'>{field[0]}</td>
             <td style={{display: 'flex', flexDirection: 'row', flexWrap: "wrap"}}>
               {
                 field[1].fields != undefined &&
@@ -250,8 +252,8 @@ export function DeployedObject (
                   return (
                     <div className="form-control w-min m-1 shadow-xl">
                       <label className="input-group input-group-vertical input-group-xs">
-                        <span >{field[0]}</span>
-                        <p className="input input-bordered input-xs text-center" >{field[1]}</p>
+                        <span className='font-mono' >{field[0]}</span>
+                        <p className="input input-bordered input-xs text-center font-mono" >{field[1]}</p>
                       </label>
                     </div>
                   )
@@ -267,8 +269,8 @@ export function DeployedObject (
 
     return (
       <tr>
-        <td>{field[0]}</td>
-        <td>{field[1].toString()}</td>
+        <td className='font-mono'>{field[0]}</td>
+        <td className='font-mono'>{field[1].toString()}</td>
       </tr>
     )
   });
@@ -304,7 +306,8 @@ export function DeployedObject (
         </div>
         <div>
           <h1 className="card-title text-center text-neutral-content">{props.objectName}</h1>
-          <p className="text-center text-neutral-content">
+          <h2 className='font-semibold'>Address: </h2>
+          <p className="text-center text-neutral-content font-mono text-opacity-90">
             {shortenAddress(props.packageAddress, 3)}
             ::
             {props.moduleName}
@@ -321,6 +324,29 @@ export function DeployedObject (
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
             </label>
           </p>
+          { 
+            props.typeParameter != undefined &&
+            <div>
+              <h2 className='font-semibold'>Type argument: </h2>
+              <p className="text-center text-neutral-content font-mono text-opacity-90">
+                {shortenAddress(props.typeParameter.split('::')[0], 3)}
+                ::
+                {props.typeParameter.split('::')[1]}
+                ::
+                {props.typeParameter.split('::')[2]}
+                <label 
+                  tabIndex={0} 
+                  className="btn btn-circle btn-ghost btn-xs text-info" 
+                  onClick={async () => {
+                    navigator.clipboard.writeText(props.typeParameter || '')
+                    console.log('clipboard', await navigator.clipboard.readText())
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                </label>
+              </p>
+            </div>
+          }
           <table style={{marginTop:"15px"}} className="table table-compact table-zebra w-full shadow-xl">
             <thead>
               <tr>
