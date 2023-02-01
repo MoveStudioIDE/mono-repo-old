@@ -105,7 +105,7 @@ function DeployInnerSidebar(
         <div style={{display: "flex", justifyContent: "center"}}>
           <div className="form-control">
             <div className="input-group input-group-xs">
-              <input type="text" placeholder="0x00...000" className="input input-xs" />
+              <input type="text" placeholder="0x00...000" className="input input-xs font-mono w-full" />
               <button className="btn btn-xs btn-primary" onClick={handleObjectAdd}>
                 Add
               </button>

@@ -89,7 +89,15 @@ function DeployCanvas (
           
         } else if (objectData.dataType == 'moveObject') {
           const fullName = objectData.type;
-          const splitFullName = fullName.split('::');
+          let structType = fullName.split('<').pop().split('>')[0]
+          const fullNameWithoutStruct = fullName.split('<')[0]
+          const splitFullName = fullNameWithoutStruct.split('::');
+          console.log("SPLIT FULL NAME", splitFullName)
+          console.log("STRUCT TYPE", structType)
+
+          if (!(fullName.includes('<') && fullName.includes('>'))) {
+            structType = undefined
+          }
           
           return <DeployedObject
             address={objectId}
@@ -97,6 +105,7 @@ function DeployCanvas (
             packageAddress={splitFullName[0]}
             moduleName={splitFullName[1]}
             objectName={splitFullName[2]}
+            typeParameter={structType}
             shared={shared}
             updateHandler={updateObjectByAddress}
             dragStartHandler={handleDragStart}
@@ -140,10 +149,16 @@ function DeployCanvas (
         if (objectData.dataType == 'package') {
           return;
         } else if (objectData.dataType == 'moveObject') {
-
           const fullName = objectData.type;
+          let structType = fullName.split('<').pop().split('>')[0]
+          const fullNameWithoutStruct = fullName.split('<')[0]
+          const splitFullName = fullNameWithoutStruct.split('::');
+          console.log("SPLIT FULL NAME", splitFullName)
+          console.log("STRUCT TYPE", structType)
 
-          const splitFullName = fullName.split('::');
+          if (!(fullName.includes('<') && fullName.includes('>'))) {
+            structType = undefined
+          }
           
           object = <DeployedObject
             address={address}
@@ -152,6 +167,7 @@ function DeployCanvas (
             moduleName={splitFullName[1]}
             objectName={splitFullName[2]}
             shared={shared}
+            typeParameter={structType}
             updateHandler={updateObjectByAddress}
             dragStartHandler={handleDragStart}
             dragEnterHandler={handleDragEnter}
@@ -233,7 +249,11 @@ function DeployCanvas (
             ...base,
             background: 'hsl(var(--b3))',
             opacity: '0.7',
-          })
+          }),
+          // wrapper: {
+          //   width: '90%',
+          //   height: '100%',
+          // }
         }}
       >
         {/* <ResponsiveMasonry >

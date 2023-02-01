@@ -274,20 +274,17 @@ function BuildCanvas(
             theme={editorTheme[props.theme]}
             className="step5"
           />
-          <div className="toast toast-end">
-            {!props.showError && props.toast}
-          </div>
           {
             props.showError &&
-            <div className="alert shadow-lg -m-6" style={{position: "relative", top: "-250px", left: "5%", width: "95%", height: "240px", overflow: "auto"}}>
-              <div style={{position: 'absolute', top: "0px", right: "0px", margin: "5px"}}>
+            <div className="alert shadow-lg -m-6 alert-error" style={{position: "relative", top: "-250px", left: "5%", width: "95%", height: "240px", overflow: "auto"}}>
+              <div style={{position: 'absolute', top: "0px", right: "0px", margin: "10px"}}>
                 <button 
-                  className="btn btn-square btn-xs btn-outline"
+                  className="btn btn-square btn-sm btn-error"
                   onClick={() => {
                     props.setShowError(false);
                   }}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
                 </button>
               </div>
               <div style={{marginTop: "auto", whiteSpace: "pre-wrap", lineHeight: "125%", }}>

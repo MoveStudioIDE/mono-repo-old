@@ -18,6 +18,7 @@ function PackageFunction(
 
   // const functionArguments = [] as string[];
   const [functionArguments, setfunctionArguments] = useState<string[]>([]);
+  const [functionTypeArguments, setFunctionTypeArguments] = useState<string[]>([]);
   const [functionParameterList, setFunctionParameterList] = useState<JSX.Element[]>([]);
 
   const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
@@ -33,9 +34,25 @@ function PackageFunction(
 
   const getFunctionParameterList = () => {
     const params = (props.functionDetails as any).parameters;
+    const typeParams = (props.functionDetails as any).type_parameters;
     console.log('params', params)
+    console.log('type params', typeParams)
 
+    const functionTypeParams = [];
     const functionParams = [];
+
+
+    for (let i = 0; i < typeParams.length; i++) {
+      console.log('type param', typeParams[i])
+      functionTypeParams.push(
+        <FunctionTypeParameter
+          // parameterName={typeParams[i].abilities}
+          // parameterType={types[i]}
+          parameterIndex={i}
+          handleParameterChange={handleTypeParameterChange}
+        />
+      )
+    }
 
     for (let i = 0; i < params.length; i++) {
       console.log('param', params[i])
@@ -74,14 +91,18 @@ function PackageFunction(
       }
     }
 
-    setFunctionParameterList(functionParams);
+    setFunctionParameterList(functionTypeParams.concat(functionParams));
 
     while(functionArguments.length > 0) {
       functionArguments.pop();
     }
 
+    functionTypeParams.forEach(() => {
+      functionTypeArguments.push('');
+    });
+
     functionParams.forEach(() => {
-      functionArguments.push('')
+      functionArguments.push('');
     });
 
     console.log('function arguments', functionArguments)
@@ -109,6 +130,24 @@ function PackageFunction(
     // setfunctionArguments(functionArguments);
   }
 
+  const handleTypeParameterChange = (index: number, parameter: any) => {
+    console.log(index, parameter)
+    console.log('function type arguments', functionTypeArguments)
+    
+    if (functionTypeArguments == undefined) {
+      return;
+    } 
+
+    console.log('function arguments before', functionTypeArguments)
+
+
+    functionTypeArguments[index] = parameter;
+
+    console.log('function arguments after', functionTypeArguments)
+
+    // setfunctionArguments(functionArguments);
+  }
+
   console.log('function arugments outside', functionArguments)
 
   const handleExecuteMoveCall = async () => {
@@ -116,25 +155,37 @@ function PackageFunction(
     console.log('function parameters', functionArguments)
     console.log('function name', functionName)
     console.log('package address', props.packageAddress)
-    console.log('type parameters', [])
+    console.log('type parameters', functionTypeArguments)
 
     if (functionArguments == undefined) {
       return;
     }
 
+    if (functionTypeArguments == undefined) {
+      return;
+    }
+
     props.setPendingTxn();
 
-    const moveCallTxn = await signAndExecuteTransaction({
-      kind: 'moveCall',
-      data: {
-        packageObjectId: props.packageAddress,
-        module: props.moduleName,
-        function: functionName,
-        typeArguments: [],
-        arguments: functionArguments,
-        gasBudget: 300000
-      }
-    });
+    let moveCallTxn;
+
+    try {
+      moveCallTxn = await signAndExecuteTransaction({
+        kind: 'moveCall',
+        data: {
+          packageObjectId: props.packageAddress,
+          module: props.moduleName,
+          function: functionName,
+          typeArguments: functionTypeArguments,
+          arguments: functionArguments,
+          gasBudget: 300000
+        }
+      });
+    } catch (e) {
+      console.log('error', e)
+      props.setFailTxn("");
+      return;
+    }
 
     console.log('move call txn', moveCallTxn);
 
@@ -154,6 +205,8 @@ function PackageFunction(
       style={{margin: '10px 0px'}}
     >
       <div className="card-body">
+        
+        <h1 className="card-title text-neutral-content font-mono">{functionName}</h1>
         <div className="card-actions">
           {
             (props.functionDetails as any).is_entry &&
@@ -161,7 +214,6 @@ function PackageFunction(
           }
           <div className="badge badge-outline badge-secondary">{(props.functionDetails as any).visibility}</div>
         </div>
-        <h1 className="card-title text-neutral-content">{functionName}</h1>
         <div className="form-control">
           {functionParameterList}
         </div>
@@ -202,8 +254,36 @@ function FunctionParameter(
 
   return (
     <label className="input-group input-group-xs" style={{margin: "2px"}}>
-      <span>Arg{props.parameterIndex}</span>
-      <input type="text" id="input" placeholder={props.parameterName} className="input input-bordered input-xs" onChange={handleParameterChange} />
+      <span className='font-medium'>Arg{props.parameterIndex}</span>
+      <input type="text" id="input" placeholder={props.parameterName} className="input input-bordered input-xs italic font-mono" onChange={handleParameterChange} />
+    </label>
+  )
+}
+
+function FunctionTypeParameter(
+  props: {
+    // parameterName: string,
+    parameterIndex: number,
+    handleParameterChange: (index: number, parameter: string) => void
+  }
+) {
+
+  useEffect(() => {
+    const input = document.getElementById('input') as HTMLInputElement;
+    input.value = '';
+  })
+
+  const handleParameterChange = (event: any) => {
+    props.handleParameterChange(
+      props.parameterIndex,
+      event.target.value,
+    );
+  }
+
+  return (
+    <label className="input-group input-group-xs" style={{margin: "2px"}}>
+      <span className='font-medium'>Type{props.parameterIndex}</span>
+      <input type="text" id="input" className="input input-bordered input-xs italic" onChange={handleParameterChange} />
     </label>
   )
 }
