@@ -62,8 +62,32 @@ function PackageFunction(
         console.log('e')
         const object = extractMutableReference(params[i])
         if (object === undefined) {
+          console.log('d')
+          if (params[i].Struct != undefined) {
+            console.log('struct', params[i].Struct)
+            functionParams.push(
+              <FunctionParameter
+                parameterName={`${shortenAddress(params[i].Struct.address, 1)}::${params[i].Struct.module}::${params[i].Struct.name}`}
+                // parameterType={types[i]}
+                parameterIndex={i}
+                handleParameterChange={handleParameterChange}
+              />
+            );
+          } else if (params[i].Vector != undefined) {
+            console.log('vector', params[i].Vector)
+            functionParams.push(
+              <FunctionParameter
+                parameterName={`vector<${params[i].Vector}>`}
+                // parameterType={types[i]}
+                parameterIndex={i}
+                handleParameterChange={handleParameterChange}
+              />
+            );
+          }
+
           continue;
         }
+
         console.log("object", object)
         const struct = (object as any).Struct as {address: string, module: string, name: string};
         if (struct.address == "0x2" && struct.name == "TxContext") {
