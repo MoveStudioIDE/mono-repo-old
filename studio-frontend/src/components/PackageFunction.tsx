@@ -265,7 +265,8 @@ function FunctionParameter(
 ) {
 
   useEffect(() => {
-    const input = document.getElementById('input') as HTMLInputElement;
+    const input = document.getElementById(`input${props.parameterIndex}`) as HTMLInputElement;
+    // console.log('input', input)
     input.value = '';
   })
 
@@ -279,7 +280,7 @@ function FunctionParameter(
   return (
     <label className="input-group input-group-xs" style={{margin: "2px"}}>
       <span className='font-medium'>Arg{props.parameterIndex}</span>
-      <input type="text" id="input" placeholder={props.parameterName} className="input input-bordered input-xs italic font-mono" onChange={handleParameterChange} />
+      <input type="text" id={`input${props.parameterIndex}`} placeholder={props.parameterName} className="input input-bordered input-xs italic font-mono" onChange={handleParameterChange} />
     </label>
   )
 }
@@ -293,7 +294,7 @@ function FunctionTypeParameter(
 ) {
 
   useEffect(() => {
-    const input = document.getElementById('input') as HTMLInputElement;
+    const input = document.getElementById(`type-input${props.parameterIndex}`) as HTMLInputElement;
     input.value = '';
   })
 
@@ -307,7 +308,7 @@ function FunctionTypeParameter(
   return (
     <label className="input-group input-group-xs" style={{margin: "2px"}}>
       <span className='font-medium'>Type{props.parameterIndex}</span>
-      <input type="text" id="input" className="input input-bordered input-xs italic" onChange={handleParameterChange} />
+      <input type="text" id={`type-input${props.parameterIndex}`} className="input input-bordered input-xs italic" onChange={handleParameterChange} />
     </label>
   )
 }
