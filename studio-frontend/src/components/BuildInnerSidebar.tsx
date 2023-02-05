@@ -148,7 +148,7 @@ function BuildInnerSidebar(
             className="ml-1 font-mono w-24 break-words text-center"
           >
             {/* TODO: Eventually get this to work with wrapping, not truncating */}
-            {shortenWord(module.name, 18)}.move
+            {shortenWord(module.name, 17)}{module.name.length < 18 ? ".move" : ""}
           </p>
         </td>
       </tr>
