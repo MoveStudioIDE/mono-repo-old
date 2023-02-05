@@ -14,3 +14,10 @@ export function shortenWord(string: string, cutLength: number = 10): string {
   }
   return string
 }
+
+export function shortenDecimal(decimal: string, cutLength: number = 10): string {
+  if (decimal.length > cutLength) {
+    return decimal.substring(0, cutLength) + '...'
+  }
+  return decimal
+}

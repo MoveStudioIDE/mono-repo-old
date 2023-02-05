@@ -22,7 +22,8 @@ export interface DeployedPackageInfo {
   address: string | undefined
 }
 
-import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
+import { ConnectButton, useWallet, useSuiProvider } from '@suiet/wallet-kit';
+// import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import axios from "axios";
 
 function DeploymentPage() {
@@ -33,8 +34,14 @@ function DeploymentPage() {
   const [compileError, setCompileError] = useState<string>('');
   const [deployedModules, setDeployedModules] = useState<string[]>([]);
   const [deployedObjects, setDeployedObjects] = useState<DeployedPackageInfo[]>([]);
-  const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
+  // const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
+  const wallet = useWallet()
+  console.log('chain', wallet.chain)
+  console.log('chains', wallet.chains)
+
   const [toasts, setToasts] = useState<JSX.Element | undefined>();
+  // const [transaction, setTransaction] = useState<(JSX.Element | undefined)>();
+
   const [isOverlayActive, setIsOverlayActive] = useState<boolean>(false);
   const [runTutorial, setRunTutorial] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
@@ -165,10 +172,10 @@ function DeploymentPage() {
       return;
     }
 
-    if(connected && runTutorial && stepIndex === 1) {
+    if(wallet.connected && runTutorial && stepIndex === 1) {
       setStepIndex(2);
     }
-  }, [connected])
+  }, [wallet.connected])
 
   useEffect(() => {
     if (runTutorial && stepIndex === 2 && currentProject?.package === 'demoPackage') {
@@ -236,7 +243,7 @@ function DeploymentPage() {
       return;
     }
     if (action === 'next' && type === 'step:after') {
-      if (index === 1 && !connected) {
+      if (index === 1 && !wallet.connected) {
         alert('Please connect your Sui wallet to continue with the tutorial. (Note: the Suiet wallet is currently not supported)')
         return;
       }
@@ -340,6 +347,15 @@ function DeploymentPage() {
         </div>
       // ]
     )
+
+    // setTransaction(
+    //   <div className="card " >
+    //     <div className="card-body">
+    //     </div>
+    //   </div>
+    // )
+
+
   }
 
   const setFailTxn = (digest: string) => {
@@ -493,11 +509,13 @@ function DeploymentPage() {
       console.log('publishData', publishData);
 
       try {
-        const publishTxn = await signAndExecuteTransaction({
-          kind: 'publish',
-          data: {
-            compiledModules: compiledModules,
-            gasBudget: GAS_BUDGET,
+        const publishTxn = await wallet.signAndExecuteTransaction({
+          transaction: {
+            kind: 'publish',
+            data: {
+              compiledModules: compiledModules,
+              gasBudget: GAS_BUDGET,
+            }
           }
         });
   
