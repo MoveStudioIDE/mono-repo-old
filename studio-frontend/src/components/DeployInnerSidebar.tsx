@@ -50,28 +50,34 @@ function DeployInnerSidebar(
       allAvailableWallets,  // all the installed Sui-standard wallets
     } = useWallet();
   
-    return [...configuredWallets, ...detectedWallets].map((wallet) => (
-      <button
-        className="btn btn-xs w-full btn-info btn-outline bg-base-100"
-        key={wallet.name}
-        onClick={() => {
-          // check if user installed the wallet
-          if (!wallet.installed) {
-            // do something like guiding users to install
-            return;
+    return [...configuredWallets, ...detectedWallets].map((wallet) => {
+      return (
+        <button
+          className="btn btn-xs w-full btn-info btn-outline bg-base-100"
+          key={wallet.name}
+          onClick={() => {
+            // check if user installed the wallet
+            if (!wallet.installed) {
+              // do something like guiding users to install
+              if(wallet.downloadUrl.browserExtension !== undefined) {
+                console.log('downloadUrl', wallet.downloadUrl.browserExtension);
+                window.open(wallet.downloadUrl.browserExtension, '_blank');
+              }
+              return;
+            }
+            setWalletIcon(wallet.iconUrl);
+            select(wallet.name);
+          }}
+        >
+          <img src={wallet.iconUrl} alt={wallet.name} className="w-5 h-5 inline-block mr-2" />
+          {
+            wallet.name == 'Martian Sui Wallet' ?
+            <span>Martian wallet</span> :
+            <span>{wallet.name}</span>
           }
-          setWalletIcon(wallet.iconUrl);
-          select(wallet.name);
-        }}
-      >
-        <img src={wallet.iconUrl} alt={wallet.name} className="w-5 h-5 inline-block mr-2" />
-        {
-          wallet.name == 'Martian Sui Wallet' ?
-          <span>Martian wallet</span> :
-          <span>{wallet.name}</span>
-        }
-      </button>
-    ));
+        </button>
+      )
+    });
   }
 
   //---Handlers---//

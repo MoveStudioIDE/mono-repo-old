@@ -275,7 +275,7 @@ function BuildInnerSidebar(
   return (
     <div style={{overflow: "auto"}}>
       <div className="card w-full shadow-xl card-compact">
-      <div className="card-body -mt-2">
+      <div className="card-body -mt-5">
         <div className="form-control w-full">
           <label className="label -mb-2">
             <span className="label-text font-bold">Packages</span>
@@ -317,7 +317,7 @@ function BuildInnerSidebar(
         </div>
         {props.currentProject && <div>
           <div className="step2">
-            <table style={{marginTop:"20px"}} className="table table-compact table-zebra w-full">
+            <table style={{marginTop:"10px"}} className="table table-compact table-zebra w-full">
               <thead>
                 <tr>
                   <th style={{position: "relative"}} className="text-center">Dependency</th>
