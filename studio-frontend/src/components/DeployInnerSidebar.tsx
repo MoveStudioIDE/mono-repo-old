@@ -96,14 +96,14 @@ function DeployInnerSidebar(
             name="project" 
             id="projectSelector"
             onChange={handleProjectChange}
-            className="input input-bordered input-primary w-full max-w-xs input-xs focus:outline-none"
+            className="input input-bordered input-success w-full max-w-xs input-xs focus:outline-none"
           >
             <option value="**default">--Select a package--</option>
             {projects}
           </select>
           <button 
             onClick={handlePackagePublish} 
-            className="btn btn-xs btn-primary btn-outline tutorial-deploy-publish-button"
+            className="btn btn-xs btn-success btn-outline tutorial-deploy-publish-button"
             disabled={props.currentProject == null || props.compileError != ''}
             // style={{margin:"2px 5px"}}
           >
@@ -122,11 +122,11 @@ function DeployInnerSidebar(
               id="addObjectInput"
               type="text" 
               placeholder="0x000...000" 
-              className="input input-bordered input-secondary w-full max-w-xs input-xs focus:outline-none font-mono"
+              className="input input-bordered input-warning w-full max-w-xs input-xs focus:outline-none font-mono"
               onChange={verifyObjectId}
             />
             <button 
-              className="btn btn-xs btn-outline btn-secondary" 
+              className="btn btn-xs btn-outline btn-warning" 
               onClick={handleObjectAdd}
               disabled={!isValidObjectId}
             >
