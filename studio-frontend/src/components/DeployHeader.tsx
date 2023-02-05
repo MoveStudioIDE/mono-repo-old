@@ -22,7 +22,7 @@ const daisyThemes = [
   // 'halloween',
   // 'garden',
   // 'forest',
-  'aqua',
+  // 'aqua',
   // 'lofi',
   // 'pastel',
   // 'fantasy',
@@ -54,7 +54,7 @@ function DeployHeader(
       <div className="flex-none">
         <div className="dropdown dropdown-bottom">
           <button className="btn btn-square btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
           </button>
           <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
             <a><li><Link to="/build"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="butt" strokeLinejoin="round"><path d="M20 14.66V20a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h5.34"></path><polygon points="18 2 22 6 12 16 8 16 8 12 18 2"></polygon></svg>Build</Link></li></a>
@@ -71,8 +71,10 @@ function DeployHeader(
       
       <div className="flex-none">
         <div className="dropdown dropdown-end ">
-          <label tabIndex={0} className="btn btn-ghost rounded-btn mr-2 normal-case text-lg">Theme</label>
-          <ul tabIndex={0} className="menu dropdown-content menu-compact p-2 shadow bg-base-100 rounded-box w-52 mt-4 h-40" style={{display: "inline", overflow: "auto"}}>
+          <label tabIndex={0} className="btn btn-ghost rounded-btn">
+            Theme
+            <svg className="ml-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M6 9l6 6 6-6"/></svg>
+          </label>          <ul tabIndex={0} className="menu dropdown-content menu-compact p-2 shadow bg-base-100 rounded-box w-52 mt-4 h-40" style={{display: "inline", overflow: "auto"}}>
             {
               daisyThemes.map((theme) => {
                 // return <li><a className={`btn m-1 btn-secondary ${props.theme === 'winter' ? 'text-slate-400' : ''}`} onClick={() => {props.setTheme(theme)}}>{theme}</a></li> 
@@ -81,10 +83,10 @@ function DeployHeader(
             }
           </ul>
         </div>
-        <ConnectButton className="mr-2 btn btn-md tutorial-deploy-connect-wallet" style={{backgroundColor: "hsl(var(--a))", color: "hsl(var(--ac))"}}/>
+        <ConnectButton className="mr-2 btn btn-md tutorial-deploy-connect-wallet" style={{backgroundColor: "hsl(var(--p))", color: "hsl(var(--pc))"}}/>
         <div className="dropdown dropdown-end">
           <button className="btn btn-square btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
           </button>
           <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
             {/* <li>
@@ -98,10 +100,10 @@ function DeployHeader(
                 </label>
               </div>
             </li> */}
-            <li><a onClick={props.startTutorial}>
+            {/* <li><a onClick={props.startTutorial}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
               Run tutorial
-            </a></li>
+            </a></li> */}
             <li><a onClick={props.resetCache}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path><line x1="12" y1="2" x2="12" y2="12"></line></svg>
               Reset IDE

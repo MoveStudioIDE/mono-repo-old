@@ -1,7 +1,7 @@
 import { Dependency, Module, Project } from "../types/project-types";
 import Joyride from 'react-joyride';
 import { useEffect, useState } from "react";
-import { shortenWord } from "../utils/address-shortener";
+import { shortenAddress, shortenWord } from "../utils/address-shortener";
 
 function BuildInnerSidebar(
   props: {
@@ -29,6 +29,8 @@ function BuildInnerSidebar(
 ) {
 
   const [moduleCarousel, setModuleCarousel] = useState(false);
+  const [isValidModuleName, setIsValidModuleName] = useState(false);
+  const [invalidNameError, setInvalidNameError] = useState("Insert name");
 
   useEffect(() => {
     if (props.currentProject == null) {
@@ -89,7 +91,7 @@ function BuildInnerSidebar(
     return (
       <div style={{display: "flex", justifyContent: "space-around",}}>
         <div 
-          className={`text-center border card-compact border-base-content card ${ moduleCarousel ? "hover:w-9/12 hover:h-28 w-8/12" : "w-8/12"} h-24 bg-base-100 image-full cursor-pointer`}
+          className={`text-center border card-compact border-base-content card hover:outline outline-primary ${ moduleCarousel ? "hover:w-9/12 hover:h-28 w-8/12" : "w-8/12"} h-24 bg-base-100 image-full cursor-pointer`}
           onClick={() => {
             if (!moduleCarousel) {
               return
@@ -125,6 +127,35 @@ function BuildInnerSidebar(
     )
   });
 
+  const tableModules = props.currentProject?.modules.map((module: Module) => {
+    return (
+      <tr 
+        className="hover cursor-pointer"
+        onClick={() => {
+          props.addActiveModules(module.name)
+        }}
+      >
+        <td style={{display: "flex"}} className="w-full">
+          <label 
+            tabIndex={0} 
+            className="btn btn-square btn-ghost btn-xs text-error" 
+            onClick={() => props.deleteModule(module.name)}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+          </label>
+
+          <p 
+            className="ml-1 font-mono w-24 break-words text-center"
+          >
+            {/* TODO: Eventually get this to work with wrapping, not truncating */}
+            {shortenWord(module.name, 17)}{module.name.length < 18 ? ".move" : ""}
+          </p>
+        </td>
+      </tr>
+    )
+  });
+           
+
   const dependencies = props.currentProject?.dependencies.map((dependency: Dependency) => {
     return (
       <tr>
@@ -138,13 +169,12 @@ function BuildInnerSidebar(
           </label>
 
           <p className="ml-1 font-mono">
-            {dependency.name}
-
+            {shortenWord(dependency.name, 15)}
           </p>
 
         </td>
         <td>
-          <p className="font-mono">{dependency.address}</p>
+          <p className="font-mono">{shortenAddress(dependency.address, 3)}</p>
         </td>
       </tr>
     )
@@ -183,6 +213,41 @@ function BuildInnerSidebar(
     }
   }
 
+  const handleNewModuleChange = (event: any) => {
+    console.log('handleNewModuleChange', event.target.value);
+    const input = event.target.value;
+    if (input == '' || input == undefined) {
+      setInvalidNameError('Module name cannot be empty');
+      setIsValidModuleName(false);
+      return;
+    }
+
+    // Make sure module name starts with a letter
+    if (!input.match(/^[a-zA-Z]/)) {
+      setInvalidNameError('Module name must start with a letter');
+      setIsValidModuleName(false);
+      return;
+    }
+
+    // Make sure module name is alphanumeric (underscores allowed)
+    if (!input.match(/^[a-zA-Z0-9_]+$/)) {
+      // find out what character is invalid
+      const invalidChar = input.match(/[^a-zA-Z0-9_]/);
+      setInvalidNameError(`Invalid character: '${invalidChar}'`);
+      setIsValidModuleName(false);
+      return;
+    }
+
+    // Check if module name already exists
+    if (props.currentProject?.modules.find((module: Module) => module.name === input)) {
+      setInvalidNameError('Module name already exists');
+      setIsValidModuleName(false);
+      return;
+    }
+
+    setIsValidModuleName(true)
+  }
+
   const addDepencies = () => {
     const dependency = document.getElementById('dependency') as HTMLInputElement;
     const address = document.getElementById('address') as HTMLInputElement;
@@ -197,30 +262,13 @@ function BuildInnerSidebar(
   const handleNewModuleClick = () => {
     const moduleSelect = document.getElementById('newModuleInput') as HTMLInputElement;
 
-    if (moduleSelect.value == '' || moduleSelect.value == undefined) {
-      alert('Please enter a module name');
-      return;
-    }
-
-    // Make sure module name starts with a letter
-    if (!moduleSelect.value.match(/^[a-zA-Z]/)) {
-      alert('Module name must start with a letter');
-      return;
-    }
-
-    // Make sure module name is alphanumeric
-    if (!moduleSelect.value.match(/^[a-zA-Z0-9]+$/)) {
-      alert('Module name must be alphanumeric');
-      return;
-    }
-
     props.changeModule(`1${moduleSelect.value}`);
     moduleSelect.value = '';
+
+    setInvalidNameError('Module name cannot be empty');
+    setIsValidModuleName(false);
   }
 
-
-  
-      
 
   //---Render---//
 
@@ -256,17 +304,27 @@ function BuildInnerSidebar(
           props.currentProject && 
           <button 
             onClick={props.compileCode} 
-            className={`btn btn-xs btn-info ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
+            className={`btn btn-xs btn-success btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
             style={{margin:"2px 5px"}}
           >
             Compile
           </button>
         }
+        {/* {
+          props.currentProject && 
+          <button 
+            onClick={props.compileCode} 
+            className={`btn btn-xs btn-info btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
+            style={{margin:"2px 5px"}}
+          >
+            Change name
+          </button>
+        } */}
         {
           props.currentProject && 
           <button 
             onClick={handleProjectDelete} 
-            className="btn btn-xs btn-error step8"
+            className="btn btn-xs btn-error btn-outline w-min h-min step8"
             style={{margin:"2px 5px"}}
           >
             Delete
@@ -278,8 +336,8 @@ function BuildInnerSidebar(
           <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full">
             <thead>
               <tr>
-                <th style={{position: "relative"}}>Dependency</th>
-                <th>Address</th>
+                <th style={{position: "relative"}} className="text-center">Dependency</th>
+                <th className="text-center">Address</th>
               </tr>
             </thead>
             <tbody>
@@ -290,7 +348,7 @@ function BuildInnerSidebar(
                     type="text" 
                     id="dependency"
                     placeholder="Dependency"
-                    className="input input-bordered input-warning w-full max-w-xs input-xs"
+                    className="input input-bordered input-warning w-full max-w-xs input-xs focus:outline-none font-mono"
                   />
                 </td>
                 <td>
@@ -298,70 +356,63 @@ function BuildInnerSidebar(
                     type="text"
                     id="address"
                     placeholder="Address"
-                    className="input input-bordered input-warning w-full max-w-xs input-xs"
+                    className="input input-bordered input-warning w-full max-w-xs input-xs focus:outline-none font-mono"
                   />
                 </td>
               </tr>
             </tbody>
           </table>
           <div style={{display: "flex", justifyContent: "space-around"}}>
-            <button style={{marginTop:"5px"}} onClick={addDepencies} className="btn btn-xs btn-warning">Add Dependency</button>
+            <button style={{marginTop:"5px"}} onClick={addDepencies} className="btn btn-xs btn-outline btn-warning">Add Dependency</button>
           </div>
         </div>
-        <div style={{display: "flex", justifyContent: "space-around"}} >
-          <div className="form-control step3" style={{marginTop:"25px"}}>
-            <label className="input-group input-group-xs">
-              <input type="text" placeholder="new module" className="input input-xs" id="newModuleInput"/>
-              <button className="btn btn-xs bg-secondary" onClick={handleNewModuleClick}>
-                Add
-              </button>
-            </label>
-          </div>
+        <div className="step2">
+          <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full [&_tr.hover:hover_*]:!bg-neutral">
+            <thead>
+              <tr>
+                <th style={{position: "relative"}} className="text-center">Modules</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tableModules}
+              <tr>
+                <td>
+                  {/* <input
+                    type="text" 
+                    id="newModuleInput"
+                    placeholder="Enter module name"
+                    className="input input-bordered input-info w-full max-w-xs input-xs focus:outline-none font-mono"
+                    onChange={handleNewModuleChange}
+                  /> */}
+                  <div className="form-control">
+                    <div className="input-group input-group-xs">
+                      <input 
+                        type="text" 
+                        id="newModuleInput"
+                        placeholder="module name"
+                        className="input input-bordered input-info w-full max-w-xs input-xs focus:outline-none font-mono"
+                        onChange={handleNewModuleChange}
+                      />
+                      <button onClick={handleNewModuleClick} className="btn btn-xs btn-outline btn-info" disabled={!isValidModuleName}>Add</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          {/* <div style={{display: "flex", justifyContent: "space-around"}}>
+            {
+              !isValidModuleName &&
+              <div className="tooltip tooltip-top tooltip-error" data-tip={invalidNameError}>
+                <button style={{marginTop:"5px"}} onClick={handleNewModuleClick} className="btn btn-xs btn-outline btn-info " disabled>Add Module</button>
+              </div>
+            }
+            {
+              isValidModuleName &&
+              <button style={{marginTop:"5px"}} onClick={handleNewModuleClick} className="btn btn-xs btn-outline btn-info">Add Module</button>
+            }
+          </div> */}
         </div>
-        {modules && modules.length > 0 && <div style={{display: "flex", justifyContent: "space-around", marginTop: "10px"}} >
-          { !moduleCarousel &&
-            <div className="stack" onClick={() => setModuleCarousel(true)}>
-              {modules}
-              <div className="border border-base-content card w-8/12 bg-base-100">
-                <div className="card-body">A</div>
-              </div> 
-              <div className="text-center border border-base-content card w-8/12 bg-base-100">
-                <div className="card-body">B</div>
-              </div> 
-              <div className="text-center border border-base-content card w-8/12 bg-base-100">
-                <div className="card-body">C</div>
-              </div>
-            </div>
-          }
-          { moduleCarousel &&
-            <div >
-              <div className="max-h-56 carousel carousel-vertical" style={{overflow: "auto"}}>
-                {modules}
-                {/* <div style={{display: "flex", justifyContent: "space-around",}}>
-                  <div className="border border-base-content card w-36 bg-base-100">
-                    <div className="card-body">A</div>
-                  </div> 
-                </div> */}
-                {/* <div style={{display: "flex", justifyContent: "space-around"}}>
-                <div className="text-center border border-base-content card w-36 bg-base-100">
-                  <div className="card-body">B</div>
-                </div> 
-                </div> */}
-                {/* <div style={{display: "flex", justifyContent: "space-around",}}>
-                <div className="text-center border border-base-content card w-36 bg-base-100">
-                  <div className="card-body">C</div>
-                </div>
-                </div> */}
-              </div>
-              <div style={{display: "flex", justifyContent: "space-around", marginTop: "10px"}} >
-                <button className="btn btn-xs" onClick={() => setModuleCarousel(false)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M18 15l-6-6-6 6"/></svg>              
-                  {/* <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M17 11l-5-5-5 5M17 18l-5-5-5 5"/></svg> */}
-                </button>
-              </div>
-            </div>
-          }
-        </div>}
       </div>}
     </div>
   );

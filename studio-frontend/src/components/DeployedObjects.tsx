@@ -115,7 +115,7 @@ export function DeployedPackage (
     >
       <div className="card-body">
         <div className="card-actions justify-end">
-          <a className="link link-hover" href={`https://explorer.sui.io/object/${props.address}`} target="_blank" rel="noopener noreferrer">
+          <a className="link link-hover" href={`https://explorer.sui.io/object/${props.address}?network=devnet`} target="_blank" rel="noopener noreferrer">
             <button className="btn btn-square btn-sm" >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>            
             </button>
@@ -325,7 +325,7 @@ export function DeployedObject (
           <button className="btn btn-square btn-sm" onClick={refreshHandler}>
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"> <path d="M2.5 2v6h6M21.5 22v-6h-6"/><path d="M22 11.5A10 10 0 0 0 3.2 7.2M2 12.5a10 10 0 0 0 18.8 4.2"/></svg>
           </button>
-          <a className="link link-hover" href={`https://explorer.sui.io/object/${props.address}`} target="_blank" rel="noopener noreferrer">
+          <a className="link link-hover" href={`https://explorer.sui.io/object/${props.address}?network=devnet`} target="_blank" rel="noopener noreferrer">
             <button className="btn btn-square btn-sm" >
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>            
             </button>
