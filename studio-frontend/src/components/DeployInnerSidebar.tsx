@@ -131,7 +131,7 @@ function DeployInnerSidebar(
   return (
     <div style={{paddingTop:"0px", paddingRight: "5px", paddingLeft: "5px", marginTop: "10px", overflow: "auto"}}>
       {wallet.connected && 
-          <div className="card w-full bg-base-100 shadow-xl card-compact">
+          <div className="card w-full shadow-xl card-compact ">
             <div className="card-actions justify-end ">
             <a className="link link-hover" href={`https://explorer.sui.io/address/${wallet.address}?network=devnet`} target="_blank" rel="noopener noreferrer">
               <button className="btn btn-square btn-ghost btn-xs m-1" >
@@ -263,7 +263,7 @@ function DeployInnerSidebar(
         </div>
       }
       { !wallet.connected &&
-        <div className="card w-full bg-base-100 shadow-xl card-compact">
+        <div className="card w-full shadow-xl card-compact">
           <div className="card-body">
             <h2 className="card-title">Connect wallet</h2>
             <p className="text-semibold mb-1 -mt-2 opacity-75">Connect wallet to get started</p>
