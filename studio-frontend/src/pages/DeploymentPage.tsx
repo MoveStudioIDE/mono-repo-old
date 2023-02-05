@@ -147,6 +147,14 @@ function DeploymentPage() {
     },
   ]
 
+  // Alert the user if they leave the page when they have deployed objects in the session
+  useEffect(() => {
+    if (deployedObjects.length === 0) return;
+    window.onbeforeunload = function() {
+      return ""
+    }
+  }, [deployedObjects])
+
   useEffect(() => {
     console.log('toasts', toasts);
   }, [toasts]);
