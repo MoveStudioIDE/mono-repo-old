@@ -169,7 +169,7 @@ function BuildInnerSidebar(
           </label>
 
           <p className="ml-1 font-mono">
-            {dependency.name}
+            {shortenWord(dependency.name, 15)}
           </p>
 
         </td>
@@ -264,6 +264,9 @@ function BuildInnerSidebar(
 
     props.changeModule(`1${moduleSelect.value}`);
     moduleSelect.value = '';
+
+    setInvalidNameError('Module name cannot be empty');
+    setIsValidModuleName(false);
   }
 
 
@@ -374,18 +377,30 @@ function BuildInnerSidebar(
               {tableModules}
               <tr>
                 <td>
-                  <input
+                  {/* <input
                     type="text" 
                     id="newModuleInput"
                     placeholder="Enter module name"
                     className="input input-bordered input-info w-full max-w-xs input-xs focus:outline-none font-mono"
                     onChange={handleNewModuleChange}
-                  />
+                  /> */}
+                  <div className="form-control">
+                    <div className="input-group input-group-xs">
+                      <input 
+                        type="text" 
+                        id="newModuleInput"
+                        placeholder="module name"
+                        className="input input-bordered input-info w-full max-w-xs input-xs focus:outline-none font-mono"
+                        onChange={handleNewModuleChange}
+                      />
+                      <button onClick={handleNewModuleClick} className="btn btn-xs btn-outline btn-info" disabled={!isValidModuleName}>Add</button>
+                    </div>
+                  </div>
                 </td>
               </tr>
             </tbody>
           </table>
-          <div style={{display: "flex", justifyContent: "space-around"}}>
+          {/* <div style={{display: "flex", justifyContent: "space-around"}}>
             {
               !isValidModuleName &&
               <div className="tooltip tooltip-top tooltip-error" data-tip={invalidNameError}>
@@ -396,7 +411,7 @@ function BuildInnerSidebar(
               isValidModuleName &&
               <button style={{marginTop:"5px"}} onClick={handleNewModuleClick} className="btn btn-xs btn-outline btn-info">Add Module</button>
             }
-          </div>
+          </div> */}
         </div>
       </div>}
     </div>
