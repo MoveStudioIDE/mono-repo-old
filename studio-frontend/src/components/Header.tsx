@@ -5,6 +5,7 @@ import studioIcon from "../icons/studio-62.png"
 import studioIcon2Transparent from "../icons/moveIconTransparent1.png"
 import studioIcon3Transparent from "../icons/studio10Transparent.png"
 import studioIconGifTransparent from "../icons/studioTransparent.gif"
+import daniel from "../icons/dan.jpeg"
 
 import bugIcon from "../icons/insect-30.png"
 
@@ -76,7 +77,10 @@ function Header(
       </div>
       <div className="flex-none">
         <div className="dropdown dropdown-end ">
-          <label tabIndex={0} className="btn btn-ghost rounded-btn">Theme</label>
+          <label tabIndex={0} className="btn btn-ghost rounded-btn">
+            Theme
+            <svg className="ml-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M6 9l6 6 6-6"/></svg>
+          </label>
           <ul tabIndex={0} className="menu dropdown-content menu-compact p-2 shadow bg-base-100 rounded-box w-52 mt-4 h-40" style={{display: "inline", overflow: "auto"}}>
           {
               daisyThemes.map((theme) => {
@@ -88,7 +92,12 @@ function Header(
         </div>
         <div className="dropdown dropdown-end">
           <button className="btn btn-square btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" className="inline-block w-5 h-5 stroke-current"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>
+            {/* <div className="avatar btn btn-circle btn-ghost hover:ring hover:ring-primary">
+              <div className="w-12 rounded-full">
+                <img src={daniel} />
+              </div>
+            </div> */}
           </button>
           <ul tabIndex={0} className="menu dropdown-content p-2 shadow bg-base-100 rounded-box w-52 mt-4">
             {/* <li>
@@ -102,10 +111,10 @@ function Header(
                 </label>
               </div>
             </li> */}
-            <li><a onClick={props.startTutorial}>
+            {/* <li><a onClick={props.startTutorial}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
               Run tutorial
-            </a></li>
+            </a></li> */}
             <li><a onClick={props.resetDemo}>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M2.5 2v6h6M2.66 15.57a10 10 0 1 0 .57-8.38"/></svg>
               Reset demo project

@@ -665,7 +665,7 @@ function BuildPage() {
     handleProjectChange('**default');
     
     setStepIndex(0);
-    setRunTutorial(true);
+    // setRunTutorial(true);
     
   }
 

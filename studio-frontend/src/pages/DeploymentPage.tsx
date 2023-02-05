@@ -208,7 +208,7 @@ function DeploymentPage() {
     handleProjectChange('**default');
     setDeployedObjects([]);
 
-    setRunTutorial(true);
+    // setRunTutorial(true);
     // setStepIndex(0);
   }
 
