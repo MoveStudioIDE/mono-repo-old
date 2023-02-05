@@ -273,147 +273,116 @@ function BuildInnerSidebar(
   //---Render---//
 
   return (
-    <div style={{padding:"5px", overflow: "auto", display: "flex", justifyContent: "center", flexDirection: "column"}} className="tutorial-sidebar">
-      {/* <h1 style={{textAlign:"center"}}>Packages</h1> */}
-      {/* <Joyride
-        run={props.runTutorial}
-        steps={props.tutorialSteps}
-        // continuous={true}
-        // showProgress={true}
-        // showSkipButton={true}
-        debug={true}
-        disableOverlayClose={true}
-        stepIndex={props.stepIndex}
-        spotlightClicks={true}
-        callback={props.tutorialCallback}
-      /> */}
-      <select 
-        name="project" 
-        id="projectSelector"
-        onChange={handleProjectChange}
-        style={{margin:"5px 0px"}}
-        className="select w-full select-xs max-w-xs step1"
-        value={props.currentProject?.package || '**default'}
-      >
-        <option value="**default">--Select a package--</option>
-        <option value="**addProject">++Create new package++</option>
-        {projects}
-      </select>
-      <div style={{display: "flex", justifyContent: "space-around"}}>
-        {
-          props.currentProject && 
-          <button 
-            onClick={props.compileCode} 
-            className={`btn btn-xs btn-success btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
-            style={{margin:"2px 5px"}}
+    <div style={{overflow: "auto"}}>
+      <div className="card w-full shadow-xl card-compact">
+      <div className="card-body -mt-2">
+        <div className="form-control w-full">
+          <label className="label -mb-2">
+            <span className="label-text font-bold">Packages</span>
+          </label>
+          <select 
+            name="project" 
+            id="projectSelector"
+            onChange={handleProjectChange}
+            style={{margin:"5px 0px"}}
+            className="select w-full select-xs max-w-xs step1"
+            value={props.currentProject?.package || '**default'}
           >
-            Compile
-          </button>
-        }
-        {/* {
-          props.currentProject && 
-          <button 
-            onClick={props.compileCode} 
-            className={`btn btn-xs btn-info btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
-            style={{margin:"2px 5px"}}
-          >
-            Change name
-          </button>
-        } */}
-        {
-          props.currentProject && 
-          <button 
-            onClick={handleProjectDelete} 
-            className="btn btn-xs btn-error btn-outline w-min h-min step8"
-            style={{margin:"2px 5px"}}
-          >
-            Delete
-          </button>
-        }
-      </div>
-      {props.currentProject && <div>
-        <div className="step2">
-          <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full">
-            <thead>
-              <tr>
-                <th style={{position: "relative"}} className="text-center">Dependency</th>
-                <th className="text-center">Address</th>
-              </tr>
-            </thead>
-            <tbody>
-              {dependencies}
-              <tr>
-                <td>
-                  <input
-                    type="text" 
-                    id="dependency"
-                    placeholder="Dependency"
-                    className="input input-bordered input-warning w-full max-w-xs input-xs focus:outline-none font-mono"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="address"
-                    placeholder="Address"
-                    className="input input-bordered input-warning w-full max-w-xs input-xs focus:outline-none font-mono"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <div style={{display: "flex", justifyContent: "space-around"}}>
-            <button style={{marginTop:"5px"}} onClick={addDepencies} className="btn btn-xs btn-outline btn-warning">Add Dependency</button>
+            <option value="**default">--Select a package--</option>
+            <option value="**addProject">++Create new package++</option>
+            {projects}
+          </select>
+        </div>
+        <div style={{display: "flex", justifyContent: "space-around"}}>
+          {
+            props.currentProject && 
+            <button 
+              onClick={props.compileCode} 
+              className={`btn btn-xs btn-success btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
+              style={{margin:"2px 5px"}}
+            >
+              Compile
+            </button>
+          }
+          {
+            props.currentProject && 
+            <button 
+              onClick={handleProjectDelete} 
+              className="btn btn-xs btn-error btn-outline w-min h-min step8"
+              style={{margin:"2px 5px"}}
+            >
+              Delete
+            </button>
+          }
+        </div>
+        {props.currentProject && <div>
+          <div className="step2">
+            <table style={{marginTop:"20px"}} className="table table-compact table-zebra w-full">
+              <thead>
+                <tr>
+                  <th style={{position: "relative"}} className="text-center">Dependency</th>
+                  <th className="text-center">Address</th>
+                </tr>
+              </thead>
+              <tbody>
+                {dependencies}
+                <tr>
+                  <td>
+                    <input
+                      type="text" 
+                      id="dependency"
+                      placeholder="Dependency"
+                      className="input input-bordered input-warning w-full max-w-xs input-xs focus:outline-none font-mono"
+                    />
+                  </td>
+                  <td>
+                    <input
+                      type="text"
+                      id="address"
+                      placeholder="Address"
+                      className="input input-bordered input-warning w-full max-w-xs input-xs focus:outline-none font-mono"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div style={{display: "flex", justifyContent: "space-around"}}>
+              <button style={{marginTop:"5px"}} onClick={addDepencies} className="btn btn-xs btn-outline btn-warning">Add Dependency</button>
+            </div>
           </div>
-        </div>
-        <div className="step2">
-          <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full [&_tr.hover:hover_*]:!bg-neutral">
-            <thead>
-              <tr>
-                <th style={{position: "relative"}} className="text-center">Modules</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tableModules}
-              <tr>
-                <td>
-                  {/* <input
-                    type="text" 
-                    id="newModuleInput"
-                    placeholder="Enter module name"
-                    className="input input-bordered input-info w-full max-w-xs input-xs focus:outline-none font-mono"
-                    onChange={handleNewModuleChange}
-                  /> */}
-                  <div className="form-control">
-                    <div className="input-group input-group-xs">
-                      <input 
-                        type="text" 
-                        id="newModuleInput"
-                        placeholder="module name"
-                        className="input input-bordered input-info w-full max-w-xs input-xs focus:outline-none font-mono"
-                        onChange={handleNewModuleChange}
-                      />
-                      <button onClick={handleNewModuleClick} className="btn btn-xs btn-outline btn-info" disabled={!isValidModuleName}>Add</button>
+          <div className="step2">
+            <table style={{marginTop:"25px"}} className="table table-compact table-zebra w-full [&_tr.hover:hover_*]:!bg-neutral">
+              <thead>
+                <tr>
+                  <th style={{position: "relative"}} className="text-center">Modules</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tableModules}
+                <tr>
+                  <td>
+                    <div className="form-control">
+                      <div className="input-group input-group-xs">
+                        <input 
+                          type="text" 
+                          id="newModuleInput"
+                          placeholder="module name"
+                          className="input input-bordered input-info w-full max-w-xs input-xs focus:outline-none font-mono"
+                          onChange={handleNewModuleChange}
+                        />
+                        <button onClick={handleNewModuleClick} className="btn btn-xs btn-outline btn-info" disabled={!isValidModuleName}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M20 11.08V8l-6-6H6a2 2 0 0 0-2 2v16c0 1.1.9 2 2 2h6"/><path d="M14 3v5h5M18 21v-6M15 18h6"/></svg>
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          {/* <div style={{display: "flex", justifyContent: "space-around"}}>
-            {
-              !isValidModuleName &&
-              <div className="tooltip tooltip-top tooltip-error" data-tip={invalidNameError}>
-                <button style={{marginTop:"5px"}} onClick={handleNewModuleClick} className="btn btn-xs btn-outline btn-info " disabled>Add Module</button>
-              </div>
-            }
-            {
-              isValidModuleName &&
-              <button style={{marginTop:"5px"}} onClick={handleNewModuleClick} className="btn btn-xs btn-outline btn-info">Add Module</button>
-            }
-          </div> */}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>}
         </div>
-      </div>}
+      </div>
     </div>
   );
 }

@@ -4,7 +4,7 @@
 
 .page-build {
   display: grid;
-  grid-template-columns: fit-content(240px) auto;
+  grid-template-columns: 250px auto;
   grid-template-rows: 65px auto;
 
   overflow: hidden;

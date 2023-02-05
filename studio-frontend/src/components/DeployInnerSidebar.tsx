@@ -25,6 +25,16 @@ function DeployInnerSidebar(
   const [isValidObjectId, setIsValidObjectId] = useState(false);
   const [walletIcon, setWalletIcon] = useState('');
 
+  useEffect(() => {
+    if (wallet.connected) {
+      wallet.configuredWallets.forEach((detectedWallet) => {
+        if (detectedWallet.name == wallet.name) {
+          setWalletIcon(detectedWallet.iconUrl);
+        }
+      })
+    }
+  }, [wallet.connected])
+
 
   //---Helper---//
 
@@ -129,7 +139,7 @@ function DeployInnerSidebar(
   console.log('walleticon', walletIcon)
 
   return (
-    <div style={{paddingTop:"0px", paddingRight: "5px", paddingLeft: "5px", marginTop: "10px", overflow: "auto"}}>
+    <div style={{overflow: "auto"}}>
       {wallet.connected && 
           <div className="card w-full shadow-xl card-compact ">
             <div className="card-actions justify-end ">
