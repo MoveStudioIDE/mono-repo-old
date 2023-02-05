@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Project } from "../types/project-types"
 
 
@@ -13,6 +13,8 @@ function DeployInnerSidebar(
   }
 ) {
 
+  const [isValidObjectId, setIsValidObjectId] = useState(false);
+
 
   //---Helper---//
 
@@ -21,6 +23,25 @@ function DeployInnerSidebar(
   });
 
   //---Handlers---//
+
+  const verifyObjectId = (event: any) => {
+    const objectId = event.target.value;
+
+    // Make sure object ID starts with 0x
+    if (objectId.slice(0,2) != '0x') {
+      setIsValidObjectId(false);
+      return;
+    }
+
+    // make sure object id is alphanumeric
+    const regex = /^[0-9a-fA-F]+$/;
+    if (!regex.test(objectId.slice(2))) {
+      setIsValidObjectId(false);
+      return;
+    }
+
+    setIsValidObjectId(true);
+  }
 
   const handleProjectChange = (event: any) => {
     console.log('handleProjectChange', event.target.value);
@@ -64,52 +85,53 @@ function DeployInnerSidebar(
   }
 
   return (
-    <div style={{padding:"5px", overflow: "auto"}}>
-      <h1 style={{textAlign: "center",marginTop:"10px"}}>Publish new package</h1>
-      <select 
-        name="project" 
-        id="projectSelector"
-        onChange={handleProjectChange}
-        style={{marginTop:"5px", marginBottom:"5px"}}
-        className="select w-full select-xs max-w-xs text-current tutorial-deploy-publish-select"
-      >
-        <option value="**default">--Select a package--</option>
-        {projects}
-      </select>
+    <div style={{padding:"5px", marginTop: "10px", overflow: "auto"}}>
       <div style={{display: "flex", justifyContent: "space-around"}}>
-        {
-          props.currentProject && 
-          !props.compileError &&
+        <div className="form-control w-full">
+        <label className="label">
+          <span className="label-text font-bold">Deploy package</span>
+        </label>
+        <div className="input-group input-group-xs w-full">
+          <select 
+            name="project" 
+            id="projectSelector"
+            onChange={handleProjectChange}
+            className="input input-bordered input-primary w-full max-w-xs input-xs focus:outline-none"
+          >
+            <option value="**default">--Select a package--</option>
+            {projects}
+          </select>
           <button 
             onClick={handlePackagePublish} 
-            className="btn btn-xs btn-secondary tutorial-deploy-publish-button"
-            style={{margin:"2px 5px"}}
+            className="btn btn-xs btn-primary btn-outline tutorial-deploy-publish-button"
+            disabled={props.currentProject == null || props.compileError != ''}
+            // style={{margin:"2px 5px"}}
           >
             Publish
           </button>
-        }
-      </div>
-      {/* {
-        props.compileError != '' && 
-        <div className="alert alert-error shadow-lg" style={{marginTop: "15px"}}>
-          <div>
-            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-            <span>
-              Compile error
-            </span>
-          </div>
         </div>
-      } */}
+      </div>
+    </div>
       <div style={{marginTop:"25px", marginBottom:"5px"}} className="tutorial-deploy-add-object">
-        <h2 style={{textAlign: "center", marginBottom: "5px"}}>Add existing package or object</h2>
-        <div style={{display: "flex", justifyContent: "center"}}>
-          <div className="form-control">
-            <div className="input-group input-group-xs">
-              <input type="text" placeholder="0x00...000" className="input input-xs font-mono w-full" />
-              <button className="btn btn-xs btn-primary" onClick={handleObjectAdd}>
-                Add
-              </button>
-            </div>
+        <div className="form-control">
+          <label className="label">
+            <span className="label-text font-bold">Add existing package or object</span>
+          </label>
+          <div className="input-group input-group-xs">
+            <input 
+              id="addObjectInput"
+              type="text" 
+              placeholder="0x000...000" 
+              className="input input-bordered input-secondary w-full max-w-xs input-xs focus:outline-none font-mono"
+              onChange={verifyObjectId}
+            />
+            <button 
+              className="btn btn-xs btn-outline btn-secondary" 
+              onClick={handleObjectAdd}
+              disabled={!isValidObjectId}
+            >
+              Add
+            </button>
           </div>
         </div>
       </div>
