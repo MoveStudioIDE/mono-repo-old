@@ -24,7 +24,7 @@ const daisyThemes = [
   // 'halloween',
   // 'garden',
   // 'forest',
-  'aqua',
+  // 'aqua',
   // 'lofi',
   // 'pastel',
   // 'fantasy',
@@ -41,6 +41,7 @@ const daisyThemes = [
   'coffee',
   // 'winter'
 ];
+
 function LandingHeader(
   props: {
     theme: string,

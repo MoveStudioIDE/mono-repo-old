@@ -23,7 +23,7 @@ const daisyThemes = [
   // 'halloween',
   // 'garden',
   // 'forest',
-  'aqua',
+  // 'aqua',
   // 'lofi',
   // 'pastel',
   // 'fantasy',
