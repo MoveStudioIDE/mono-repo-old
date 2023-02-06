@@ -4,7 +4,7 @@
 
 .page-build {
   display: grid;
-  grid-template-columns: fit-content(240px) auto;
+  grid-template-columns: 250px auto;
   grid-template-rows: 65px auto;
 
   overflow: hidden;
@@ -19,7 +19,7 @@
 
 .page-deploy {
   display: grid;
-  grid-template-columns: fit-content(200px) auto;
+  grid-template-columns: 240px auto;
   grid-template-rows: 65px auto;
 
   overflow: hidden;
@@ -43,7 +43,7 @@
 
   border-bottom: 5px solid hsl(var(--a));
 
-  /* overflow: hidden; */
+  overflow: visible;
   
 }
 

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
+// import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
+import { ConnectButton, useWallet, useSuiProvider } from '@suiet/wallet-kit';
 import { extractMutableReference } from '@mysten/sui.js';
 import { shortenAddress } from '../utils/address-shortener';
 
@@ -21,7 +22,7 @@ function PackageFunction(
   const [functionTypeArguments, setFunctionTypeArguments] = useState<string[]>([]);
   const [functionParameterList, setFunctionParameterList] = useState<JSX.Element[]>([]);
 
-  const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
+  const wallet = useWallet();
 
   const functionName = (props.functionDetails as any).name
 
@@ -194,15 +195,17 @@ function PackageFunction(
     let moveCallTxn;
 
     try {
-      moveCallTxn = await signAndExecuteTransaction({
-        kind: 'moveCall',
-        data: {
-          packageObjectId: props.packageAddress,
-          module: props.moduleName,
-          function: functionName,
-          typeArguments: functionTypeArguments,
-          arguments: functionArguments,
-          gasBudget: 300000
+      moveCallTxn = await wallet.signAndExecuteTransaction({
+        transaction: {
+          kind: 'moveCall',
+          data: {
+            packageObjectId: props.packageAddress,
+            module: props.moduleName,
+            function: functionName,
+            typeArguments: functionTypeArguments,
+            arguments: functionArguments,
+            gasBudget: 300000
+          }
         }
       });
     } catch (e) {

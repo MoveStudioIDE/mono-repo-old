@@ -22,8 +22,10 @@ export interface DeployedPackageInfo {
   address: string | undefined
 }
 
-import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
+import { ConnectButton, useWallet, useSuiProvider } from '@suiet/wallet-kit';
+// import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import axios from "axios";
+import { network } from "../utils/network";
 
 function DeploymentPage() {
 
@@ -33,8 +35,14 @@ function DeploymentPage() {
   const [compileError, setCompileError] = useState<string>('');
   const [deployedModules, setDeployedModules] = useState<string[]>([]);
   const [deployedObjects, setDeployedObjects] = useState<DeployedPackageInfo[]>([]);
-  const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
+  // const { connected, getAccounts, signAndExecuteTransaction } = useWallet();
+  const wallet = useWallet()
+  console.log('chain', wallet.chain)
+  console.log('chains', wallet.chains)
+
   const [toasts, setToasts] = useState<JSX.Element | undefined>();
+  // const [transaction, setTransaction] = useState<(JSX.Element | undefined)>();
+
   const [isOverlayActive, setIsOverlayActive] = useState<boolean>(false);
   const [runTutorial, setRunTutorial] = useState(false);
   const [stepIndex, setStepIndex] = useState(0);
@@ -165,10 +173,10 @@ function DeploymentPage() {
       return;
     }
 
-    if(connected && runTutorial && stepIndex === 1) {
+    if(wallet.connected && runTutorial && stepIndex === 1) {
       setStepIndex(2);
     }
-  }, [connected])
+  }, [wallet.connected])
 
   useEffect(() => {
     if (runTutorial && stepIndex === 2 && currentProject?.package === 'demoPackage') {
@@ -236,7 +244,7 @@ function DeploymentPage() {
       return;
     }
     if (action === 'next' && type === 'step:after') {
-      if (index === 1 && !connected) {
+      if (index === 1 && !wallet.connected) {
         alert('Please connect your Sui wallet to continue with the tutorial. (Note: the Suiet wallet is currently not supported)')
         return;
       }
@@ -326,7 +334,7 @@ function DeploymentPage() {
           <div>
             <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <span>Successful transaction</span>
-            <a href={`https://explorer.sui.io/transaction/${digest}?network=devnet`} target="_blank" rel="noopener noreferrer">
+            <a href={`https://explorer.sui.io/transaction/${digest}?network=${network[wallet.chain?.name || 'Sui Devnet']}`} target="_blank" rel="noopener noreferrer">
               <button>
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
               </button>
@@ -340,6 +348,15 @@ function DeploymentPage() {
         </div>
       // ]
     )
+
+    // setTransaction(
+    //   <div className="card " >
+    //     <div className="card-body">
+    //     </div>
+    //   </div>
+    // )
+
+
   }
 
   const setFailTxn = (digest: string) => {
@@ -352,7 +369,7 @@ function DeploymentPage() {
           <div>
             <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             <span>Transaction failed</span>
-            <a href={`https://explorer.sui.io/transaction/${digest}?network=devnet`} target="_blank" rel="noopener noreferrer">
+            <a href={`https://explorer.sui.io/transaction/${digest}?network=${network[wallet.chain?.name || 'Sui Devnet']}`} target="_blank" rel="noopener noreferrer">
               <button >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
               </button>
@@ -493,11 +510,13 @@ function DeploymentPage() {
       console.log('publishData', publishData);
 
       try {
-        const publishTxn = await signAndExecuteTransaction({
-          kind: 'publish',
-          data: {
-            compiledModules: compiledModules,
-            gasBudget: GAS_BUDGET,
+        const publishTxn = await wallet.signAndExecuteTransaction({
+          transaction: {
+            kind: 'publish',
+            data: {
+              compiledModules: compiledModules,
+              gasBudget: GAS_BUDGET,
+            }
           }
         });
   
@@ -630,7 +649,7 @@ function DeploymentPage() {
               <div>
                 <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 <span>Successful publication</span>
-                <a href={`https://explorer.sui.io/transaction/${publishTxnDigest}?network=devnet`} target="_blank" rel="noopener noreferrer">
+                <a href={`https://explorer.sui.io/transaction/${publishTxnDigest}?network=${network[wallet.chain?.name || 'Sui Devnet']}`} target="_blank" rel="noopener noreferrer">
                   <button >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
                   </button>
