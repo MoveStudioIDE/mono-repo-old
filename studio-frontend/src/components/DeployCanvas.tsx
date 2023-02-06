@@ -6,6 +6,7 @@ import {DeployedPackage, DeployedObject} from './DeployedObjects'
 import LoadingOverlay from 'react-loading-overlay-ts';
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { SPINNER_COLORS } from '../utils/theme';
+import { useSuiProvider, useWallet } from '@suiet/wallet-kit';
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
@@ -31,7 +32,11 @@ function DeployCanvas (
   const [draggedId, setDraggedId] = useState<string | undefined>(undefined)
   const [draggedOverId, setDraggedOverId] = useState<string | undefined>(undefined)
 
-
+  const wallet = useWallet();
+  const {
+    getObject, 
+    getNormalizedMoveModulesByPackage
+  } = useSuiProvider(wallet.chain?.rpcUrl || '');
 
   useEffect(() => {
     
@@ -54,9 +59,19 @@ function DeployCanvas (
         return;
       }
 
-      return axios.post(`${BACKEND_URL}object-details`, {objectId: objectId}).then((res) => {
+      // console.log('objectId', objectId)
+
+      // return getObject(objectId).then((objectData) => {
+      //   console.log('objectData', objectData);
+
+      // }).catch((err) => {
+      //   console.log(err)
+      // });
+
+      return axios.post(`${BACKEND_URL}object-details`, {objectId: objectId, rpc: wallet.chain?.rpcUrl}).then((res) => {
         console.log('res', res);
         if (res == undefined || res.data.status != 'Exists') {
+          props.removeDeployedObject(id)
           return;
         }
 
@@ -64,7 +79,7 @@ function DeployCanvas (
         const shared = res.data.details.owner.hasOwnProperty('Shared')
         if (objectData.dataType == 'package') {
 
-          return axios.post(`${BACKEND_URL}package-details`, {packageId: objectId}).then((res) => {
+          return axios.post(`${BACKEND_URL}package-details`, {packageId: objectId, rpc: wallet.chain?.rpcUrl}).then((res) => {
 
             const packageDetails = res.data;
 
@@ -124,7 +139,7 @@ function DeployCanvas (
       setDeployedObjects(objects);
     });
 
-    // await props.setIsOverlayActive(false);
+    await props.setIsOverlayActive(false);
 
   }
 

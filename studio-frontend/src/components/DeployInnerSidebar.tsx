@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Project } from "../types/project-types"
 import { shortenAddress } from "../utils/address-shortener";
 import { decimalify } from "../utils/decimal";
+import { network } from "../utils/network";
 
 
 function DeployInnerSidebar(
@@ -17,7 +18,6 @@ function DeployInnerSidebar(
 ) {
 
   const wallet = useWallet();
-  const {} = useSuiProvider('https://fullnode.devnet.sui.io:443');
   const {
     error, loading, balance
   } = useAccountBalance();
@@ -142,20 +142,20 @@ function DeployInnerSidebar(
     select.value = '**default';
   }
 
-  console.log('walleticon', walletIcon)
+  // console.log('walleticon', walletIcon)
 
   return (
     <div style={{overflow: "auto"}}>
       {wallet.connected && 
-          <div className="card w-full shadow-xl card-compact ">
-            <div className="card-actions justify-end ">
-            <a className="link link-hover" href={`https://explorer.sui.io/address/${wallet.address}?network=devnet`} target="_blank" rel="noopener noreferrer">
+        <div className="card w-full shadow-xl card-compact ">
+          <div className="card-actions justify-end z-20">
+            <a className="link link-hover " href={`https://explorer.sui.io/address/${wallet.address}?network=${network[wallet.chain?.name || 'Sui Devnet']}`} target="_blank" rel="noopener noreferrer">
               <button className="btn btn-square btn-ghost btn-xs m-1" >
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>            
               </button>
             </a> 
           </div>
-          <div className="card-body -mt-5">
+          <div className="card-body -mt-10">
             <h2 className="card-title">
               {
                 walletIcon != '' &&
@@ -280,9 +280,9 @@ function DeployInnerSidebar(
       }
       { !wallet.connected &&
         <div className="card w-full shadow-xl card-compact">
-          <div className="card-body">
+          <div className="card-body ">
             <h2 className="card-title">Connect wallet</h2>
-            <p className="text-semibold mb-1 -mt-2 opacity-75">Connect wallet to get started</p>
+            <p className="text-semibold mb-1 -mt-2 opacity-75">Choose a wallet to get started</p>
             {WalletSelector()}
           </div>
         </div>
