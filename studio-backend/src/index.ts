@@ -76,12 +76,13 @@ app.post('/publish', async (req, res) => {
 
 app.post('/object-details', async (req, res) => {
   const objectId = req.body.objectId as string;
+  const rpc = req.body.rpc as string;
 
   console.log('Retrieving object details for: ' + objectId)
 
   // console.log(objectId);
 
-  const objectDetails = await getObjectDetails(objectId);
+  const objectDetails = await getObjectDetails(objectId, rpc);
 
   // console.log(objectDetails);
 
@@ -90,11 +91,12 @@ app.post('/object-details', async (req, res) => {
 
 app.post('/package-details', async (req, res) => {
   const packageId = req.body.packageId as string;
+  const rpc = req.body.rpc as string;
 
   // console.log(packageId);
   console.log('Retrieving package details for: ' + packageId)
 
-  const packageDetails = await getPackageDetails(packageId);
+  const packageDetails = await getPackageDetails(packageId, rpc);
 
   // console.log(packageDetails);
 
