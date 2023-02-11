@@ -12,6 +12,7 @@ import Header from "../components/Header";
 import Joyride from 'react-joyride';
 import {SPINNER_COLORS} from "../utils/theme";
 import ScaleLoader from "react-spinners/ScaleLoader";
+import Module from "module";
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
@@ -330,9 +331,52 @@ function BuildPage() {
     //   setStepIndex(6);
     // }
   }
+
+  useEffect(() => {
+    if (currentProject && currentProject.modules.length > 0 && currentModule == null && activeModules.length == 0) {
+      setActiveModules([currentProject.modules[0].name])
+      setCurrentModule(currentProject.modules[0].name);
+    }
+  }, [currentProject]);
   
 
   //---Handlers---//
+
+  // Create a new module with the same code as the given module
+  const handleDuplicateModule = async (module: string) => {
+    if (!currentProject) {
+      return;
+    }
+
+    const newModuleName = prompt('Enter new module name');
+    if (!newModuleName) {
+      return;
+    }
+
+    const moduleCode = currentProject.modules.find((m) => m.name === module)?.code || '';
+
+    const duplicateModuleInDB = async () => {
+      setCurrentModule(null);
+
+      indexedDb = new IndexedDb('test');
+      await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      await indexedDb.addNewModule('projects', currentProject.package, newModuleName);
+      await indexedDb.updateModule('projects', currentProject.package, newModuleName, moduleCode);
+    }
+
+    duplicateModuleInDB().then(() => {
+        getProjectData(currentProject.package);
+        // setActiveModules([...activeModules, newModuleName])
+        // setCurrentModule(newModuleName);
+        // setCode('');
+        setShowError(false);
+        setCompileError('');
+        setCompiledModules([]);
+        // setActiveModules([...activeModules, newModuleName])
+        setToast(undefined)
+    });
+
+  }
 
   const handleNewCode = (newCode: string, module: string) => {
     const updateModuleInIndexdb = async (newCode: string) => {
@@ -369,6 +413,68 @@ function BuildPage() {
       }
     });
     setCode(newCode);
+  }
+
+  // Function to duplicate a project with the same modules and dependencies
+  const handleDuplicateProject = async () => {
+    const newProjectName = prompt('Enter new project name');
+    if (!newProjectName) {
+      return;
+    }
+
+    if (!currentProject) {
+      return;
+    }
+    
+    const duplicateToIndexDB = async (newProjectName: string) => {
+      indexedDb = new IndexedDb('test');
+      await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      await indexedDb.putValue('projects', {
+        package: newProjectName,
+        dependencies: [
+          {name: newProjectName, address: '0x0'},
+          ...currentProject.dependencies.filter((dep) => dep.name !== currentProject.package)
+        ],
+        modules: currentProject.modules
+      });
+    }
+
+    duplicateToIndexDB(newProjectName).then(async () => {
+      await getProjects();
+      await getProjectData(newProjectName);
+    });
+  }
+
+
+  // Function to change the name of the current project
+  const handleProjectNameChange = (newName: string) => {
+    if (!currentProject) {
+      return;
+    }
+    const updateProjectNameInIndexdb = async (newName: string) => {
+      indexedDb = new IndexedDb('test');
+      await indexedDb.createObjectStore(['projects'], {keyPath: 'package'});
+      await indexedDb.putValue('projects', {
+        package: newName,
+        dependencies: [
+          {name: newName, address: '0x0'},
+          ...currentProject.dependencies.filter((dep) => dep.name !== currentProject.package)
+        ],
+        modules: currentProject.modules
+      });
+      await indexedDb.deleteValue('projects', currentProject.package);
+    }
+
+    // Make sure project name is unique
+    if (projectList.includes(newName)) {
+      alert('Project name already exists');
+      return;
+    }
+
+    updateProjectNameInIndexdb(newName).then(async () => {
+      await getProjects();
+      await getProjectData(newName);
+    });
   }
 
   const handleProjectChange = (projectChange: string) => {
@@ -435,7 +541,6 @@ function BuildPage() {
       setCompiledModules([]);
       console.log('newProject', projectChange);
       getProjectData(projectChange);
-      console.log('currentProject', currentProject);
     }
   }
 
@@ -762,13 +867,17 @@ function BuildPage() {
 
   }
 
-  const removeActiveModuleHandler = (moduleName: string) => {
+  const removeActiveModuleHandler = async (moduleName: string) => {
     if (!currentProject) {
       return;
     }
 
     const newActiveModules = activeModules.filter((module) => module !== moduleName);
-    setActiveModules(newActiveModules);
+    await setActiveModules(newActiveModules);
+
+    if (newActiveModules.length > 0) {
+      await handleModuleChange(newActiveModules[0]);
+    }
   }
 
 
@@ -859,9 +968,12 @@ function BuildPage() {
             stepIndex={stepIndex}
             setStepIndex={setStepIndex}
             changeProject={handleProjectChange}
+            changeProjectName={handleProjectNameChange}
             deleteProject={handleProjectDelete}
+            duplicateProject={handleDuplicateProject}
             changeModule={handleModuleChange}
             deleteModule={handleModuleDelete}
+            duplicateModule={handleDuplicateModule}
             addDependency={handleDependencyAdd}
             removeDependency={handleDependencyRemove}
           />
