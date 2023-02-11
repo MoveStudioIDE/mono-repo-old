@@ -210,7 +210,13 @@ function PackageFunction(
       });
     } catch (e) {
       console.log('error', e)
-      props.setFailTxn("");
+      console.log('error.message', (e as any).message.includes('wallet not connected'))
+      if ((e as any).message.includes('wallet not connected')) {
+        console.log('here')
+        props.setFailTxn("Wallet not connected");
+      } else {
+        props.setFailTxn("");
+      }
       return;
     }
 
