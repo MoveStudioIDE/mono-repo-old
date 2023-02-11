@@ -5,6 +5,9 @@ import { shortenAddress } from "../utils/address-shortener";
 import { decimalify } from "../utils/decimal";
 import { network } from "../utils/network";
 
+const disabledWallets = [
+  "Martian Sui Wallet",
+]
 
 function DeployInnerSidebar(
   props: {
@@ -68,6 +71,7 @@ function DeployInnerSidebar(
             setWalletIcon(wallet.iconUrl);
             select(wallet.name);
           }}
+          disabled={disabledWallets.includes(wallet.name)}
         >
           <img src={wallet.iconUrl} alt={wallet.name} className="w-5 h-5 inline-block mr-2" />
           {
@@ -114,7 +118,7 @@ function DeployInnerSidebar(
   }
 
   const handleObjectAdd = (event: any) => {
-    const objectId = event.target.previousSibling.value;
+    const objectId = (document.getElementById('addObjectInput') as HTMLInputElement).value;
 
     if (objectId == '' || objectId == undefined) {
       return;
