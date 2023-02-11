@@ -118,7 +118,7 @@ function DeployInnerSidebar(
   }
 
   const handleObjectAdd = (event: any) => {
-    const objectId = event.target.previousSibling.value;
+    const objectId = (document.getElementById('addObjectInput') as HTMLInputElement).value;
 
     if (objectId == '' || objectId == undefined) {
       return;
