@@ -222,7 +222,7 @@ function PackageFunction(
 
     console.log('move call txn', moveCallTxn);
 
-    if (moveCallTxn.effects.status.status == 'success') {
+    if (moveCallTxn.effects.status?.status == 'success' || (moveCallTxn.effects as any).effects.status.status == 'success') {
       props.setSuccessTxn(moveCallTxn.certificate.transactionDigest);
     } else {
       props.setFailTxn(moveCallTxn.certificate.transactionDigest);
