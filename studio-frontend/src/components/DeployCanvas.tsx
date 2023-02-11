@@ -135,11 +135,11 @@ function DeployCanvas (
       });
     });
 
-    Promise.all(objects).then((objects) => {
-      setDeployedObjects(objects);
+    Promise.all(objects).then(async (objects) => {
+      await setDeployedObjects(objects);
     });
 
-    await props.setIsOverlayActive(false);
+    // await props.setIsOverlayActive(false);
 
   }
 

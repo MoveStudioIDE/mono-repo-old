@@ -26,6 +26,7 @@ import { ConnectButton, useWallet, useSuiProvider } from '@suiet/wallet-kit';
 // import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import axios from "axios";
 import { network } from "../utils/network";
+import { OwnedObjectRef } from "@mysten/sui.js";
 
 function DeploymentPage() {
 
@@ -625,8 +626,9 @@ function DeploymentPage() {
 
         const publishTxnDigest = res.certificate.transactionDigest;
 
-        const publishTxnCreated = res.effects.created;
+        const publishTxnCreated = res.effects.created || (res.effects as any).effects.created as OwnedObjectRef[] || [];
 
+        console.log('res', res)
         console.log('publishTxnCreated', publishTxnCreated);
         console.log('publishTxnDigest', publishTxnDigest);
 
