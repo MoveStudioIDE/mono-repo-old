@@ -525,7 +525,7 @@ function DeploymentPage() {
       } catch (error: any) {
         console.log('error', error.message);
 
-        if (error.message.includes("Cannot find gas coin for signer address")) {
+        if (error.message.includes("Cannot find gas coin for signer address") || error.message.includes("failed SUI balance is insufficient to pay for gasBudget")) {
           setToasts(
             <div className="alert alert-error" id={id2}>
               <div>
