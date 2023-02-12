@@ -149,7 +149,7 @@ export function DeployedPackage (
             id="detailSelector"
             onChange={handleDetailChange}
             style={{marginTop:"5px", marginBottom:"5px"}}
-            className="select w-full select-xs max-w-xs"
+            className="select w-full select-xs "
           >
             <option value="package details">Package Details</option>
             <optgroup label="Package structs">
@@ -227,16 +227,16 @@ export function DeployedObject (
     if (field[1] === null) {
       return (
         <tr>
-          <td className='font-mono'>{field[0]}</td>
-          <td className='font-mono'>{field[1]}</td>
+          <td className='font-mono whitespace-normal break-words'>{field[0]}</td>
+          <td className='font-mono whitespace-normal break-words'>{field[1]}</td>
         </tr>
       )
     } else if (typeof field[1] == 'object') {
       if (field[1].id != undefined) {
         return (
           <tr>
-            <td className='font-mono'>{field[0]}</td>
-            <td className='font-mono'>{field[1].id}</td>
+            <td className='font-mono whitespace-normal break-words'>{field[0]}</td>
+            <td className='font-mono whitespace-normal break-words'>{field[1].id}</td>
           </tr>
         )
       } else {
@@ -246,18 +246,52 @@ export function DeployedObject (
         const moduleName = typeSplit[1]
         const structName = typeSplit[2]
 
+        console.log('field[1]', field[1])
+
         return (
           <tr>
-            <td className='font-mono'>{field[0]}</td>
+            <td className='font-mono whitespace-normal break-words'>{field[0]}</td>
             <td style={{display: 'flex', flexDirection: 'row', flexWrap: "wrap"}}>
               {
                 field[1].fields != undefined &&
                 Object.entries(field[1].fields).map((field: any) => {
+
+                  if (typeof field[1] === 'object') {
+                    if (field[1].id != undefined) {
+                      // return (
+                      //   <div className="form-control w-min m-1 shadow-xl">
+                      //     <label className="input-group input-group-vertical input-group-xs">
+                      //       <span className='font-mono' >{field[0]}</span>
+                      //       <p className="input input-bordered input-xs text-center font-mono" >
+                      //         {shortenAddress(field[1].id, 2)}
+                      //         {
+                      //           field[1].id.toString().length > 0 &&
+                      //           <label
+                      //             tabIndex={0}
+                      //             className="btn btn-circle btn-ghost btn-xs text-info"
+                      //             onClick={async () => {
+                      //               navigator.clipboard.writeText(field[1].id.toString())
+                      //               console.log('clipboard', await navigator.clipboard.readText())
+                      //             }}
+                      //           >
+                      //             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect></svg>
+                      //           </label>
+                      //         }
+                      //       </p>
+                      //     </label>
+                      //   </div>
+                      // )
+                      return;
+                    } else {
+                      return;
+                    }
+                  }
+
                   return (
                     <div className="form-control w-min m-1 shadow-xl">
                       <label className="input-group input-group-vertical input-group-xs">
                         <span className='font-mono' >{field[0]}</span>
-                        <p className="input input-bordered input-xs text-center font-mono" >
+                        <p className="input input-bordered input-xs text-center font-mono whitespace-normal break-words" >
                           {field[1]}
                           {
                             field[1].toString().length > 0 &&
@@ -282,14 +316,12 @@ export function DeployedObject (
           </tr>
         )
       }
-
-      
     }
 
     return (
       <tr >
-        <td className='font-mono'>{field[0]}</td>
-        <td className='font-mono max-w-[15rem] whitespace-normal break-all'>
+        <td className='font-mono whitespace-normal break-words'>{field[0]}</td>
+        <td className='font-mono max-w-[15rem] whitespace-normal break-words'>
           {field[1].toString()}
           {
             field[1].toString().length > 0 &&
@@ -307,7 +339,7 @@ export function DeployedObject (
         </td>
       </tr>
     )
-  });
+  }).filter((field) => field != undefined);
 
   const refreshHandler = async () => {
     console.log('refresh')
@@ -381,17 +413,20 @@ export function DeployedObject (
               </p>
             </div>
           }
-          <table style={{marginTop:"15px"}} className="table table-compact table-zebra w-full shadow-xl">
-            <thead>
-              <tr>
-                <th>Attributes</th>
-                <th>values</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fieldListEntries}
-            </tbody>
-          </table>
+          {
+            fieldListEntries.length > 0 &&
+            <table style={{marginTop:"15px"}} className="table table-compact table-zebra w-full shadow-xl">
+              <thead>
+                <tr>
+                  <th>Attributes</th>
+                  <th>values</th>
+                </tr>
+              </thead>
+              <tbody>
+                {fieldListEntries}
+              </tbody>
+            </table>
+          }
         </div>
         <div className="card-actions justify-end text-neutral-content">
           <div className="badge badge-outline">Object</div> 
