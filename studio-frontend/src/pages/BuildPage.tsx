@@ -520,7 +520,7 @@ function BuildPage() {
       }
 
       // Make sure project name is alphanumeric
-      if (!newProjectName.match(/^[a-zA-Z0-9]+$/)) {
+      if (!newProjectName.match(/^[a-zA-Z0-9_]+$/)) {
         alert('Project name must be alphanumeric');
         return;
       }

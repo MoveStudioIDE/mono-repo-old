@@ -28,8 +28,8 @@ function PackageStruct(
       console.log('e')
       return (
         <tr>
-          <td className='font-mono'>{field.name}</td>
-          <td className='font-mono'>
+          <td className='font-mono whitespace-normal break-words w-24'>{field.name}</td>
+          <td className='font-mono whitespace-normal break-all w-72'>
             {field.type_.Struct.address}::{field.type_.Struct.module}::{field.type_.Struct.name}
             <label 
               tabIndex={0} 
@@ -47,8 +47,8 @@ function PackageStruct(
     } else {
       return (
         <tr>
-          <td className='font-mono'>{field.name}</td>
-          <td className='font-mono'>
+          <td className='font-mono whitespace-normal break-words w-24'>{field.name}</td>
+          <td className='font-mono whitespace-normal break-all w-72'>
             {field.type_}
             <label 
               tabIndex={0} 
