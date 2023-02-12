@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 // import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import { ConnectButton, useWallet, useSuiProvider } from '@suiet/wallet-kit';
-import { extractMutableReference } from '@mysten/sui.js';
+import { extractMutableReference, extractReference, extractStructTag } from '@mysten/sui.js';
 import { shortenAddress } from '../utils/address-shortener';
 
 
@@ -63,12 +63,34 @@ function PackageFunction(
         console.log('e')
         const object = extractMutableReference(params[i])
         if (object === undefined) {
-          console.log('d')
-          if (params[i].Struct != undefined) {
+          const reference = extractReference(params[i]) as any
+          console.log('reference', reference)
+
+          if (reference == undefined) {
+            const struct = extractStructTag(params[i]) as any
+
+            console.log('extractedStruct', struct)
+
+            if (struct.Struct != undefined) {
+              console.log('struct', params[i].Struct)
+              functionParams.push(
+                <FunctionParameter
+                  parameterName={`${shortenAddress(struct.Struct.address, 1)}::${struct.Struct.module}::${struct.Struct.name}`}
+                  // parameterType={types[i]}
+                  parameterIndex={i}
+                  handleParameterChange={handleParameterChange}
+                />
+              );
+            }
+
+            continue;
+          }
+          
+          if (reference.Struct != undefined) {
             console.log('struct', params[i].Struct)
             functionParams.push(
               <FunctionParameter
-                parameterName={`${shortenAddress(params[i].Struct.address, 1)}::${params[i].Struct.module}::${params[i].Struct.name}`}
+                parameterName={`${shortenAddress(reference.Struct.address, 1)}::${reference.Struct.module}::${reference.Struct.name}`}
                 // parameterType={types[i]}
                 parameterIndex={i}
                 handleParameterChange={handleParameterChange}
@@ -287,9 +309,11 @@ function FunctionParameter(
   }
 
   return (
-    <label className="input-group input-group-xs" style={{margin: "2px"}}>
+    <label className="input-group input-group-xs w-full" style={{margin: "2px"}}>
       <span className='font-medium'>Arg{props.parameterIndex}</span>
-      <input type="text" id={`input${props.parameterIndex}`} placeholder={props.parameterName} className="input input-bordered input-xs italic font-mono" onChange={handleParameterChange} />
+      <div className="tooltip tooltip-primary w-full" data-tip={props.parameterName}>
+        <input type="text" id={`input${props.parameterIndex}`} placeholder={props.parameterName} className="input input-bordered input-xs italic font-mono w-full" onChange={handleParameterChange} />
+      </div>
     </label>
   )
 }
