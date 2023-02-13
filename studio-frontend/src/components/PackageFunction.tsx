@@ -48,12 +48,14 @@ function PackageFunction(
       functionTypeParams.push(
         <FunctionTypeParameter
           // parameterName={typeParams[i].abilities}
-          // parameterType={types[i]}
+          parameterType={typeParams[i].abilities as string[]}
           parameterIndex={i}
           handleParameterChange={handleTypeParameterChange}
         />
       )
-    }
+    } 
+
+    let count = 0;
 
     for (let i = 0; i < params.length; i++) {
       console.log('param', params[i])
@@ -71,11 +73,37 @@ function PackageFunction(
 
             console.log('extractedStruct', struct)
 
-            if (struct.Struct != undefined) {
+            if (struct != undefined && struct.Struct != undefined) {
               console.log('struct', params[i].Struct)
               functionParams.push(
                 <FunctionParameter
                   parameterName={`${shortenAddress(struct.Struct.address, 1)}::${struct.Struct.module}::${struct.Struct.name}`}
+                  // parameterType={types[i]}
+                  parameterIndex={i}
+                  handleParameterChange={handleParameterChange}
+                />
+              );
+              continue;
+            }
+
+            if (params[i].TypeParameter != undefined) {
+              console.log('type param', params[i].TypeParameter)
+              functionParams.push(
+                <FunctionParameter
+                  // parameterName={typeParams[i].abilities}
+                  parameterName={`Type${params[i].TypeParameter}`}
+                  parameterIndex={i}
+                  handleParameterChange={handleParameterChange}
+                />
+              )
+              continue;
+            }
+
+            if (params[i].Vector != undefined) {
+              console.log('vector', params[i].Vector)
+              functionParams.push(
+                <FunctionParameter
+                  parameterName={`vector<${params[i].Vector}>`}
                   // parameterType={types[i]}
                   parameterIndex={i}
                   handleParameterChange={handleParameterChange}
@@ -144,6 +172,10 @@ function PackageFunction(
       functionArguments.pop();
     }
 
+    while(functionTypeArguments.length > 0) {
+      functionTypeArguments.pop();
+    }
+
     functionTypeParams.forEach(() => {
       functionTypeArguments.push('');
     });
@@ -199,10 +231,10 @@ function PackageFunction(
 
   const handleExecuteMoveCall = async () => {
     console.log('execute move call')
-    console.log('function parameters', functionArguments)
+    console.log('function parameters', functionArguments.filter((param) => param != ''))
     console.log('function name', functionName)
     console.log('package address', props.packageAddress)
-    console.log('type parameters', functionTypeArguments)
+    console.log('type parameters', functionTypeArguments.filter((param) => param != ''))
 
     if (functionArguments == undefined) {
       return;
@@ -311,7 +343,7 @@ function FunctionParameter(
   return (
     <label className="input-group input-group-xs w-full" style={{margin: "2px"}}>
       <span className='font-medium'>Arg{props.parameterIndex}</span>
-      <div className="tooltip tooltip-primary w-full" data-tip={props.parameterName}>
+      <div className="tooltip tooltip-primary w-full font-mono" data-tip={props.parameterName}>
         <input type="text" id={`input${props.parameterIndex}`} placeholder={props.parameterName} className="input input-bordered input-xs italic font-mono w-full" onChange={handleParameterChange} />
       </div>
     </label>
@@ -321,6 +353,7 @@ function FunctionParameter(
 function FunctionTypeParameter(
   props: {
     // parameterName: string,
+    parameterType: string[],
     parameterIndex: number,
     handleParameterChange: (index: number, parameter: string) => void
   }
@@ -339,9 +372,9 @@ function FunctionTypeParameter(
   }
 
   return (
-    <label className="input-group input-group-xs" style={{margin: "2px"}}>
+    <label className="input-group input-group-xs w-full" style={{margin: "2px"}}>
       <span className='font-medium'>Type{props.parameterIndex}</span>
-      <input type="text" id={`type-input${props.parameterIndex}`} className="input input-bordered input-xs italic" onChange={handleParameterChange} />
+      <input type="text" id={`type-input${props.parameterIndex}`} placeholder={JSON.stringify(props.parameterType)} className="input input-bordered input-xs italic w-full" onChange={handleParameterChange} />
     </label>
   )
 }

@@ -52,7 +52,9 @@ function BuildCanvas(
     theme: string,
     compiledModules: string[],
     compileError: string,
+    testResults: string,
     showError: boolean,
+    showTestResults: boolean,
     activeModules: string[],
     removeActiveModule: (module: string) => void,
     toast: JSX.Element | undefined,
@@ -63,6 +65,7 @@ function BuildCanvas(
     setStepIndex: (stepIndex: number) => void,
     // tutorialCallback: (data: any) => void,
     setShowError: (showError: boolean) => void,
+    setShowTestResults: (showTestResults: boolean) => void,
     setCode: (code: string, module: string) => void,
     changeModule: (module: string) => void,
     deleteModule: (module: string) => void,
@@ -290,6 +293,26 @@ function BuildCanvas(
               <div style={{marginTop: "auto", whiteSpace: "pre-wrap", lineHeight: "125%", }}>
                 <Ansi>
                   {stripAnsi(props.compileError)}
+                </Ansi>
+              </div>
+            </div>
+          }
+          {
+            props.showTestResults &&
+            <div className="alert shadow-lg -m-6 alert-warning relative inset-x-0 bottom-0" style={{ top: Math.min(250, ((props.testResults.match(/\n/g) || []).length) * 30 + 10) * -1, left: "5%", width: "95%", height: Math.min(((props.testResults.match(/\n/g) || []).length) * 30, 240), overflow: "auto"}}>
+              <div style={{position: 'absolute', top: "0px", right: "0px", margin: "10px"}}>
+                <button 
+                  className="btn btn-square btn-outline btn-sm btn-error"
+                  onClick={() => {
+                    props.setShowTestResults(false);
+                  }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" /></svg>
+                </button>
+              </div>
+              <div style={{marginTop: "auto", whiteSpace: "pre-wrap", lineHeight: "125%", }}>
+                <Ansi>
+                  {stripAnsi(props.testResults)}
                 </Ansi>
               </div>
             </div>

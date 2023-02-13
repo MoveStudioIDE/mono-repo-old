@@ -1,6 +1,6 @@
 import cors from 'cors';
 import express from 'express';
-import { compile, publish } from './compile';
+import { compile, publish, test } from './compile';
 import { getObjectDetails, getPackageDetails } from './object-details';
 
 const app = express();
@@ -58,6 +58,21 @@ app.post('/compile', async (req, res) => {
   // console.log(compileResult)
 
   res.send(compileResult);
+
+});
+
+app.post('/test', async (req, res) => {
+  const project = req.body;
+
+  // console.log(project);
+  console.log('testing project...')
+
+  // Call compile function
+  const testResults = await test(project);
+
+  // console.log(compileResult)
+
+  res.send(testResults);
 
 });
 

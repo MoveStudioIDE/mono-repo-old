@@ -222,6 +222,8 @@ function BuildPage() {
   const [compiledModules, setCompiledModules] = useState<string[]>([]);
   const [compileError, setCompileError] = useState<string>('');
   const [showError, setShowError] = useState(false);
+  const [testResults, setTestResults] = useState<string>('');
+  const [showTestResults, setShowTestResults] = useState(false);
 
   const [autoCompile, setAutoCompile] = useState(false);
   const [activeModules, setActiveModules] = useState<string[]>([]);
@@ -264,6 +266,7 @@ function BuildPage() {
     setCompileError('');
     setCompiledModules([]);
     setShowError(false);
+    setShowTestResults(false);
     if (!currentProject) {
       return;
     }
@@ -332,6 +335,93 @@ function BuildPage() {
     // }
   }
 
+  const testProject = () => {
+    
+    setToast(
+      <div className="alert alert-info">
+        <div>
+          <ScaleLoader
+            color={SPINNER_COLORS[theme].infoContent}
+            height={20}
+            // width={15}
+          />
+          <span className="normal-case" style={{color: 'hsl(var(--inc))'}} >Testing...</span>
+        </div>
+      </div>
+    )
+
+    setCompileError('');
+    setCompiledModules([]);
+    setShowError(false);
+    setShowTestResults(false);
+    if (!currentProject) {
+      return;
+    }
+
+    console.log('testing with backend: ', BACKEND_URL);
+
+    axios.post(`${BACKEND_URL}test`, currentProject).then((res) => {
+      const testResults = res.data as string;
+      console.log('res test', testResults);
+
+      if (!testResults.includes('Running Move unit tests')) {
+        setToast(
+          <div className="alert alert-error">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>Compile error</span>
+            <button onClick={() => setToast(undefined)}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+        )
+        return;
+      }
+            
+
+      setTestResults(testResults);
+
+      setToast(
+        <div className="alert alert-warning">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>Tests complete</span>
+          <button
+            className="btn btn-xs btn-ghost"
+            onClick={() => {
+              console.log()
+              if (currentProject == null || currentProject.modules == null) {
+                return;
+              }
+              if (activeModules.length == 0) {
+                console.log('no active modules')
+                addActiveModulesHandler(currentProject.modules[0].name);
+              }
+              setShowTestResults(true);
+            }}
+          >
+            View
+          </button>
+          <button onClick={() => setToast(undefined)}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          </button>
+        </div>
+      </div>
+      )
+
+      // setCompiledModules(compileResults);
+      // setCompileError('');
+    });
+
+
+    // console.log('herhererere')
+    // if (runTutorial && stepIndex === 5) {
+    //   console.log('setting step 6')
+    //   setStepIndex(6);
+    // }
+  }
+
   useEffect(() => {
     if (currentProject && currentProject.modules.length > 0 && currentModule == null && activeModules.length == 0) {
       setActiveModules([currentProject.modules[0].name])
@@ -372,6 +462,7 @@ function BuildPage() {
         setShowError(false);
         setCompileError('');
         setCompiledModules([]);
+        setShowTestResults(false);
         // setActiveModules([...activeModules, newModuleName])
         setToast(undefined)
     });
@@ -539,6 +630,7 @@ function BuildPage() {
       setShowError(false);
       setCompileError('');
       setCompiledModules([]);
+      setShowTestResults(false);
       console.log('newProject', projectChange);
       getProjectData(projectChange);
     }
@@ -559,6 +651,7 @@ function BuildPage() {
       setShowError(false);
       setCompileError('');
       setCompiledModules([]);
+      setShowTestResults(false);
     });
   }
 
@@ -601,6 +694,7 @@ function BuildPage() {
         setShowError(false);
         setCompileError('');
         setCompiledModules([]);
+        setShowTestResults(false);
         // setActiveModules([...activeModules, newModuleName])
         setToast(undefined)
         // setCompileError('');
@@ -664,6 +758,7 @@ function BuildPage() {
     setShowError(false);
     setCompileError('');
     setCompiledModules([]);
+    setShowTestResults(false);
     // Remove form active modules
     // setActiveModules(activeModules.filter((m) => m !== moduleName));
 
@@ -957,6 +1052,7 @@ function BuildPage() {
             currentProject={currentProject}
             currentModule={currentModule}
             compileCode={compileCode} 
+            testProject={testProject}
             compiledModules={compiledModules}
             compileError={compileError}
             activeModules={activeModules}
@@ -986,6 +1082,9 @@ function BuildPage() {
             compileError={compileError}
             showError={showError}
             setShowError={setShowError}
+            testResults={testResults}
+            showTestResults={showTestResults}
+            setShowTestResults={setShowTestResults}
             activeModules={activeModules}
             removeActiveModule={removeActiveModuleHandler}
             toast={toast}
@@ -1003,7 +1102,7 @@ function BuildPage() {
         }
       />
       <div className="toast toast-end">
-        {!showError && toast}
+        {!showError && !showTestResults && toast}
       </div>
     </div>
   );
