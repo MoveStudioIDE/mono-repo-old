@@ -98,6 +98,7 @@ function PackageFunction(
               )
               continue;
             }
+            continue;
           }
           
           if (reference.Struct != undefined) {
