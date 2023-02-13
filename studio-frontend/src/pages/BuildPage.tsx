@@ -266,6 +266,7 @@ function BuildPage() {
     setCompileError('');
     setCompiledModules([]);
     setShowError(false);
+    setShowTestResults(false);
     if (!currentProject) {
       return;
     }
@@ -362,42 +363,8 @@ function BuildPage() {
     axios.post(`${BACKEND_URL}test`, currentProject).then((res) => {
       const testResults = res.data as string;
       console.log('res test', testResults);
-      // if (typeof compileResults === 'string') {
-      //   setCompiledModules([]);
-      //   setCompileError(compileResults);
 
-      //   setToast(
-      //     <div className="alert alert-error">
-      //     <div>
-      //       <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-      //       <span>Compile failed</span>
-      //         <button
-      //           className="btn btn-xs btn-ghost"
-      //           onClick={() => {
-      //             console.log()
-      //             if (currentProject == null || currentProject.modules == null) {
-      //               return;
-      //             }
-      //             if (activeModules.length == 0) {
-      //               console.log('no active modules')
-      //               addActiveModulesHandler(currentProject.modules[0].name);
-      //             }
-      //             setShowError(true);
-      //           }}
-      //         >
-      //           View
-      //         </button>
-      //         <button onClick={() => setToast(undefined)}>
-      //           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      //         </button>
-      //     </div>
-      //   </div>
-      //   )
-
-      //   return;
-      // }
-
-      if (testResults === '') {
+      if (!testResults.includes('Running Move unit tests')) {
         setToast(
           <div className="alert alert-error">
           <div>

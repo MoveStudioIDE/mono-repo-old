@@ -321,13 +321,13 @@ function BuildInnerSidebar(
             {projects}
           </select>
         </div>
-        <div className="-mt-1 -mb-1" style={{display: "flex", justifyContent: "space-around"}}>
+        <div className="-mt-1 -mb-1" style={{display: "flex", justifyContent: "center"}}>
           {
             props.currentProject && 
             <button 
               onClick={props.compileCode} 
               className={`btn btn-xs btn-success btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
-              style={{margin:"2px 2px"}}
+              style={{margin:"2px 2px", marginRight:"5px"}}
             >
               Compile
             </button>
@@ -337,19 +337,9 @@ function BuildInnerSidebar(
             <button 
               onClick={props.testProject} 
               className={`btn btn-xs btn-success btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
-              style={{margin:"2px 2px"}}
+              style={{margin:"2px 2px", marginLeft:"5px"}}
             >
               Test
-            </button>
-          }
-          {
-            props.currentProject && 
-            <button 
-              onClick={handleProjectDelete} 
-              className="btn btn-xs btn-error btn-outline w-min h-min step8"
-              style={{margin:"2px 2px"}}
-            >
-              Delete
             </button>
           }
         </div>
@@ -366,7 +356,7 @@ function BuildInnerSidebar(
               className={`btn btn-xs btn-info btn-outline h-min `}
               style={{margin:"2px 5px"}}
             >
-              Rename package
+              Rename
             </button>
           }
           {
@@ -379,6 +369,16 @@ function BuildInnerSidebar(
               style={{margin:"2px 5px"}}
             >
               Duplicate
+            </button>
+          }
+          {
+            props.currentProject && 
+            <button 
+              onClick={handleProjectDelete} 
+              className="btn btn-xs btn-error btn-outline w-min h-min step8"
+              style={{margin:"2px 2px"}}
+            >
+              Delete
             </button>
           }
         </div>
