@@ -327,7 +327,7 @@ function BuildInnerSidebar(
             <button 
               onClick={props.compileCode} 
               className={`btn btn-xs btn-success btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
-              style={{margin:"2px 2px", marginRight:"5px"}}
+              style={{margin:"2px 2px", marginRight:"10px"}}
             >
               Compile
             </button>
@@ -337,7 +337,7 @@ function BuildInnerSidebar(
             <button 
               onClick={props.testProject} 
               className={`btn btn-xs btn-success btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
-              style={{margin:"2px 2px", marginLeft:"5px"}}
+              style={{margin:"2px 2px", marginLeft:"10px"}}
             >
               Test
             </button>
@@ -354,7 +354,7 @@ function BuildInnerSidebar(
                 }
               }}
               className={`btn btn-xs btn-info btn-outline h-min `}
-              style={{margin:"2px 5px"}}
+              style={{margin:"2px 2px"}}
             >
               Rename
             </button>
@@ -366,7 +366,7 @@ function BuildInnerSidebar(
                 props.duplicateProject();
               }} 
               className={`btn btn-xs btn-warning btn-outline w-min h-min`}
-              style={{margin:"2px 5px"}}
+              style={{margin:"2px 2px"}}
             >
               Duplicate
             </button>
