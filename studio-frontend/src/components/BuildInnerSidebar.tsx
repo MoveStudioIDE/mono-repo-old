@@ -9,6 +9,7 @@ function BuildInnerSidebar(
     currentProject: Project | null,
     currentModule: string | null,
     compileCode: () => void,
+    testProject: () => void,
     compiledModules: string[],
     compileError: string,
     activeModules: string[],
@@ -329,6 +330,16 @@ function BuildInnerSidebar(
               style={{margin:"2px 2px"}}
             >
               Compile
+            </button>
+          }
+          {
+            props.currentProject && 
+            <button 
+              onClick={props.testProject} 
+              className={`btn btn-xs btn-success btn-outline w-min h-min ${modules?.length === 0 ? 'btn-disabled' : ''} step6`}
+              style={{margin:"2px 2px"}}
+            >
+              Test
             </button>
           }
           {
