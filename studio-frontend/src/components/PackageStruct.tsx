@@ -30,8 +30,8 @@ function PackageStruct(
       if (field.type_.Struct != undefined) {
         return (
           <tr>
-            <td className='font-mono whitespace-normal break-words w-24 text-center'>{field.name}</td>
-            <td className='font-mono whitespace-normal break-all w-72  text-center'>
+            <td className='font-mono whitespace-normal break-words max-w-24 text-center'>{field.name}</td>
+            <td className='font-mono whitespace-normal break-all max-w-72  text-center'>
               {field.type_.Struct.address}::{field.type_.Struct.module}::{field.type_.Struct.name}
               <label 
                 tabIndex={0} 
@@ -49,8 +49,8 @@ function PackageStruct(
       } else if (field.type_.TypeParameter != undefined) {
         return (
           <tr>
-            <td className='font-mono whitespace-normal break-words w-24  text-center'>{field.name}</td>
-            <td className='font-mono whitespace-normal break-all w-72  text-center'>
+            <td className='font-mono whitespace-normal break-words max-w-24  text-center'>{field.name}</td>
+            <td className='font-mono whitespace-normal break-all max-w-72  text-center'>
               Type{field.type_.TypeParameter}: {JSON.stringify((props.structDetails as any).type_parameters[field.type_.TypeParameter].constraints.abilities)}
               <label 
                 tabIndex={0} 
@@ -70,8 +70,8 @@ function PackageStruct(
     } else {
       return (
         <tr>
-          <td className='font-mono whitespace-normal break-words w-24  text-center'>{field.name}</td>
-          <td className='font-mono whitespace-normal break-all w-72  text-center'>
+          <td className='font-mono whitespace-normal break-words max-w-24  text-center'>{field.name}</td>
+          <td className='font-mono whitespace-normal break-all max-w-72  text-center'>
             {field.type_}
             <label 
               tabIndex={0} 
