@@ -98,6 +98,19 @@ function PackageFunction(
               )
               continue;
             }
+
+            if (params[i].Vector != undefined) {
+              console.log('vector', params[i].Vector)
+              functionParams.push(
+                <FunctionParameter
+                  parameterName={`vector<${params[i].Vector}>`}
+                  // parameterType={types[i]}
+                  parameterIndex={i}
+                  handleParameterChange={handleParameterChange}
+                />
+              );
+            }
+
             continue;
           }
           
