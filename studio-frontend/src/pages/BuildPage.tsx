@@ -364,7 +364,7 @@ function BuildPage() {
       const testResults = res.data as string;
       console.log('res test', testResults);
 
-      if (!testResults.includes('Running Move unit tests')) {
+      if (!testResults.includes('Running Move unit tests') && !testResults.includes('error') && !testResults.includes('warning')) {
         setToast(
           <div className="alert alert-error">
           <div>
@@ -378,9 +378,14 @@ function BuildPage() {
         )
         return;
       }
+
+      // if (testResults.split('\n')[0].includes("UPDATING GIT DEPENDENCY")) {
+      //   console.log("UPDATING GIT DEPENDENCY")
+      //   testResults = testResults.replace("UPDATING GIT DEPENDENCY https://github.com/MystenLabs/sui.git\n", "")
+      // }
             
 
-      setTestResults(testResults);
+      setTestResults(testResults.replace("UPDATING GIT DEPENDENCY https://github.com/MystenLabs/sui.git\n", ""));
 
       setToast(
         <div className="alert alert-warning">
