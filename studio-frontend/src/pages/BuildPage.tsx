@@ -27,6 +27,7 @@ const puzzles = {
       'Create a new function called main',
       'Create a new resource called BirthdayBot',
     ], 
+    package: 'overmind',
     modules: [
       {
         name: 'birthday.move',
@@ -187,7 +188,7 @@ const puzzles = {
       },
     ]
   }
-} as { [key: string]: { title: string, objective: string, instructions: string[], modules: {}[] } }
+} as { [key: string]: { title: string, objective: string, instructions: string[], package: string, modules: {}[] } }
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
@@ -215,7 +216,7 @@ function BuildPage(props: {
         const puzzleData = puzzles[props.projectName];
 
         await indexedDb.putValue('projects', {
-          package: props.projectName,
+          package: puzzleData.package,
           dependencies: [
             {name: props.projectName, address: '0x0'},
             {name: 'Sui', address: '0x02'}
@@ -863,7 +864,6 @@ function BuildPage(props: {
             code={code} setCode={handleNewCode} 
             changeModule={handleModuleChange}
             deleteModule={handleModuleDelete}
-            theme={theme}
           />
         }
       />

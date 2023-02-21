@@ -48,7 +48,6 @@ function BuildCanvas(
     code: string,
     currentProject: Project | null,
     currentModule: string | null,
-    theme: string,
     compiledModules: string[],
     compileError: string,
     testResults: string,
@@ -221,7 +220,7 @@ function BuildCanvas(
     // monaco.editor.setTheme(editorTheme[props.theme]);
     // console.log('theme', props.theme)
     // console.log('editorTheme', editorTheme[props.theme])
-  }, [props.theme, monaco]);
+  }, );
 
 
   const handleEditorChange = (value: any) => {
