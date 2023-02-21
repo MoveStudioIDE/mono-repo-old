@@ -44,7 +44,6 @@ import bugIcon from "../icons/insect-30.png"
 
 function Header(
   props: {
-    theme: string, 
     resetCache: () => void;
     resetDemo: () => void;
   }

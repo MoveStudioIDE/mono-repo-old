@@ -57,6 +57,7 @@ function BuildCanvas(
     activeModules: string[],
     removeActiveModule: (module: string) => void,
     toast: JSX.Element | undefined,
+
     // tutorialSteps:  any[],
     // runTutorial: boolean,
     // setRunTutorial: (runTutorial: boolean) => void,
