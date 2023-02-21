@@ -10,47 +10,43 @@ import daniel from "../icons/dan.jpeg"
 import bugIcon from "../icons/insect-30.png"
 
 
-const daisyThemes = [
-  // 'light',
-  'dark',
-  // 'cupcake',
-  // 'bumblebee',
-  // 'emerald',
-  // 'corporate',
-  // 'synthwave',
-  // 'retro',
-  // 'cyberpunk',
-  // 'valentine',
-  // 'halloween',
-  // 'garden',
-  // 'forest',
-  // 'aqua',
-  // 'lofi',
-  // 'pastel',
-  // 'fantasy',
-  // 'wireframe',
-  // 'black',
-  // 'luxury',
-  'dracula',
-  // 'cmyk',
-  // 'autumn',
-  'business',
-  // 'acid',
-  // 'lemonade',
-  'night',
-  'coffee',
-  // 'winter'
-];
+// const daisyThemes = [
+//   // 'light',
+//   'dark',
+//   // 'cupcake',
+//   // 'bumblebee',
+//   // 'emerald',
+//   // 'corporate',
+//   // 'synthwave',
+//   // 'retro',
+//   // 'cyberpunk',
+//   // 'valentine',
+//   // 'halloween',
+//   // 'garden',
+//   // 'forest',
+//   // 'aqua',
+//   // 'lofi',
+//   // 'pastel',
+//   // 'fantasy',
+//   // 'wireframe',
+//   // 'black',
+//   // 'luxury',
+//   'dracula',
+//   // 'cmyk',
+//   // 'autumn',
+//   'business',
+//   // 'acid',
+//   // 'lemonade',
+//   'night',
+//   'coffee',
+//   // 'winter'
+// ];
 
 function Header(
   props: {
     theme: string, 
-    setTheme: (theme: string) => void;
-    autoCompile: boolean;
-    setAutoCompile: (autoCompile: boolean) => void;
     resetCache: () => void;
     resetDemo: () => void;
-    startTutorial: () => void;
   }
 ) {
 
@@ -58,7 +54,7 @@ function Header(
 
   return (
     <div className="navbar bg-base-300 step9">
-      <div className="flex-none">
+      {/* <div className="flex-none">
         <div className="dropdown dropdown-bottom">
           <button className="btn btn-square btn-ghost">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h7" /></svg>
@@ -68,7 +64,7 @@ function Header(
             <a><li><Link to="/deployment"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><path d="M21.2 15c.7-1.2 1-2.5.7-3.9-.6-2-2.4-3.5-4.4-3.5h-1.2c-.7-3-3.2-5.2-6.2-5.6-3-.3-5.9 1.3-7.3 4-1.2 2.5-1 6.5.5 8.8m8.7-1.6V21"/><path d="M16 16l-4-4-4 4"/></svg>Deploy</Link></li></a>
           </ul>
         </div>
-      </div>
+      </div> */}
       <div className="flex-1">
         <a><Link to="/" className="btn btn-ghost normal-case text-xl ml-1"> 
           <img src={studioIconGifTransparent} width="40px" style={{marginRight: "5px"}}/>
@@ -76,7 +72,7 @@ function Header(
         </Link></a>
       </div>
       <div className="flex-none">
-        <div className="dropdown dropdown-end ">
+        {/* <div className="dropdown dropdown-end ">
           <label tabIndex={0} className="btn btn-ghost rounded-btn">
             Theme
             <svg className="ml-1" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><path d="M6 9l6 6 6-6"/></svg>
@@ -89,7 +85,7 @@ function Header(
               })
             }
           </ul>
-        </div>
+        </div> */}
         <div className="dropdown dropdown-end">
           <button className="btn btn-square btn-ghost">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="arcs"><line x1="4" y1="21" x2="4" y2="14"></line><line x1="4" y1="10" x2="4" y2="3"></line><line x1="12" y1="21" x2="12" y2="12"></line><line x1="12" y1="8" x2="12" y2="3"></line><line x1="20" y1="21" x2="20" y2="16"></line><line x1="20" y1="12" x2="20" y2="3"></line><line x1="1" y1="14" x2="7" y2="14"></line><line x1="9" y1="8" x2="15" y2="8"></line><line x1="17" y1="16" x2="23" y2="16"></line></svg>

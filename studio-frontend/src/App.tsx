@@ -22,8 +22,6 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
 // import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import BuildPage from './pages/BuildPage';
-import DeploymentPage from './pages/DeploymentPage';
-import LandingPage from './pages/LandingPage';
 
 import Joyride from 'react-joyride';
 
@@ -32,15 +30,15 @@ function App() {
 
   return (
     <div>
-      <WalletProvider>
+      {/* <WalletProvider> */}
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            {/* <Route path="/" element={<LandingPage />} /> */}
             <Route path="/build" element={<BuildPage />} />
-            <Route path="/deployment" element={<DeploymentPage />} />
+            {/* <Route path="/deployment" element={<DeploymentPage />} /> */}
           </Routes>
         </BrowserRouter>
-      </WalletProvider>
+      {/* </WalletProvider> */}
     </div>
   );
 }
