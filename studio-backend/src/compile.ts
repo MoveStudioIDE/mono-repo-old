@@ -166,16 +166,23 @@ export async function test(project: Project) {
     return testResults;
 
   } catch (error: any) {
-    // console.log('error', error)
-    const errorMessage = error.stdout;
-    // console.log("errorMessage", errorMessage)
+    console.log('error', error)
+    const errorMessageToIgnore = error.stdout;
+    const errorMessage = error.stderr.replace(errorMessageToIgnore, '');
 
-    const testResultsIndex = errorMessage.search("Running Move unit tests");
 
-    // Get the unit test results
-    const testResults = errorMessage.slice(testResultsIndex)
+    console.log("errorMessage", errorMessage)
+
+
+    // let testResultsIndex = errorMessage.search("error");
+    // if (testResultsIndex === -1) {
+    //   testResultsIndex = errorMessage.search("warning");
+    // }
+
+    // // Get the unit test results
+    // const testResults = errorMessage.slice(testResultsIndex)
     
-    console.log("testResults", testResults)
+    // console.log("testResults", testResults)
 
     // Check error message for update needed message - TODO
 
@@ -183,7 +190,7 @@ export async function test(project: Project) {
     fs.rmdirSync(tempProjectPath, { recursive: true });
     
 
-    return testResults as string;
+    return errorMessage as string;
 
   }
 }
