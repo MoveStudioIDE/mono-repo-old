@@ -25,6 +25,12 @@ const TEMP_DIR = `${__dirname}/../temp-packages`;
 //   ],
 // };
 
+type TestReturn = {
+  result: string;
+  errorCode: string;
+  error: boolean;
+}
+
 export async function compile(project: Project): Promise<string | string[]> {
 
   // Created temporary project in user directory
@@ -97,7 +103,7 @@ export async function compile(project: Project): Promise<string | string[]> {
   }
 }
 
-export async function test(project: Project) {
+export async function test(project: Project): Promise<TestReturn> {
 
   // Created temporary project in user directory
   const tempProjectPath = `${TEMP_DIR}/${project.package}`;
@@ -163,15 +169,26 @@ export async function test(project: Project) {
     fs.rmdirSync(tempProjectPath, { recursive: true });
 
 
-    return testResults;
+    return {
+      result: testResults,
+      errorCode: "",
+      error: false
+    }
 
   } catch (error: any) {
     console.log('error', error)
     const errorMessageToIgnore = error.stdout;
     const errorMessage = error.stderr.replace(errorMessageToIgnore, '');
 
+    // Find the index of the unit test results
+    const testResultsIndex = errorMessageToIgnore.search("Running Move unit tests");
+
+    // Get the unit test results
+    const testResults = errorMessageToIgnore.slice(testResultsIndex);
+
 
     console.log("errorMessage", errorMessage)
+    console.log("testResults", testResults)
 
 
     // let testResultsIndex = errorMessage.search("error");
@@ -188,9 +205,29 @@ export async function test(project: Project) {
 
     // Remove the temporary project directory
     fs.rmdirSync(tempProjectPath, { recursive: true });
+
+    // if (errorMessage.includes("Running Move unit tests")) {
+    //   return {
+    //     result: "",
+    //     errorCode: errorMessage,
+    //     error: 1
+    //   };
+    // }
     
 
-    return errorMessage as string;
+    if (errorMessageToIgnore.includes("Failed to build Move modules: Compilation error.")) {
+      return {
+        result: testResults,
+        errorCode: errorMessage,
+        error: true
+      };
+    }
+
+    return {
+      result: testResults,
+      errorCode: errorMessage,
+      error: false
+    };
 
   }
 }
