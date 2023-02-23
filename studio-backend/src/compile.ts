@@ -25,6 +25,12 @@ const TEMP_DIR = `${__dirname}/../temp-packages`;
 //   ],
 // };
 
+type TestReturn = {
+  result: string;
+  errorCode: string;
+  error: number;
+}
+
 export async function compile(project: Project): Promise<string | string[]> {
 
   // Created temporary project in user directory
@@ -97,7 +103,7 @@ export async function compile(project: Project): Promise<string | string[]> {
   }
 }
 
-export async function test(project: Project) {
+export async function test(project: Project): Promise<TestReturn> {
 
   // Created temporary project in user directory
   const tempProjectPath = `${TEMP_DIR}/${project.package}`;
@@ -163,7 +169,11 @@ export async function test(project: Project) {
     fs.rmdirSync(tempProjectPath, { recursive: true });
 
 
-    return testResults;
+    return {
+      result: testResults,
+      errorCode: "",
+      error: 0
+    }
 
   } catch (error: any) {
     console.log('error', error)
@@ -188,9 +198,21 @@ export async function test(project: Project) {
 
     // Remove the temporary project directory
     fs.rmdirSync(tempProjectPath, { recursive: true });
+
+    // if (errorMessage.includes("Running Move unit tests")) {
+    //   return {
+    //     result: "",
+    //     errorCode: errorMessage,
+    //     error: 1
+    //   };
+    // }
     
 
-    return errorMessage as string;
+    return {
+      result: errorMessage,
+      errorCode: errorMessage,
+      error: 2
+    };
 
   }
 }
