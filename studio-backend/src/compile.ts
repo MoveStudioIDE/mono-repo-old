@@ -28,7 +28,7 @@ const TEMP_DIR = `${__dirname}/../temp-packages`;
 type TestReturn = {
   result: string;
   errorCode: string;
-  error: number;
+  error: boolean;
 }
 
 export async function compile(project: Project): Promise<string | string[]> {
@@ -172,7 +172,7 @@ export async function test(project: Project): Promise<TestReturn> {
     return {
       result: testResults,
       errorCode: "",
-      error: 0
+      error: false
     }
 
   } catch (error: any) {
@@ -180,8 +180,15 @@ export async function test(project: Project): Promise<TestReturn> {
     const errorMessageToIgnore = error.stdout;
     const errorMessage = error.stderr.replace(errorMessageToIgnore, '');
 
+    // Find the index of the unit test results
+    const testResultsIndex = errorMessageToIgnore.search("Running Move unit tests");
+
+    // Get the unit test results
+    const testResults = errorMessageToIgnore.slice(testResultsIndex);
+
 
     console.log("errorMessage", errorMessage)
+    console.log("testResults", testResults)
 
 
     // let testResultsIndex = errorMessage.search("error");
@@ -208,10 +215,18 @@ export async function test(project: Project): Promise<TestReturn> {
     // }
     
 
+    if (errorMessageToIgnore.includes("Failed to build Move modules: Compilation error.")) {
+      return {
+        result: testResults,
+        errorCode: errorMessage,
+        error: true
+      };
+    }
+
     return {
-      result: errorMessage,
+      result: testResults,
       errorCode: errorMessage,
-      error: 2
+      error: false
     };
 
   }

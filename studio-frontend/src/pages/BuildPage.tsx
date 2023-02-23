@@ -364,7 +364,7 @@ function BuildPage() {
       const testResults = res.data as {
         result: string;
         errorCode: string;
-        error: number;
+        error: boolean;
       };
       console.log('res test', testResults);
 
@@ -383,20 +383,20 @@ function BuildPage() {
       //   return;
       // }
 
-      // if (testResults.error == 1) {
-      //   setToast(
-      //     <div className="alert alert-error">
-      //     <div>
-      //       <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-      //       <span>Test error</span>
-      //       <button onClick={() => setToast(undefined)}>
-      //         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-      //       </button>
-      //     </div>
-      //   </div>
-      //   )
-      //   return;
-      // }
+      if (testResults.error) {
+        setToast(
+          <div className="alert alert-error">
+          <div>
+            <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span>Compilation error</span>
+            <button onClick={() => setToast(undefined)}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+        )
+        return;
+      }
 
       // if (testResults.split('\n')[0].includes("UPDATING GIT DEPENDENCY")) {
       //   console.log("UPDATING GIT DEPENDENCY")
@@ -404,7 +404,11 @@ function BuildPage() {
       // }
             
 
-      setTestResults(testResults.result.replace("UPDATING GIT DEPENDENCY https://github.com/MystenLabs/sui.git\n", ""));
+      if (!testResults.result.includes("Running Move unit tests")) {
+        setTestResults("Clear warnings and errors to run tests:\n\n" + testResults.errorCode.replace("UPDATING GIT DEPENDENCY https://github.com/MystenLabs/sui.git\n", ""));
+      } else {
+        setTestResults(testResults.result.replace("UPDATING GIT DEPENDENCY https://github.com/MystenLabs/sui.git\n", ""));
+      }
 
       setToast(
         <div className="alert alert-warning">
