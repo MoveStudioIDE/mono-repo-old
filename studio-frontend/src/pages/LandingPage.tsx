@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import LandingHeader from "../components/LandingHeader";
 import hero1 from "../icons/hero1.jpeg";
 import dan from "../icons/dan.jpeg";
+import evan from "../icons/evan.png";
 import buildPage from "../icons/build-page.png";
 import deployPage from "../icons/deploy-page.png";
 import studioIcon from "../icons/studio-62.png"
@@ -135,21 +136,21 @@ function LandingPage() {
                 </figure>
                 <div className="card-body items-center text-center">
                   <h2 className="card-title">Daniel</h2>
-                  <p>Founder & Developer</p>
+                  <p>Cofounder & Developer</p>
                 </div>
               </div>  
             </div> 
-            {/* <div id="item2" className="carousel-item w-full">
-              <div className="card w-96 bg-base-100 shadow-xl">
-                <div className="card-body">
-                  <h2 className="card-title">Card title!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div className="card-actions justify-end">
-                    <button className="btn btn-primary">Buy Now</button>
-                  </div>
+            <div id="team-item2" className="carousel-item w-full ">
+              <div className="card card-compact bg-base-100 shadow-xl" >
+                <figure className="px-10 pt-10">
+                  <img src={evan} alt="dan" className="rounded-2xl shadow-2xl" />
+                </figure>
+                <div className="card-body items-center text-center">
+                  <h2 className="card-title">Evan</h2>
+                  <p>Cofounder & Developer</p>
                 </div>
-              </div>
-            </div>  */}
+              </div>  
+            </div> 
             {/* <div id="item3" className="carousel-item w-full">
               <div className="card w-96 bg-base-100 shadow-xl">
                 <div className="card-body">
@@ -175,7 +176,7 @@ function LandingPage() {
           </div>  
           <div className="flex justify-center w-64 py-2 gap-2">
             <a href="#team-item1" className="btn btn-xs">1</a> 
-            {/* <a href="#item2" className="btn btn-xs">2</a>  */}
+            <a href="#team-item2" className="btn btn-xs">2</a> 
             {/* <a href="#item3" className="btn btn-xs">3</a>  */}
             {/* <a href="#item4" className="btn btn-xs">4</a> */}
           </div>
