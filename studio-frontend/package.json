@@ -14,6 +14,7 @@
     "@types/react-dom": "^18.0.0",
     "@types/react-loading-overlay": "^1.0.1",
     "@types/react-responsive-masonry": "^2.1.0",
+    "@vercel/analytics": "^0.1.11",
     "ansi-to-react": "^6.1.6",
     "axios": "^1.2.1",
     "daisyui": "^2.46.0",
