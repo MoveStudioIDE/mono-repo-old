@@ -14,6 +14,8 @@ import { IndexedDb } from './db/ProjectsDB';
 import { textChangeRangeIsUnchanged } from 'typescript';
 import axios from 'axios';
 
+import { Analytics } from '@vercel/analytics/react';
+
 
 const GAS_BUDGET = 40000;
 
@@ -41,6 +43,7 @@ function App() {
           </Routes>
         </BrowserRouter>
       </WalletProvider>
+      <Analytics />
     </div>
   );
 }
