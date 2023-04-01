@@ -6,7 +6,7 @@ import { decimalify } from "../utils/decimal";
 import { network } from "../utils/network";
 
 const disabledWallets = [
-  "Martian Sui Wallet",
+  "Martian Sui Wallet disabled",
 ]
 
 function DeployInnerSidebar(
