@@ -6,7 +6,7 @@ import {DeployedPackage, DeployedObject} from './DeployedObjects'
 import LoadingOverlay from 'react-loading-overlay-ts';
 import ScaleLoader from "react-spinners/ScaleLoader";
 import { SPINNER_COLORS } from '../utils/theme';
-import { useSuiProvider, useWallet } from '@suiet/wallet-kit';
+import { ConnectButton, ConnectModal, useSuiProvider, useWallet } from '@suiet/wallet-kit';
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
