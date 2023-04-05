@@ -63,7 +63,7 @@ export async function compile(project: Project): Promise<string | string[]> {
     version = "0.0.1"
 
     [dependencies]
-    Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework", rev = "devnet" }
+    Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet" }
 
     [addresses]
     ${addresses}
@@ -135,7 +135,7 @@ export async function test(project: Project): Promise<TestReturn> {
     version = "0.0.1"
 
     [dependencies]
-    Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework", rev = "devnet" }
+    Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet" }
 
     [addresses]
     ${addresses}
