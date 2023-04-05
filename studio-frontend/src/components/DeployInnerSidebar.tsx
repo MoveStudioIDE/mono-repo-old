@@ -21,9 +21,9 @@ function DeployInnerSidebar(
 ) {
 
   const wallet = useWallet();
-  const {
-    error, loading, balance
-  } = useAccountBalance();
+  // const {
+  //   error, loading, balance
+  // } = useAccountBalance();
 
   const [isValidObjectId, setIsValidObjectId] = useState(false);
   const [walletIcon, setWalletIcon] = useState('');
@@ -187,16 +187,16 @@ function DeployInnerSidebar(
                 </label>
               </p>
             </div>
-            <div>
+            {/* <div>
               <h2 className='font-semibold'>Gas balance:</h2>
               <p className="text-center text-neutral-content font-mono text-opacity-90">
-                {loading ? "Loading balance..." : `${decimalify(balance, 9)} Sui`} 
+                {loading ? "Loading balance..." : `${decimalify(balance?.toString() || '', 9)} Sui`} 
                 {!loading &&
                   <label 
                     tabIndex={0} 
                     className="btn btn-circle btn-ghost btn-xs text-info" 
                     onClick={async () => {
-                      navigator.clipboard.writeText(balance)
+                      navigator.clipboard.writeText(balance?.toString() || '')
                       console.log('clipboard', await navigator.clipboard.readText())
                     }}
                   >
@@ -204,7 +204,7 @@ function DeployInnerSidebar(
                   </label>
                 }
               </p>
-            </div>
+            </div> */}
             <div>
               <h2 className='font-semibold'>Network:</h2>
               <p className="text-center text-neutral-content font-mono text-opacity-90">

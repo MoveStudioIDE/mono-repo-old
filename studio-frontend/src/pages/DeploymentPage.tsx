@@ -26,7 +26,7 @@ import { ConnectButton, useWallet, useSuiProvider } from '@suiet/wallet-kit';
 // import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import axios from "axios";
 import { network } from "../utils/network";
-import { OwnedObjectRef } from "@mysten/sui.js";
+import { fromB64, normalizeSuiObjectId, OwnedObjectRef, TransactionBlock } from "@mysten/sui.js";
 
 function DeploymentPage() {
 
@@ -531,172 +531,168 @@ function DeploymentPage() {
     }
     // compileCode();
 
-    const callPublish = async (compiledModules: string[]) => {
+    // const callPublish = async (compiledModulesAndDependencies: any) => {
 
-      const publishData = {
-        compiledModules: compiledModules,
-        gasBudget: GAS_BUDGET
-      }
+    //   const tx = new TransactionBlock();
+    //   const [upgradeCap] = tx.publish(
+    //     compiledModulesAndDependencies.modules.map((m: any) => Array.from(fromB64(m))),
+    //     compiledModulesAndDependencies.dependencies.map((addr: string) =>
+    //       normalizeSuiObjectId(addr)
+    //     )
+    //   );
+    //   tx.transferObjects([upgradeCap], tx.pure(wallet.address));
+
+    //   try {
+    //     const publishTxn = await wallet.signAndExecuteTransactionBlock({
+    //       transactionBlock: tx,
+    //     });
   
-      console.log('publishData', publishData);
+    //     return publishTxn;
+    //   } catch (error: any) {
+    //     console.log('error', error.message);
 
-      try {
-        const publishTxn = await wallet.signAndExecuteTransaction({
-          transaction: {
-            kind: 'publish',
-            data: {
-              compiledModules: compiledModules,
-              gasBudget: GAS_BUDGET,
-            }
-          }
-        });
-  
-        return publishTxn;
-      } catch (error: any) {
-        console.log('error', error.message);
+    //     if (error.message.includes("Cannot find gas coin for signer address") || error.message.includes("SUI balance is insufficient to pay for gasBudget")) {
+    //       setToasts(
+    //         <div className="alert alert-error" id={id2}>
+    //           <div>
+    //             <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    //             <span>Insufficient gas</span>
+    //             <button onClick={() => setToasts(undefined)}>
+    //               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    //             </button>
+    //           </div>
+    //         </div>
+    //       );
+    //     } else if (error.message.includes("Transaction rejected from user")) {
+    //       setToasts(
+    //         <div className="alert alert-error" id={id2}>
+    //           <div>
+    //             <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    //             <span>Rejected</span>
+    //             <button onClick={() => setToasts(undefined)}>
+    //               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    //             </button>
+    //           </div>
+    //         </div>
+    //       );
+    //     } else if (error.message.includes("Wallet Not Connected") || error.message.includes("wallet not connected")) {
+    //       setToasts(
+    //         <div className="alert alert-error" id={id2}>
+    //           <div>
+    //             <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    //             <span>Wallet not connected</span>
+    //             <button onClick={() => setToasts(undefined)}>
+    //               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    //             </button>
+    //           </div>
+    //         </div>
+    //       );
+    //     } else {
+    //       setToasts(
+    //         <div className="alert alert-error" id={id2}>
+    //           <div>
+    //             <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    //             <span>Publication fail</span>
+    //             <button onClick={() => setToasts(undefined)}>
+    //               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    //             </button>
+    //           </div>
+    //         </div>
+    //       );
+    //     }
+    //   }
+    // }
 
-        if (error.message.includes("Cannot find gas coin for signer address") || error.message.includes("SUI balance is insufficient to pay for gasBudget")) {
-          setToasts(
-            <div className="alert alert-error" id={id2}>
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span>Insufficient gas</span>
-                <button onClick={() => setToasts(undefined)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-              </div>
-            </div>
-          );
-        } else if (error.message.includes("Transaction rejected from user")) {
-          setToasts(
-            <div className="alert alert-error" id={id2}>
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span>Rejected</span>
-                <button onClick={() => setToasts(undefined)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-              </div>
-            </div>
-          );
-        } else if (error.message.includes("Wallet Not Connected") || error.message.includes("wallet not connected")) {
-          setToasts(
-            <div className="alert alert-error" id={id2}>
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span>Wallet not connected</span>
-                <button onClick={() => setToasts(undefined)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-              </div>
-            </div>
-          );
-        } else {
-          setToasts(
-            <div className="alert alert-error" id={id2}>
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span>Publication fail</span>
-                <button onClick={() => setToasts(undefined)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-              </div>
-            </div>
-          );
-        }
-      }
-    }
+    // compileCode().then((res) => {
 
-    compileCode().then((res) => {
+    //   if (res == undefined) {
+    //     return;
+    //   }
 
-      if (res == undefined) {
-        return;
-      }
+    //   if (typeof res === 'string') {
+    //     setCompileError(res);
+    //     setToasts(
+    //       <div className="alert alert-error" id={id2}>
+    //         <div>
+    //           <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    //           <span>Package compile error</span>
+    //           <button onClick={() => setToasts(undefined)}>
+    //             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    //           </button>
+    //         </div>
+    //       </div>
+    //     );
+    //     return;
+    //   }
 
-      if (typeof res === 'string') {
-        setCompileError(res);
-        setToasts(
-          <div className="alert alert-error" id={id2}>
-            <div>
-              <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <span>Package compile error</span>
-              <button onClick={() => setToasts(undefined)}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              </button>
-            </div>
-          </div>
-        );
-        return;
-      }
+    //   if (res.length === 0) {
+    //     setCompileError('No modules to publish');
+    //     setToasts(
+    //       <div className="alert alert-error" id={id2}>
+    //         <div>
+    //           <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+    //           <span>Empty package</span>
+    //           <button onClick={() => setToasts(undefined)}>
+    //             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    //           </button>
+    //         </div>
+    //       </div>
+    //     );
+    //     return;
+    //   }
 
-      if (res.length === 0) {
-        setCompileError('No modules to publish');
-        setToasts(
-          <div className="alert alert-error" id={id2}>
-            <div>
-              <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-              <span>Empty package</span>
-              <button onClick={() => setToasts(undefined)}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-              </button>
-            </div>
-          </div>
-        );
-        return;
-      }
+    //   setCurrentProject(null)
 
-      setCurrentProject(null)
+      // callPublish(res).then((res) => {
+      //   console.log('res', res);
 
-      callPublish(res).then((res) => {
-        console.log('res', res);
+      //   if (res == undefined) {
+      //     return;
+      //   }
 
-        if (res == undefined) {
-          return;
-        }
+        // const publishTxnDigest = res.certificate.transactionDigest;
 
-        const publishTxnDigest = res.certificate.transactionDigest;
+        // const publishTxnCreated = res.effects.created || (res.effects as any).effects.created as OwnedObjectRef[] || [];
 
-        const publishTxnCreated = res.effects.created || (res.effects as any).effects.created as OwnedObjectRef[] || [];
+        // console.log('res', res)
+        // console.log('publishTxnCreated', publishTxnCreated);
+        // console.log('publishTxnDigest', publishTxnDigest);
 
-        console.log('res', res)
-        console.log('publishTxnCreated', publishTxnCreated);
-        console.log('publishTxnDigest', publishTxnDigest);
+        // const packageInfos = publishTxnCreated?.map((object: any) => {
+        //   return {id: Math.random().toString(36).slice(2), name: currentProject.package, address: object.reference.objectId};
+        // });
 
-        const packageInfos = publishTxnCreated?.map((object) => {
-          return {id: Math.random().toString(36).slice(2), name: currentProject.package, address: object.reference.objectId};
-        });
+        // if (!packageInfos) {
+        //   return;
+        // }
 
-        if (!packageInfos) {
-          return;
-        }
+        // if (publishTxnCreated) {
+        //   setDeployedObjects([...deployedObjects, ...packageInfos]);
+        // }
 
-        if (publishTxnCreated) {
-          setDeployedObjects([...deployedObjects, ...packageInfos]);
-        }
-
-        setToasts(
-          // [
-            // ...toasts,
-            <div className="alert alert-success" id={id2}>
-              <div>
-                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-                <span>Successful publication</span>
-                <a href={`https://explorer.sui.io/transaction/${publishTxnDigest}?network=${network[wallet.chain?.name || 'Sui Devnet']}`} target="_blank" rel="noopener noreferrer">
-                  <button >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
-                  </button>
-                </a>
-                <button onClick={() => setToasts(undefined)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-                </button>
-              </div>
-            </div>
-          // ]
-        );
+        // setToasts(
+        //   // [
+        //     // ...toasts,
+        //     <div className="alert alert-success" id={id2}>
+        //       <div>
+        //         <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+        //         <span>Successful publication</span>
+        //         <a href={`https://explorer.sui.io/transaction/${publishTxnDigest}?network=${network[wallet.chain?.name || 'Sui Devnet']}`} target="_blank" rel="noopener noreferrer">
+        //           <button >
+        //             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
+        //           </button>
+        //         </a>
+        //         <button onClick={() => setToasts(undefined)}>
+        //           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        //         </button>
+        //       </div>
+        //     </div>
+        //   // ]
+        // );
         
-      });
-    });
-    setIsOverlayActive(false);
+    //   });
+    // });
+    // setIsOverlayActive(false);
   }
 
   const addExistingObject = (objectId: string) => {

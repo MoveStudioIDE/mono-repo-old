@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 // import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import { ConnectButton, useWallet, useSuiProvider } from '@suiet/wallet-kit';
-import { extractMutableReference, extractReference, extractStructTag } from '@mysten/sui.js';
+import { extractMutableReference, extractReference, extractStructTag, TransactionBlock } from '@mysten/sui.js';
 import { shortenAddress } from '../utils/address-shortener';
 
 
@@ -230,59 +230,57 @@ function PackageFunction(
   console.log('function arugments outside', functionArguments)
 
   const handleExecuteMoveCall = async () => {
-    console.log('execute move call')
-    console.log('function parameters', functionArguments.filter((param) => param != ''))
-    console.log('function name', functionName)
-    console.log('package address', props.packageAddress)
-    console.log('type parameters', functionTypeArguments.filter((param) => param != ''))
+    // console.log('execute move call')
+    // console.log('function parameters', functionArguments.filter((param) => param != ''))
+    // console.log('function name', functionName)
+    // console.log('package address', props.packageAddress)
+    // console.log('type parameters', functionTypeArguments.filter((param) => param != ''))
 
-    if (functionArguments == undefined) {
-      return;
-    }
+    // if (functionArguments == undefined) {
+    //   return;
+    // }
 
-    if (functionTypeArguments == undefined) {
-      return;
-    }
+    // if (functionTypeArguments == undefined) {
+    //   return;
+    // }
 
-    props.setPendingTxn();
+    // props.setPendingTxn();
 
-    let moveCallTxn;
+    // let moveCallTxn;
 
-    try {
-      moveCallTxn = await wallet.signAndExecuteTransaction({
-        transaction: {
-          kind: 'moveCall',
-          data: {
-            packageObjectId: props.packageAddress,
-            module: props.moduleName,
-            function: functionName,
-            typeArguments: functionTypeArguments,
-            arguments: functionArguments,
-            gasBudget: 300000
-          }
-        }
-      });
-    } catch (e) {
-      console.log('error', e)
-      console.log('error.message', (e as any).message.includes('wallet not connected'))
-      if ((e as any).message.includes('wallet not connected')) {
-        console.log('here')
-        props.setFailTxn("Wallet not connected");
-      } else {
-        props.setFailTxn("");
-      }
-      return;
-    }
+    // const tx = new TransactionBlock();
+    // tx.moveCall({
+    //   target: `${props.packageAddress}::${props.moduleName}::${functionName}`,
+    //   arguments: functionArguments.map((arg) => {
+    //     return tx.pure(arg)
+    //     }),
+    // })
 
-    console.log('move call txn', moveCallTxn);
+    // try {
+    //   moveCallTxn = await wallet.signAndExecuteTransactionBlock({
+    //     transactionBlock: tx,
+    //   });
+    // } catch (e) {
+    //   console.log('error', e)
+    //   console.log('error.message', (e as any).message.includes('wallet not connected'))
+    //   if ((e as any).message.includes('wallet not connected')) {
+    //     console.log('here')
+    //     props.setFailTxn("Wallet not connected");
+    //   } else {
+    //     props.setFailTxn("");
+    //   }
+    //   return;
+    // }
 
-    if (moveCallTxn.effects.status?.status == 'success' || (moveCallTxn.effects as any).effects.status.status == 'success') {
-      props.setSuccessTxn(moveCallTxn.certificate.transactionDigest);
-    } else {
-      props.setFailTxn(moveCallTxn.certificate.transactionDigest);
-    }
+    // console.log('move call txn', moveCallTxn);
 
-    props.refreshHandler();
+    // // if (moveCallTxn.effects.status?.status == 'success' || (moveCallTxn.effects as any).effects.status.status == 'success') {
+    // //   props.setSuccessTxn(moveCallTxn.certificate.transactionDigest);
+    // // } else {
+    // //   props.setFailTxn(moveCallTxn.certificate.transactionDigest);
+    // // }
+
+    // props.refreshHandler();
   }
 
 
