@@ -160,6 +160,7 @@ function DeploymentPage() {
 
   // Alert the user if they leave the page when they have deployed objects in the session
   useEffect(() => {
+    console.log('deployedObjects', deployedObjects)
     if (deployedObjects.length === 0) return;
     window.onbeforeunload = function() {
       return ""
@@ -537,17 +538,17 @@ function DeploymentPage() {
 
       const tx = new TransactionBlock();
       
-      tx.publish(
+      const [upgradeCap] = tx.publish(
         compiledModulesAndDependencies.modules.map((m: any) => Array.from(fromB64(m))),
         compiledModulesAndDependencies.dependencies.map((addr: string) =>
           normalizeSuiObjectId(addr)
             )
       );
 
+      tx.transferObjects([upgradeCap], tx.pure(wallet.address));
+
       try {
-        const publishTxn = await wallet.signAndExecuteTransactionBlock({
-          transactionBlock: tx
-        });
+        const publishTxn = await wallet.signAndExecuteTransactionBlock({ transactionBlock: tx });
   
         return publishTxn;
       } catch (error: any) {
@@ -652,49 +653,56 @@ function DeploymentPage() {
           return;
         }
 
-        // const publishTxnDigest = res.certificate.transactionDigest;
+        const publishTxnDigest = res.digest;
 
-        // const publishTxnCreated = res.effects.created || (res.effects as any).effects.created as OwnedObjectRef[] || [];
+        const publishTxnCreated = res.effects?.created || (res.effects as any).effects.created as OwnedObjectRef[] || [];
 
-        // console.log('res', res)
-        // console.log('publishTxnCreated', publishTxnCreated);
-        // console.log('publishTxnDigest', publishTxnDigest);
+        console.log('res', res)
+        console.log('publishTxnCreated', publishTxnCreated);
+        console.log('publishTxnDigest', publishTxnDigest);
 
-        // const packageInfos = publishTxnCreated?.map((object: any) => {
-        //   return {id: Math.random().toString(36).slice(2), name: currentProject.package, address: object.reference.objectId};
-        // });
+        const packageInfos = publishTxnCreated?.map((object: any) => {
+          return {id: Math.random().toString(36).slice(2), name: currentProject.package, address: object.reference.objectId};
+        });
 
-        // if (!packageInfos) {
-        //   return;
-        // }
+        if (!packageInfos) {
+          return;
+        }
 
-        // if (publishTxnCreated) {
-        //   setDeployedObjects([...deployedObjects, ...packageInfos]);
-        // }
+        console.log('packageInfos', packageInfos)
 
-        // setToasts(
-        //   // [
-        //     // ...toasts,
-        //     <div className="alert alert-success" id={id2}>
-        //       <div>
-        //         <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
-        //         <span>Successful publication</span>
-        //         <a href={`https://explorer.sui.io/transaction/${publishTxnDigest}?network=${network[wallet.chain?.name || 'Sui Devnet']}`} target="_blank" rel="noopener noreferrer">
-        //           <button >
-        //             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
-        //           </button>
-        //         </a>
-        //         <button onClick={() => setToasts(undefined)}>
-        //           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-        //         </button>
-        //       </div>
-        //     </div>
-        //   // ]
-        // );
+        if (publishTxnCreated) {
+          const newDeployedObjects = deployedObjects.concat(packageInfos);
+          console.log('newDeployedObjects', newDeployedObjects)
+          setDeployedObjects(newDeployedObjects);
+        }
+
+
+        setToasts(
+          // [
+            // ...toasts,
+            <div className="alert alert-success" id={id2}>
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" className="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                <span>Successful publication</span>
+                <a href={`https://explorer.sui.io/transaction/${publishTxnDigest}?network=${network[wallet.chain?.name || 'Sui Devnet']}`} target="_blank" rel="noopener noreferrer">
+                  <button >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><g fill="none" fill-rule="evenodd"><path d="M18 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8c0-1.1.9-2 2-2h5M15 3h6v6M10 14L20.2 3.8"/></g></svg>
+                  </button>
+                </a>
+                <button onClick={() => setToasts(undefined)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="butt" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+              </div>
+            </div>
+          // ]
+        );
         
       });
+    }).finally(() => {
+      setIsOverlayActive(false);
     });
-    setIsOverlayActive(false);
+    // setIsOverlayActive(false);
   }
 
   const addExistingObject = (objectId: string) => {

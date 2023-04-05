@@ -69,14 +69,14 @@ function DeployCanvas (
       // });
 
       return axios.post(`${BACKEND_URL}object-details`, {objectId: objectId, rpc: wallet.chain?.rpcUrl}).then((res) => {
-        console.log('res', res);
-        if (res == undefined || res.data.status != 'Exists') {
+        console.log('object details res', res);
+        if (res == undefined || res.data.error != undefined) {
           props.removeDeployedObject(id)
           return;
         }
 
-        const objectData = res.data.details.data;
-        const shared = res.data.details.owner.hasOwnProperty('Shared')
+        const objectData = res.data.data.content;
+        // const shared = res.data.details.owner.hasOwnProperty('Shared')
         if (objectData.dataType == 'package') {
 
           return axios.post(`${BACKEND_URL}package-details`, {packageId: objectId, rpc: wallet.chain?.rpcUrl}).then((res) => {
@@ -121,7 +121,7 @@ function DeployCanvas (
             moduleName={splitFullName[1]}
             objectName={splitFullName[2]}
             typeParameter={structType}
-            shared={shared}
+            shared={/*shared*/false}
             updateHandler={updateObjectByAddress}
             dragStartHandler={handleDragStart}
             dragEnterHandler={handleDragEnter}

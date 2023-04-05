@@ -22,22 +22,22 @@ function PackageStruct(
   const abilities = (props.structDetails as any).abilities.abilities.map((ability: string) => {
     return <div className="badge badge-outline badge-secondary">{ability}</div>
   })
-  const fields = (props.structDetails as any).fields.map((field: {name: string, type_: any}) => {
+  const fields = (props.structDetails as any).fields.map((field: {name: string, type: any}) => {
     console.log('field', field)
-    if (typeof field.type_ == 'object') {
+    if (typeof field.type == 'object') {
       console.log('e')
 
-      if (field.type_.Struct != undefined) {
+      if (field.type.Struct != undefined) {
         return (
           <tr>
             <td className='font-mono whitespace-normal break-words max-w-24 text-center'>{field.name}</td>
             <td className='font-mono whitespace-normal break-all max-w-72  text-center'>
-              {field.type_.Struct.address}::{field.type_.Struct.module}::{field.type_.Struct.name}
+              {field.type.Struct.address}::{field.type.Struct.module}::{field.type.Struct.name}
               <label 
                 tabIndex={0} 
                 className="btn btn-circle btn-ghost btn-xs text-info" 
                 onClick={async () => {
-                  navigator.clipboard.writeText(`${field.type_.Struct.address}::${field.type_.Struct.module}::${field.type_.Struct.name}`)
+                  navigator.clipboard.writeText(`${field.type.Struct.address}::${field.type.Struct.module}::${field.type.Struct.name}`)
                   console.log('clipboard', await navigator.clipboard.readText())
                 }}
               >
@@ -46,17 +46,17 @@ function PackageStruct(
             </td>
           </tr>
         )
-      } else if (field.type_.TypeParameter != undefined) {
+      } else if (field.type.TypeParameter != undefined) {
         return (
           <tr>
             <td className='font-mono whitespace-normal break-words max-w-24  text-center'>{field.name}</td>
             <td className='font-mono whitespace-normal break-all max-w-72  text-center'>
-              Type{field.type_.TypeParameter}: {JSON.stringify((props.structDetails as any).type_parameters[field.type_.TypeParameter].constraints.abilities)}
+              Type{field.type.TypeParameter}: {JSON.stringify((props.structDetails as any).typeparameters[field.type.TypeParameter].constraints.abilities)}
               <label 
                 tabIndex={0} 
                 className="btn btn-circle btn-ghost btn-xs text-info" 
                 onClick={async () => {
-                  navigator.clipboard.writeText(field.type_.TypeParameter)
+                  navigator.clipboard.writeText(field.type.TypeParameter)
                   console.log('clipboard', await navigator.clipboard.readText())
                 }}
               >
@@ -72,12 +72,12 @@ function PackageStruct(
         <tr>
           <td className='font-mono whitespace-normal break-words max-w-24  text-center'>{field.name}</td>
           <td className='font-mono whitespace-normal break-all max-w-72  text-center'>
-            {field.type_}
+            {field.type}
             <label 
               tabIndex={0} 
               className="btn btn-circle btn-ghost btn-xs text-info" 
               onClick={async () => {
-                navigator.clipboard.writeText(field.type_)
+                navigator.clipboard.writeText(field.type)
                 console.log('clipboard', await navigator.clipboard.readText())
               }}
             >
