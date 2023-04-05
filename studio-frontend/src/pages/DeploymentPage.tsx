@@ -10,6 +10,8 @@ import ScaleLoader from "react-spinners/ScaleLoader";
 import { SPINNER_COLORS } from '../utils/theme';
 import Joyride from 'react-joyride';
 
+import {fromB64, normalizeSuiObjectId, TransactionBlock} from "@mysten/sui.js";
+
 
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || 'http://localhost:80/';
@@ -158,6 +160,7 @@ function DeploymentPage() {
 
   // Alert the user if they leave the page when they have deployed objects in the session
   useEffect(() => {
+    console.log('deployedObjects', deployedObjects)
     if (deployedObjects.length === 0) return;
     window.onbeforeunload = function() {
       return ""
@@ -531,25 +534,21 @@ function DeploymentPage() {
     }
     // compileCode();
 
-    const callPublish = async (compiledModules: string[]) => {
+    const callPublish = async (compiledModulesAndDependencies: any) => {  
 
-      const publishData = {
-        compiledModules: compiledModules,
-        gasBudget: GAS_BUDGET
-      }
-  
-      console.log('publishData', publishData);
+      const tx = new TransactionBlock();
+      
+      const [upgradeCap] = tx.publish(
+        compiledModulesAndDependencies.modules.map((m: any) => Array.from(fromB64(m))),
+        compiledModulesAndDependencies.dependencies.map((addr: string) =>
+          normalizeSuiObjectId(addr)
+            )
+      );
+
+      tx.transferObjects([upgradeCap], tx.pure(wallet.address));
 
       try {
-        const publishTxn = await wallet.signAndExecuteTransaction({
-          transaction: {
-            kind: 'publish',
-            data: {
-              compiledModules: compiledModules,
-              gasBudget: GAS_BUDGET,
-            }
-          }
-        });
+        const publishTxn = await wallet.signAndExecuteTransactionBlock({ transactionBlock: tx });
   
         return publishTxn;
       } catch (error: any) {
@@ -654,15 +653,15 @@ function DeploymentPage() {
           return;
         }
 
-        const publishTxnDigest = res.certificate.transactionDigest;
+        const publishTxnDigest = res.digest;
 
-        const publishTxnCreated = res.effects.created || (res.effects as any).effects.created as OwnedObjectRef[] || [];
+        const publishTxnCreated = res.effects?.created || (res.effects as any).effects.created as OwnedObjectRef[] || [];
 
         console.log('res', res)
         console.log('publishTxnCreated', publishTxnCreated);
         console.log('publishTxnDigest', publishTxnDigest);
 
-        const packageInfos = publishTxnCreated?.map((object) => {
+        const packageInfos = publishTxnCreated?.map((object: any) => {
           return {id: Math.random().toString(36).slice(2), name: currentProject.package, address: object.reference.objectId};
         });
 
@@ -670,9 +669,14 @@ function DeploymentPage() {
           return;
         }
 
+        console.log('packageInfos', packageInfos)
+
         if (publishTxnCreated) {
-          setDeployedObjects([...deployedObjects, ...packageInfos]);
+          const newDeployedObjects = deployedObjects.concat(packageInfos);
+          console.log('newDeployedObjects', newDeployedObjects)
+          setDeployedObjects(newDeployedObjects);
         }
+
 
         setToasts(
           // [
@@ -695,8 +699,10 @@ function DeploymentPage() {
         );
         
       });
+    }).finally(() => {
+      setIsOverlayActive(false);
     });
-    setIsOverlayActive(false);
+    // setIsOverlayActive(false);
   }
 
   const addExistingObject = (objectId: string) => {

@@ -10,10 +10,6 @@ import reportWebVitals from './reportWebVitals';
 // import '@suiet/wallet-kit/style.css';
 
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-
-import { WalletKitProvider } from "@mysten/wallet-kit";
-
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );

@@ -6,7 +6,7 @@ import { decimalify } from "../utils/decimal";
 import { network } from "../utils/network";
 
 const disabledWallets = [
-  "Martian Sui Wallet",
+  "Martian Sui Wallet disabled",
 ]
 
 function DeployInnerSidebar(
@@ -190,13 +190,13 @@ function DeployInnerSidebar(
             <div>
               <h2 className='font-semibold'>Gas balance:</h2>
               <p className="text-center text-neutral-content font-mono text-opacity-90">
-                {loading ? "Loading balance..." : `${decimalify(balance, 9)} Sui`} 
+                {loading ? "Loading balance..." : `${decimalify(balance?.toString() || '', 9)} Sui`} 
                 {!loading &&
                   <label 
                     tabIndex={0} 
                     className="btn btn-circle btn-ghost btn-xs text-info" 
                     onClick={async () => {
-                      navigator.clipboard.writeText(balance)
+                      navigator.clipboard.writeText(balance?.toString() || '')
                       console.log('clipboard', await navigator.clipboard.readText())
                     }}
                   >

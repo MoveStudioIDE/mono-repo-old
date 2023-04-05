@@ -63,7 +63,7 @@ export async function compile(project: Project): Promise<string | string[]> {
     version = "0.0.1"
 
     [dependencies]
-    Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework", rev = "devnet" }
+    Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet" }
 
     [addresses]
     ${addresses}
@@ -135,7 +135,7 @@ export async function test(project: Project): Promise<TestReturn> {
     version = "0.0.1"
 
     [dependencies]
-    Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework", rev = "devnet" }
+    Sui = { git = "https://github.com/MystenLabs/sui.git", subdir = "crates/sui-framework/packages/sui-framework", rev = "testnet" }
 
     [addresses]
     ${addresses}
@@ -230,47 +230,6 @@ export async function test(project: Project): Promise<TestReturn> {
     };
 
   }
-}
-
-export async function publish (compiledModules: string[]) {
-  dotenv.config();
-  if (process.env.RECOVERY_PHRASE === undefined) {
-    throw new Error('RECOVERY_PHRASE is not defined');
-  }
-  // connect to local RPC server
-  const provider = new JsonRpcProvider();
-  const keyPair = Ed25519Keypair.deriveKeypair(process.env.RECOVERY_PHRASE)
-  const signer = new RawSigner(keyPair, provider);
-  // await provider.requestSuiFromFaucet(
-  //   await signer.getAddress()
-  // );
-  console.log(`Signer address: ${await signer.getAddress()}`);
-
-  // publish the compiled modules
-
-  try {
-    // const publishTxn = await signer.publish({
-    //   compiledModules: compiledModules,
-    //   gasBudget: 10000,
-    // });
-    // console.log(publishTxn)
-
-    const publishTxn = await signer.signAndExecuteTransaction({
-      kind: 'publish',
-      data: {
-        compiledModules: compiledModules,
-        gasBudget: 10000
-      },
-    });
-
-    console.log(publishTxn);
-
-    return publishTxn;  
-  } catch (error: any) {
-    console.log(error);
-  }
-  
-
 }
 
 

@@ -228,7 +228,7 @@ export function DeployedObject (
       return (
         <tr>
           <td className='font-mono whitespace-normal break-words text-center'>{field[0]}</td>
-          <td className='font-mono whitespace-normal break-words text-center'>{field[1]}</td>
+          <td className='font-mono whitespace-normal break-words  text-center'>{field[1]}</td>
         </tr>
       )
     } else if (typeof field[1] == 'object') {
