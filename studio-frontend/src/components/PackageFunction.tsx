@@ -230,57 +230,57 @@ function PackageFunction(
   console.log('function arugments outside', functionArguments)
 
   const handleExecuteMoveCall = async () => {
-    console.log('execute move call')
-    console.log('function parameters', functionArguments.filter((param) => param != ''))
-    console.log('function name', functionName)
-    console.log('package address', props.packageAddress)
-    console.log('type parameters', functionTypeArguments.filter((param) => param != ''))
+    // console.log('execute move call')
+    // console.log('function parameters', functionArguments.filter((param) => param != ''))
+    // console.log('function name', functionName)
+    // console.log('package address', props.packageAddress)
+    // console.log('type parameters', functionTypeArguments.filter((param) => param != ''))
 
-    if (functionArguments == undefined) {
-      return;
-    }
-
-    if (functionTypeArguments == undefined) {
-      return;
-    }
-
-    props.setPendingTxn();
-
-    let moveCallTxn;
-
-    const tx = new TransactionBlock();
-    tx.moveCall({
-      target: `${props.packageAddress}::${props.moduleName}::${functionName}`,
-      arguments: functionArguments.map((arg) => {
-        return tx.pure(arg)
-        }),
-    })
-
-    try {
-      moveCallTxn = await wallet.signAndExecuteTransactionBlock({
-        transactionBlock: tx,
-      });
-    } catch (e) {
-      console.log('error', e)
-      console.log('error.message', (e as any).message.includes('wallet not connected'))
-      if ((e as any).message.includes('wallet not connected')) {
-        console.log('here')
-        props.setFailTxn("Wallet not connected");
-      } else {
-        props.setFailTxn("");
-      }
-      return;
-    }
-
-    console.log('move call txn', moveCallTxn);
-
-    // if (moveCallTxn.effects.status?.status == 'success' || (moveCallTxn.effects as any).effects.status.status == 'success') {
-    //   props.setSuccessTxn(moveCallTxn.certificate.transactionDigest);
-    // } else {
-    //   props.setFailTxn(moveCallTxn.certificate.transactionDigest);
+    // if (functionArguments == undefined) {
+    //   return;
     // }
 
-    props.refreshHandler();
+    // if (functionTypeArguments == undefined) {
+    //   return;
+    // }
+
+    // props.setPendingTxn();
+
+    // let moveCallTxn;
+
+    // const tx = new TransactionBlock();
+    // tx.moveCall({
+    //   target: `${props.packageAddress}::${props.moduleName}::${functionName}`,
+    //   arguments: functionArguments.map((arg) => {
+    //     return tx.pure(arg)
+    //     }),
+    // })
+
+    // try {
+    //   moveCallTxn = await wallet.signAndExecuteTransactionBlock({
+    //     transactionBlock: tx,
+    //   });
+    // } catch (e) {
+    //   console.log('error', e)
+    //   console.log('error.message', (e as any).message.includes('wallet not connected'))
+    //   if ((e as any).message.includes('wallet not connected')) {
+    //     console.log('here')
+    //     props.setFailTxn("Wallet not connected");
+    //   } else {
+    //     props.setFailTxn("");
+    //   }
+    //   return;
+    // }
+
+    // console.log('move call txn', moveCallTxn);
+
+    // // if (moveCallTxn.effects.status?.status == 'success' || (moveCallTxn.effects as any).effects.status.status == 'success') {
+    // //   props.setSuccessTxn(moveCallTxn.certificate.transactionDigest);
+    // // } else {
+    // //   props.setFailTxn(moveCallTxn.certificate.transactionDigest);
+    // // }
+
+    // props.refreshHandler();
   }
 
 
