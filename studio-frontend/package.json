@@ -4,7 +4,7 @@
   "private": true,
   "dependencies": {
     "@monaco-editor/react": "^4.4.6",
-    "@mysten/sui.js": "^0.32.2",
+    "@mysten/sui.js": "^0.18.0",
     "@mysten/wallet-adapter-react": "^11.0.0",
     "@mysten/wallet-kit": "^0.1.2",
     "@suiet/wallet-adapter": "^0.0.18",

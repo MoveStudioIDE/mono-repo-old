@@ -2232,7 +2232,7 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/sui.js@0.32.2", "@mysten/sui.js@^0.32.2":
+"@mysten/sui.js@0.32.2":
   version "0.32.2"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.32.2.tgz#dff953a336c787465af181d8158f34a65700a74f"
   integrity sha512-/Hm4xkGolJhqj8FvQr7QSHDTlxIvL52mtbOao9f75YjrBh7y1Uh9kbJSY7xiTF1NY9sv6p5hUVlYRJuM0Hvn9A==
@@ -2246,6 +2246,25 @@
     jayson "^4.0.0"
     rpc-websockets "^7.5.1"
     superstruct "^1.0.3"
+    tweetnacl "^1.0.3"
+
+"@mysten/sui.js@^0.18.0":
+  version "0.18.0"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.18.0.tgz#af97e429bd1f8d1d9a132a1d63d457359160f936"
+  integrity sha512-tD6mQI+ZrinVaniyz8Rk4D20w6mGm5ok+6XOtL+eNS1qNnhZBRLCRjJ90dswMOv2bKQ6bG4VueNBwUJluESZrw==
+  dependencies:
+    "@mysten/bcs" "0.5.0"
+    "@noble/hashes" "^1.1.2"
+    "@noble/secp256k1" "^1.6.3"
+    "@scure/bip32" "^1.1.0"
+    "@scure/bip39" "^1.1.0"
+    "@suchipi/femver" "^1.0.0"
+    bs58 "^5.0.0"
+    cross-fetch "^3.1.5"
+    jayson "^3.6.6"
+    js-sha3 "^0.8.0"
+    lossless-json "^1.0.5"
+    rpc-websockets "^7.5.0"
     tweetnacl "^1.0.3"
 
 "@mysten/wallet-adapter-base@0.1.0":
