@@ -535,7 +535,6 @@ function DeploymentPage() {
         return compileResults;
       });
     }
-    
     // compileCode();
 
     const callPublish = async (compiledModulesAndDependencies: any) => {
