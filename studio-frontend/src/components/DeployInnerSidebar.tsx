@@ -6,8 +6,8 @@ import { decimalify } from "../utils/decimal";
 import { network } from "../utils/network";
 
 const disabledWallets = [
-  "Martian Sui Wallet",
-]
+  // "Martian Sui Wallet",
+] as string[]
 
 function DeployInnerSidebar(
   props: {
