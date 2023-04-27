@@ -248,41 +248,41 @@ function PackageFunction(
 
     let moveCallTxn;
 
-    try {
-      moveCallTxn = await wallet.signAndExecuteTransaction({
-        transaction: {
-          kind: 'moveCall',
-          data: {
-            packageObjectId: props.packageAddress,
-            module: props.moduleName,
-            function: functionName,
-            typeArguments: functionTypeArguments,
-            arguments: functionArguments,
-            gasBudget: 300000
-          }
-        }
-      });
-    } catch (e) {
-      console.log('error', e)
-      console.log('error.message', (e as any).message.includes('wallet not connected'))
-      if ((e as any).message.includes('wallet not connected')) {
-        console.log('here')
-        props.setFailTxn("Wallet not connected");
-      } else {
-        props.setFailTxn("");
-      }
-      return;
-    }
+    // try {
+    //   moveCallTxn = await wallet.signAndExecuteTransaction({
+    //     transaction: {
+    //       kind: 'moveCall',
+    //       data: {
+    //         packageObjectId: props.packageAddress,
+    //         module: props.moduleName,
+    //         function: functionName,
+    //         typeArguments: functionTypeArguments,
+    //         arguments: functionArguments,
+    //         gasBudget: 300000
+    //       }
+    //     }
+    //   });
+    // } catch (e) {
+    //   console.log('error', e)
+    //   console.log('error.message', (e as any).message.includes('wallet not connected'))
+    //   if ((e as any).message.includes('wallet not connected')) {
+    //     console.log('here')
+    //     props.setFailTxn("Wallet not connected");
+    //   } else {
+    //     props.setFailTxn("");
+    //   }
+    //   return;
+    // }
 
-    console.log('move call txn', moveCallTxn);
+    // console.log('move call txn', moveCallTxn);
 
-    if (moveCallTxn.effects.status?.status == 'success' || (moveCallTxn.effects as any).effects.status.status == 'success') {
-      props.setSuccessTxn(moveCallTxn.certificate.transactionDigest);
-    } else {
-      props.setFailTxn(moveCallTxn.certificate.transactionDigest);
-    }
+    // if (moveCallTxn.effects.status?.status == 'success' || (moveCallTxn.effects as any).effects.status.status == 'success') {
+    //   props.setSuccessTxn(moveCallTxn.certificate.transactionDigest);
+    // } else {
+    //   props.setFailTxn(moveCallTxn.certificate.transactionDigest);
+    // }
 
-    props.refreshHandler();
+    // props.refreshHandler();
   }
 
 

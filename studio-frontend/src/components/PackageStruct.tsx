@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { ConnectButton, useWallet, WalletKitProvider } from "@mysten/wallet-kit";
 import { extractMutableReference } from '@mysten/sui.js';
 import { shortenAddress } from '../utils/address-shortener';
 
