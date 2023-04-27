@@ -2157,6 +2157,13 @@
   dependencies:
     bs58 "^5.0.0"
 
+"@mysten/bcs@0.7.1":
+  version "0.7.1"
+  resolved "https://registry.yarnpkg.com/@mysten/bcs/-/bcs-0.7.1.tgz#e8db25718143e2a15688ea858470970b743f7248"
+  integrity sha512-wFPb8bkhwrbiStfZMV5rFM7J+umpke59/dNjDp+UYJKykNlW23LCk2ePyEUvGdb62HGJM1jyOJ8g4egE3OmdKA==
+  dependencies:
+    bs58 "^5.0.0"
+
 "@mysten/sui.js@0.11.0":
   version "0.11.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.11.0.tgz#f3e561af3aa1814cfc413e2a60e8b630422054b2"
@@ -2211,25 +2218,6 @@
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
-"@mysten/sui.js@^0.18.0":
-  version "0.18.0"
-  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.18.0.tgz#af97e429bd1f8d1d9a132a1d63d457359160f936"
-  integrity sha512-tD6mQI+ZrinVaniyz8Rk4D20w6mGm5ok+6XOtL+eNS1qNnhZBRLCRjJ90dswMOv2bKQ6bG4VueNBwUJluESZrw==
-  dependencies:
-    "@mysten/bcs" "0.5.0"
-    "@noble/hashes" "^1.1.2"
-    "@noble/secp256k1" "^1.6.3"
-    "@scure/bip32" "^1.1.0"
-    "@scure/bip39" "^1.1.0"
-    "@suchipi/femver" "^1.0.0"
-    bs58 "^5.0.0"
-    cross-fetch "^3.1.5"
-    jayson "^3.6.6"
-    js-sha3 "^0.8.0"
-    lossless-json "^1.0.5"
-    rpc-websockets "^7.5.0"
-    tweetnacl "^1.0.3"
-
 "@mysten/sui.js@^0.27.0":
   version "0.27.0"
   resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.27.0.tgz#62648e56bdb2f5721acdb8a138082904c605b5a8"
@@ -2265,6 +2253,22 @@
     jayson "^4.0.0"
     js-sha3 "^0.8.0"
     rpc-websockets "^7.5.0"
+    superstruct "^1.0.3"
+    tweetnacl "^1.0.3"
+
+"@mysten/sui.js@^0.32.2":
+  version "0.32.2"
+  resolved "https://registry.yarnpkg.com/@mysten/sui.js/-/sui.js-0.32.2.tgz#dff953a336c787465af181d8158f34a65700a74f"
+  integrity sha512-/Hm4xkGolJhqj8FvQr7QSHDTlxIvL52mtbOao9f75YjrBh7y1Uh9kbJSY7xiTF1NY9sv6p5hUVlYRJuM0Hvn9A==
+  dependencies:
+    "@mysten/bcs" "0.7.1"
+    "@noble/curves" "^1.0.0"
+    "@noble/hashes" "^1.3.0"
+    "@scure/bip32" "^1.3.0"
+    "@scure/bip39" "^1.2.0"
+    "@suchipi/femver" "^1.0.0"
+    jayson "^4.0.0"
+    rpc-websockets "^7.5.1"
     superstruct "^1.0.3"
     tweetnacl "^1.0.3"
 
@@ -2334,14 +2338,14 @@
   dependencies:
     eslint-scope "5.1.1"
 
-"@noble/curves@~1.0.0":
+"@noble/curves@^1.0.0", "@noble/curves@~1.0.0":
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.0.0.tgz#e40be8c7daf088aaf291887cbc73f43464a92932"
   integrity sha512-2upgEu0iLiDVDZkNLeFV2+ht0BAVgQnEmCk6JsOch9Rp8xfkMCbvbAZlA2pBHQc73dbl+vFOXfqkf4uemdn0bw==
   dependencies:
     "@noble/hashes" "1.3.0"
 
-"@noble/hashes@1.3.0", "@noble/hashes@^1.1.5", "@noble/hashes@~1.3.0":
+"@noble/hashes@1.3.0", "@noble/hashes@^1.1.5", "@noble/hashes@^1.3.0", "@noble/hashes@~1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.0.tgz#085fd70f6d7d9d109671090ccae1d3bec62554a1"
   integrity sha512-ilHEACi9DwqJB0pw7kv+Apvh50jiiSyR/cQ3y4W7lOR5mhvn/50FLUfsnfJz0BDZtl/RR16kXvptiv6q1msYZg==
@@ -2628,7 +2632,7 @@
     "@noble/secp256k1" "~1.7.0"
     "@scure/base" "~1.1.0"
 
-"@scure/bip32@^1.1.1":
+"@scure/bip32@^1.1.1", "@scure/bip32@^1.3.0":
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/@scure/bip32/-/bip32-1.3.0.tgz#6c8d980ef3f290987736acd0ee2e0f0d50068d87"
   integrity sha512-bcKpo1oj54hGholplGLpqPHRbIsnbixFtc06nwuNM5/dwSXOq/AAYoIBRsBmnZJSdfeNW5rnff7NTAz3ZCqR9Q==
@@ -2643,6 +2647,14 @@
   integrity sha512-pwrPOS16VeTKg98dYXQyIjJEcWfz7/1YJIwxUEPFfQPtc86Ym/1sVgQ2RLoD43AazMk2l/unK4ITySSpW2+82w==
   dependencies:
     "@noble/hashes" "~1.1.1"
+    "@scure/base" "~1.1.0"
+
+"@scure/bip39@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@scure/bip39/-/bip39-1.2.0.tgz#a207e2ef96de354de7d0002292ba1503538fc77b"
+  integrity sha512-SX/uKq52cuxm4YFXWFaVByaSHJh2w3BnokVSeUJVCv6K7WulT9u2BuNRBhuFl8vAuYnzx9bEu9WgpcNYTrYieg==
+  dependencies:
+    "@noble/hashes" "~1.3.0"
     "@scure/base" "~1.1.0"
 
 "@sinclair/typebox@^0.24.1":
@@ -9444,6 +9456,19 @@ rpc-websockets@^7.5.0:
   version "7.5.0"
   resolved "https://registry.yarnpkg.com/rpc-websockets/-/rpc-websockets-7.5.0.tgz#bbeb87572e66703ff151e50af1658f98098e2748"
   integrity sha512-9tIRi1uZGy7YmDjErf1Ax3wtqdSSLIlnmL5OtOzgd5eqPKbsPpwDP5whUDO2LQay3Xp0CcHlcNSGzacNRluBaQ==
+  dependencies:
+    "@babel/runtime" "^7.17.2"
+    eventemitter3 "^4.0.7"
+    uuid "^8.3.2"
+    ws "^8.5.0"
+  optionalDependencies:
+    bufferutil "^4.0.1"
+    utf-8-validate "^5.0.2"
+
+rpc-websockets@^7.5.1:
+  version "7.5.1"
+  resolved "https://registry.yarnpkg.com/rpc-websockets/-/rpc-websockets-7.5.1.tgz#e0a05d525a97e7efc31a0617f093a13a2e10c401"
+  integrity sha512-kGFkeTsmd37pHPMaHIgN1LVKXMi0JD782v4Ds9ZKtLlwdTKjn+CxM9A9/gLT2LaOuEcEFGL98h1QWQtlOIdW0w==
   dependencies:
     "@babel/runtime" "^7.17.2"
     eventemitter3 "^4.0.7"
